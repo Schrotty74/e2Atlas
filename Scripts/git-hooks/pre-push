@@ -1,0 +1,49 @@
+#!/bin/bash
+set -euo pipefail
+
+project_root="$(git rev-parse --show-toplevel)"
+remote_name="${1:-origin}"
+remote_url="${2:-}"
+case "$remote_url" in
+  https://github.com/Schrotty74/e2Atlas|https://github.com/Schrotty74/e2Atlas.git|git@github.com:Schrotty74/e2Atlas.git) ;;
+  *) echo 'Push is limited to the e2Atlas repository.' >&2; exit 1 ;;
+esac
+
+while read -r local_ref local_oid remote_ref remote_oid; do
+  # Do not use this hook to authorize branch/tag deletions.
+  if [[ "$local_oid" =~ ^0+$ ]]; then
+    echo 'Deletion requires a separate reviewed operation.' >&2; exit 1
+  fi
+  if [[ "$local_ref" == refs/heads/dev ]]; then
+    echo 'Dev must remain local, regardless of the destination ref.' >&2; exit 1
+  fi
+  case "$remote_ref" in
+    refs/heads/main) expected_local='refs/heads/main' ;;
+    refs/heads/beta) expected_local='refs/heads/beta' ;;
+    refs/tags/v*)
+      if [[ ! "$remote_ref" =~ ^refs/tags/v[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]; then
+        echo 'Only numbered beta release tags are supported.' >&2; exit 1
+      fi
+      expected_local="$remote_ref"
+      tag_commit="$(git rev-parse "${local_oid}^{commit}")"
+      if [[ "$tag_commit" != "$(git rev-parse refs/heads/beta)" ]]; then
+        echo 'A beta release tag must point to the beta branch head.' >&2; exit 1
+      fi ;;
+    *) echo 'Only main, beta and reviewed beta release tags may be pushed.' >&2; exit 1 ;;
+  esac
+  if [[ "$local_ref" != "$expected_local" ]]; then
+    echo 'The local and remote publication branches must match.' >&2; exit 1
+  fi
+  "$project_root/Scripts/check-public-tree.sh" "$local_oid"
+  # Check every outgoing commit, not only the final tree: removed local notes
+  # must not leak via Git history. The actual remote OID comes from git push.
+  if [[ "$remote_oid" =~ ^0+$ ]]; then
+    commits="$(git rev-list "$local_oid" --not --remotes="$remote_name")"
+  else
+    commits="$(git rev-list "$local_oid" "^$remote_oid")"
+  fi
+  while IFS= read -r commit; do
+    [[ -n "$commit" ]] || continue
+    "$project_root/Scripts/check-public-tree.sh" "$commit"
+  done <<< "$commits"
+done

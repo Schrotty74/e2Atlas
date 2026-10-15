@@ -1,0 +1,18 @@
+.DS_Store
+Build/
+DerivedData/
+.build/
+xcuserdata/
+*.xcuserstate
+dist/
+.swiftpm/
+.build-cache/
+
+# Local project guidance and design references are not published.
+/AGENTS.md
+/PROJECT_CONTEXT.md
+/NEXT_STEPS.md
+/CHAT_TEMPLATE.md
+/Docs/
+/Design/
+/Local/

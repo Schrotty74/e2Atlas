@@ -1,0 +1,37 @@
+{
+  "fill": {
+    "automatic-gradient": "extended-srgb:0.78039,0.41961,0.12941,1.00000"
+  },
+  "groups": [
+    {
+      "layers": [
+        {
+          "image-name": "03-Play.svg",
+          "name": "03-Play"
+        },
+        {
+          "image-name": "02-Vorderer-Rahmen.svg",
+          "name": "02-Vorderer-Rahmen"
+        },
+        {
+          "image-name": "01-Hintere-Bildflaeche.svg",
+          "name": "01-Hintere-Bildflaeche"
+        }
+      ],
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "translucency": {
+        "enabled": true,
+        "value": 0.3
+      }
+    }
+  ],
+  "supported-platforms": {
+    "circles": [
+      "watchOS"
+    ],
+    "squares": "shared"
+  }
+}

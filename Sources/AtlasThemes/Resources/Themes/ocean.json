@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "id": "ocean",
+  "name": "Ozean",
+  "light": { "background": "#F6F9FA", "surface": "#E9F0F3", "accent": "#006B80", "text": "#183139", "secondary": "#506975", "selection": "#CBE8ED" },
+  "dark": { "background": "#1C282F", "surface": "#27373F", "accent": "#6AC8D9", "text": "#ECF5F7", "secondary": "#ADCAD2", "selection": "#24505A" }
+}
