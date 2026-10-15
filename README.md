@@ -1,35 +1,85 @@
-# e2Atlas
+<p align="center"><img src="Documentation/Images/AppIcon.png" width="128" height="128" alt="e2Atlas macOS app icon"></p>
+<p align="center"><strong>English</strong> · <a href="README.de.md">Deutsch</a></p>
 
-Native macOS player for Enigma2 receivers through OpenWebif. Requires an Apple Silicon Mac and macOS 26 or later.
+# e2Atlas — Enigma2 TV player for macOS
 
-## Build
+e2Atlas brings live TV from your Enigma2 receiver to your Mac through OpenWebif. Watch a single channel, follow up to four streams in multiview, or browse the electronic program guide while keeping the picture in view. The native SwiftUI interface follows your Mac's light or dark appearance.
 
-Install Xcode 27 and select its command-line tools. Clone the `beta` branch, then run:
+**Requires an Apple Silicon Mac (M1 or later), macOS 26 or later, and an Enigma2 receiver with accessible OpenWebif and streaming services.** The current release is **0.1.0-beta.1**. Intel Macs are not supported.
+
+[Download the beta](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.1.0-beta.1) · [Changelog](CHANGELOG.md) · [Security policy](SECURITY.md)
+
+## Features
+
+- Live TV with bouquets, channel search and channel logos loaded from the receiver.
+- Multiview with two, three or four pictures and one selected audio source.
+- Mute and volume controls, plus video-only fullscreen with Escape or double-click to return.
+- Electronic program guide (EPG) with 2-, 4- and 6-hour windows, a 20:15 shortcut and your own time shortcuts.
+- Up to three saved receivers, with passwords stored in the macOS Keychain.
+- Liquid Glass controls, System and Ocean themes, and automatic or manual light/dark appearance.
+
+## Screenshots
+
+Click a preview to open the full-resolution image. The screenshots show the current German interface; the receiver address has been anonymized.
+
+<table>
+<tr>
+<td align="center"><a href="Documentation/Screenshots/full/live-tv.png?raw=true"><img src="Documentation/Screenshots/previews/live-tv.png" width="320" alt="e2Atlas live TV player on macOS with receiver channel logos and volume controls"></a><br>Live TV</td>
+<td align="center"><a href="Documentation/Screenshots/full/multiview.png?raw=true"><img src="Documentation/Screenshots/previews/multiview.png" width="320" alt="e2Atlas Enigma2 multiview with four TV streams and one active audio source"></a><br>Four-channel multiview</td>
+</tr>
+<tr>
+<td align="center"><a href="Documentation/Screenshots/full/programme-guide.png?raw=true"><img src="Documentation/Screenshots/previews/programme-guide.png" width="320" alt="e2Atlas electronic program guide with a two-hour schedule and live TV preview"></a><br>Electronic program guide</td>
+<td align="center"><a href="Documentation/Screenshots/full/receivers.png?raw=true"><img src="Documentation/Screenshots/previews/receivers.png" width="320" alt="e2Atlas receiver settings with an anonymized address and room for three receivers"></a><br>Receiver settings</td>
+</tr>
+<tr>
+<td colspan="2" align="center"><a href="Documentation/Screenshots/full/welcome.png?raw=true"><img src="Documentation/Screenshots/previews/welcome.png" width="320" alt="e2Atlas welcome screen for connecting an Enigma2 receiver through OpenWebif"></a><br>First-run setup</td>
+</tr>
+</table>
+
+## Install and open the beta
+
+Download the DMG or ZIP from the [official GitHub release](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.1.0-beta.1). Open the DMG and drag **e2Atlas Beta** to **Applications**, or extract the ZIP and move the app there.
+
+### First launch: Gatekeeper
+
+e2Atlas Beta is ad-hoc signed. It has no Apple Developer ID certificate and is not notarized, so macOS may block the first launch. If you trust the official download:
+
+1. Try to open **e2Atlas Beta** once.
+2. Open **System Settings → Privacy & Security** and scroll to **Security**.
+3. Click **Open Anyway** for e2Atlas Beta.
+4. Confirm with **Open** and authenticate if macOS asks.
+
+This adds an exception for this app. [Apple's Gatekeeper instructions](https://support.apple.com/en-us/102445) explain the process. If macOS reports malware or a damaged app, stop and check the download rather than overriding that warning.
+
+## Connect your receiver
+
+On first launch, enter a receiver name, its IP address or hostname, and the OpenWebif username and password. Choose a bouquet and channel after connecting. Further receivers can be added in Settings. Beta and Dev keep separate settings, so a Dev profile must be entered again in the Beta.
+
+Use your receiver on a trusted local network. Plain HTTP connections do not encrypt the password or TV stream. Receiver image compatibility depends on the OpenWebif and streaming services it provides.
+
+## Beta status
+
+Recording and timer management are not included yet. Keychain permission prompts after rebuilding remain under investigation. Playback checks and automated tests ran on macOS 27; macOS 26 and further receiver images still need testing. See the [changelog](CHANGELOG.md) for release details.
+
+<details>
+<summary>Build e2Atlas from source</summary>
+
+Install Xcode 27 and select its command-line tools, then run:
 
 ```sh
 git clone --branch beta https://github.com/Schrotty74/e2Atlas.git
 cd e2Atlas
-./build_beta_app.sh
+./Scripts/build_beta_app.sh
 ```
 
-The app is written to `Build/Beta/e2Atlas Beta.app`. The build downloads the pinned VLCKit 3.7.3 package from VideoLAN and verifies its SHA-256 checksum. A local build uses ad-hoc signing by default.
+The output is `Build/Beta/e2Atlas Beta.app`. Build scripts resolve the project directory from their own location, so the checkout can be stored anywhere, including a path with spaces. The build downloads VLCKit 3.7.3 from VideoLAN and verifies its SHA-256 checksum. No personal signing certificate is required.
 
-Open `e2Atlas.xcodeproj` for development. The build scripts select the channel name and bundle identifier. `Scripts/generate-project.py` regenerates the Xcode project; `Scripts/test.sh` runs the tests through Xcode. The SwiftPM manifest also describes the modules, but the supported test runner is Xcode because of VLCKit runtime loading.
+Open `e2Atlas.xcodeproj` for development. `Scripts/generate-project.py` regenerates the project, and `Scripts/test.sh` runs the tests through Xcode. The SwiftPM manifest describes the modules; Xcode is the supported test runner because of VLCKit runtime loading.
 
-Dev builds stay local. Beta builds require a checkout on `beta`; Final builds require `main`. Build scripts never push or publish. `Scripts/package-beta.sh 0.1.0-beta.1` creates ZIP and DMG packages with checksums from a clean, committed Beta checkout.
+All build entry points live in `Scripts/`. Beta builds require a checkout on `beta`; Final builds require `main`. Dev stays local. `Scripts/package-beta.sh 0.1.0-beta.1` packages a clean, committed Beta checkout as ZIP and DMG with checksums. Build and packaging scripts do not publish releases.
 
-## First launch
-
-Enter the receiver address, username and password in the welcome window. OpenWebif and streaming must be accessible from the Mac. Up to three receivers can be saved. The Beta has its own settings and Keychain namespace, so Dev receiver profiles are not transferred automatically.
-
-Choose a bouquet and channel to start playback. In multiview, choose the target image before selecting a channel. Click the active speaker control to mute it; click another image's speaker to change the audio source. The volume sliders control the active source.
-
-Use the video-only button or Command–Shift–F for video-only fullscreen. Escape or a double-click returns to the app. The program guide offers 2-, 4- and 6-hour windows and configurable time shortcuts.
-
-## Beta downloads
-
-Download the first beta from [GitHub Releases](https://github.com/Schrotty74/e2Atlas/releases). The packages are ad-hoc signed and are not notarized. See [CHANGELOG.md](CHANGELOG.md) for known limitations.
+</details>
 
 ## License
 
-The app uses the repository's [GNU GPL v3 license](LICENSE). VLCKit is distributed as a replaceable dynamic framework under LGPL-2.1-or-later; its license and source links are included in `Resources` and in the app.
+e2Atlas uses the [GNU GPL v3 license](LICENSE). VLCKit is a replaceable dynamic framework under LGPL-2.1-or-later; its license and source links are included in `Resources` and in the app.

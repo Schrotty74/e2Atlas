@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 # An allowlist is deliberate: .gitignore alone cannot protect files already tracked.
@@ -15,8 +15,9 @@ while IFS= read -r -d '' file; do
     Sources/*|Tests/*|Resources/*|Configuration/*|Scripts/*.sh|Scripts/generate-project.py|Scripts/git-hooks/pre-push|\
     e2Atlas.xcodeproj/project.pbxproj|e2Atlas.xcodeproj/xcshareddata/xcschemes/*.xcscheme|\
     e2Atlas.xcworkspace/contents.xcworkspacedata|\
-    Package.swift|Package.resolved|.gitignore|README.md|CHANGELOG.md|LICENSE|LICENSE.*|NOTICE|THIRD-PARTY-NOTICES*|\
-    build_app.sh|build_dev_app.sh|build_beta_app.sh|build_final_app.sh)
+    Package.swift|Package.resolved|.gitignore|README.md|README.de.md|SECURITY.md|SECURITY.de.md|CHANGELOG.md|LICENSE|LICENSE.*|NOTICE|THIRD-PARTY-NOTICES*|\
+    build_app.sh|build_dev_app.sh|build_beta_app.sh|build_final_app.sh|\
+    Documentation/Images/*.png|Documentation/Screenshots/full/*.png|Documentation/Screenshots/previews/*.png)
       case "$file" in
         */.DS_Store|*/xcuserdata/*|*.xcuserstate|*.log|*.dSYM/*)
           printf 'Generated or personal file cannot be published: %s\n' "$file" >&2; failed=1 ;;

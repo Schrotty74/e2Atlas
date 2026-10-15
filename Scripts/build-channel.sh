@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Sourced by the build entry points. Compatible with macOS system Bash.
 
 configure_channel() {
