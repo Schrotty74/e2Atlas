@@ -8,8 +8,7 @@ dist/
 .swiftpm/
 .build-cache/
 
-# Local project guidance and design references are not published.
-/AGENTS.md
+# Private notes and design references are not published.
 /PROJECT_CONTEXT.md
 /NEXT_STEPS.md
 /CHAT_TEMPLATE.md
