@@ -73,3 +73,5 @@ Versionsschema: drei Zahlen für Final-Generation, Beta-Schritt und Bugfix mit `
 - 15. Oktober 2026: erste Beta unter historischem Tag `v0.1.0-beta.1` veröffentlicht, 36 erfolgreiche Tests. Bilinguale READMEs, bereinigte Screenshots, Sicherheits- und Theme-Dokumentation folgten als Branch-Änderungen.
 - 16. Oktober 2026: Anzeigename dieses ersten Releases auf `e2Atlas 0.1.0-beta` geändert; historischer Tag und Download-Dateien erhalten.
 - 16. Oktober 2026: neue Beta `0.2.0-beta` mit Receiver-Info, Multiview-Tausch, lokaler Aufnahme, neuen Themes, Vorlagen, About und optionalem Anmeldehinweis vorbereitet. Feature-Listen, englischer Changelog und Kontextdateien werden auf diesen Quellstand gebracht. Veröffentlichung ist noch ausstehend.
+
+- Beta-Paketprüfung, 16. Oktober 2026: erster ZIP-Kandidat enthielt lokale Entwicklungspfade in einer zusätzlichen Xcode-Debug-Bibliothek. Nicht veröffentlicht und zur lokalen Diagnose aufbewahrt. Verteilte Builds deaktivieren künftig diese Bibliothek; die Paketierung strippt und prüft alle eigenen Mach-O-Dateien. Erneuter Build und Paketprüfung folgen.

@@ -25,16 +25,19 @@ release_dir="dist/releases/beta/$version"
 [[ ! -e "$release_dir" ]] || { echo 'Release output already exists; do not replace a prepared release.' >&2; exit 1; }
 mkdir -p "$release_dir"
 ditto "$app" "$release_dir/e2Atlas Beta.app"
-executable="$release_dir/e2Atlas Beta.app/Contents/MacOS/e2Atlas Beta"
-strip -S "$executable"
-while IFS= read -r rpath; do
-  case "$rpath" in
-    /*) install_name_tool -delete_rpath "$rpath" "$executable" ;;
-  esac
-done < <(otool -l "$executable" | awk '$1 == "cmd" { command = $2 } command == "LC_RPATH" && $1 == "path" { print $2 }')
-if strings "$executable" | grep -E '/Users/|/Volumes/|/private/' > /dev/null; then
-  echo 'Release binary contains a local development path.' >&2; exit 1
-fi
+# Strip and inspect every own Mach-O image, including any future sidecars.
+while IFS= read -r -d '' executable; do
+  [[ "$(file -b "$executable")" == *Mach-O* ]] || continue
+  strip -S "$executable"
+  while IFS= read -r rpath; do
+    case "$rpath" in
+      /*) install_name_tool -delete_rpath "$rpath" "$executable" ;;
+    esac
+  done < <(otool -l "$executable" | awk '$1 == "cmd" { command = $2 } command == "LC_RPATH" && $1 == "path" { print $2 }')
+  if strings "$executable" | grep -E '/Users/|/Volumes/|/private/' > /dev/null; then
+    echo 'Release binary contains a local development path.' >&2; exit 1
+  fi
+done < <(find "$release_dir/e2Atlas Beta.app/Contents/MacOS" -type f -print0)
 codesign --force --sign - --timestamp=none "$release_dir/e2Atlas Beta.app"
 codesign --verify --deep --strict "$release_dir/e2Atlas Beta.app"
 artifact="e2Atlas-Beta-$version-macos-arm64"

@@ -50,6 +50,11 @@ derived_data="$project_root/Build/DerivedData/$channel_name"
 # Give replaced local Dev bundles a new version for Launch Services / Icon Services.
 # Beta and Final keep their explicitly configured project build number.
 build_number_args=()
+distribution_build_args=()
+if [[ "$channel" != dev ]]; then
+  # Distribution bundles must not carry Xcode's separate debug-only image.
+  distribution_build_args=("ENABLE_DEBUG_DYLIB=NO")
+fi
 if [[ "$channel" == dev ]]; then
   dev_build_number="$(python3 - "$output_dir/$app_name.app/Contents/Info.plist" "$project_root/Build/Dev/$app_name.app/Contents/Info.plist" <<'PYBUILD'
 import plistlib, sys
@@ -80,7 +85,8 @@ xcrun xcodebuild -project e2Atlas.xcodeproj -scheme e2Atlas \
   E2ATLAS_BUILD_CHANNEL="$channel" E2ATLAS_RELEASE_VERSION="$release_version" \
   MARKETING_VERSION="${release_version%%-*}" \
   CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="$signing_identity" DEVELOPMENT_TEAM= \
-  ${build_number_args[@]+"${build_number_args[@]}"} build
+  ${build_number_args[@]+"${build_number_args[@]}"} \
+  ${distribution_build_args[@]+"${distribution_build_args[@]}"} build
 
 built_app="$derived_data/Build/Products/$build_configuration/$app_name.app"
 [[ -d "$built_app" ]] || { echo 'Xcode did not produce the expected app.' >&2; exit 1; }

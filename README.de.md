@@ -3,7 +3,7 @@
 
 # e2Atlas — Enigma2-TV-Player für macOS
 
-Mit e2Atlas siehst du Live-TV von deinem Enigma2-Receiver auf dem Mac. Die Verbindung läuft über OpenWebif. Du kannst einen Sender ansehen, bis zu vier Programme im Multiview verfolgen oder im elektronischen Programmführer stöbern, während das Fernsehbild sichtbar bleibt. Die native SwiftUI-Oberfläche folgt der hellen oder dunklen Darstellung deines Mac.
+Mit e2Atlas siehst du Live-TV von deinem Enigma2-Receiver auf dem Mac. Die Verbindung läuft über OpenWebif. Du kannst einen Sender ansehen, bis zu vier Programme im Multiview verfolgen oder im elektronischen Programmführer stöbern, während das Fernsehbild sichtbar bleibt. Die native SwiftUI-Oberfläche nutzt Liquid Glass für Bedienelemente und folgt der hellen oder dunklen Darstellung deines Mac.
 
 **Voraussetzungen: ein Mac mit Apple Silicon (M1 oder neuer), macOS 26 oder neuer und ein Enigma2-Receiver mit erreichbarem OpenWebif und Streaming-Dienst.** Die aktuelle Version ist **0.2.0-beta**. Intel-Macs werden nicht unterstützt.
 
