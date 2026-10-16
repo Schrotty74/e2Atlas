@@ -6,12 +6,12 @@
 
 | Version | Status |
 | --- | --- |
-| 0.1.0-beta.1 | Current beta; security reports welcome |
+| 0.2.0-beta | Current beta; security reports welcome |
 | Stable release | Not released yet |
 
 ## Security model
 
-e2Atlas is a macOS client for user-configured Enigma2 receivers. It reads channel lists, program data, channel logos and TV streams through OpenWebif and the receiver's streaming service. The current beta has no receiver administration, recording or timer controls. The app does not install an elevated helper or add telemetry, analytics or a cloud account service.
+e2Atlas is a macOS client for user-configured Enigma2 receivers. It reads channel lists, program data, channel logos and TV streams through OpenWebif and the receiver's streaming service. The current beta can record the receiver's MPEG-TS stream to a user-selected local file; it does not provide receiver administration or timer controls. The app does not install an elevated helper or add telemetry, analytics or a cloud account service.
 
 Receiver passwords are stored in the macOS Keychain. Successfully read passwords also remain in process memory for the app session. Receiver names, addresses, usernames and display preferences are stored locally in Application Support. Dev, Beta and Final use separate bundle identifiers and storage namespaces.
 

@@ -6,7 +6,7 @@ configure_channel() {
     dev)
       channel_name='Dev'
       app_name='e2Atlas Dev'
-      bundle_id='io.github.schrotty74.e2atlas.dev'
+      bundle_id='io.github.schrotty74.e2atlas.development'
       build_configuration='Debug'
       expected_branch='dev'
       ;;

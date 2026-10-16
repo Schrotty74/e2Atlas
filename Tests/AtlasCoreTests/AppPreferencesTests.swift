@@ -4,6 +4,26 @@ import Testing
 
 @Suite("App preference behavior")
 struct AppPreferencesTests {
+    @Test func developmentIdentityReusesOnlyItsLegacyStorageIdentifier() throws {
+        #expect(AppIdentity.developmentBundleIdentifier == "io.github.schrotty74.e2atlas.development")
+        #expect(AppIdentity.legacyDevelopmentIdentifier == "io.github.schrotty74.e2atlas.dev")
+        #expect(AppIdentity.storageIdentifier(for: AppIdentity.developmentBundleIdentifier) == AppIdentity.legacyDevelopmentIdentifier)
+        #expect(AppIdentity.storageIdentifier(for: AppIdentity.legacyDevelopmentIdentifier) == AppIdentity.legacyDevelopmentIdentifier)
+        #expect(AppIdentity.storageIdentifier(for: "io.github.schrotty74.e2atlas.beta") == "io.github.schrotty74.e2atlas.beta")
+        #expect(AppIdentity.storageIdentifier(for: "io.github.schrotty74.e2atlas") == "io.github.schrotty74.e2atlas")
+        #expect(AppIdentity.storageIdentifier(for: "example.custom.app") == "example.custom.app")
+    }
+
+    @Test func newDevelopmentIdentityUsesExistingSupportAndCacheLocations() throws {
+        let developmentPaths = try AppPaths(applicationID: AppIdentity.developmentBundleIdentifier)
+        let legacyPaths = try AppPaths(applicationID: AppIdentity.legacyDevelopmentIdentifier)
+
+        #expect(developmentPaths.support == legacyPaths.support)
+        #expect(developmentPaths.cache == legacyPaths.cache)
+        #expect(developmentPaths.support.lastPathComponent == AppIdentity.legacyDevelopmentIdentifier)
+        #expect(developmentPaths.cache.lastPathComponent == AppIdentity.legacyDevelopmentIdentifier)
+    }
+
     @Test func allowsThreeReceiversAndRejectsAFourth() throws {
         var preferences = AppPreferences()
         let profiles = (1...3).map { index in
@@ -262,6 +282,26 @@ struct CredentialSessionTests {
         #expect(backend.reads == 1)
     }
 
+    @Test func automaticFallbackPreservesSecretAndCanRecover() throws {
+        let backend = MemoryCredentialBackend()
+        let id = UUID()
+        backend.values[id] = "synthetic"
+        backend.interactionRequired = true
+        let store = CredentialStore(backend: backend)
+        #expect(try store.availablePassword(for: id) == "")
+        #expect(backend.values[id] == "synthetic")
+        #expect(backend.writes == 0)
+        backend.interactionRequired = false
+        #expect(try store.availablePassword(for: id) == "synthetic")
+    }
+
+    @Test func automaticFallbackDoesNotHideOtherStorageErrors() throws {
+        let backend = MemoryCredentialBackend()
+        backend.reject = true
+        let store = CredentialStore(backend: backend)
+        #expect(throws: AtlasFailure.self) { try store.availablePassword(for: UUID()) }
+    }
+
     @Test func rejectedAccessPreservesTheStoredSecret() throws {
         let backend = MemoryCredentialBackend()
         let id = UUID()
@@ -285,8 +325,10 @@ private final class MemoryCredentialBackend: CredentialBackend {
     var reads = 0
     var writes = 0
     var reject = false
+    var interactionRequired = false
     func password(for id: UUID) throws -> String {
         reads += 1
+        if interactionRequired { throw AtlasFailure.credentialsUnavailable }
         if reject { throw AtlasFailure.storage("Synthetic access refusal") }
         return values[id] ?? ""
     }

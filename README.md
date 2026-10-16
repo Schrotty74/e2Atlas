@@ -3,24 +3,28 @@
 
 # e2Atlas — Enigma2 TV player for macOS
 
-e2Atlas brings live TV from your Enigma2 receiver to your Mac through OpenWebif. Watch a single channel, follow up to four streams in multiview, or browse the electronic program guide while keeping the picture in view. The native SwiftUI interface follows your Mac's light or dark appearance.
+e2Atlas brings live TV from your Enigma2 receiver to your Mac through OpenWebif. Watch a channel, follow up to four streams in multiview, or browse the electronic program guide while keeping the picture in view. The native SwiftUI interface follows your Mac's light or dark appearance.
 
-**Requires an Apple Silicon Mac (M1 or later), macOS 26 or later, and an Enigma2 receiver with accessible OpenWebif and streaming services.** The current release is **0.1.0-beta.1**. Intel Macs are not supported.
+**Requires an Apple Silicon Mac (M1 or later), macOS 26 or later, and an Enigma2 receiver with accessible OpenWebif and streaming services.** The current release is **0.2.0-beta**. Intel Macs are not supported.
 
-[Download the beta](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.1.0-beta.1) · [Changelog](CHANGELOG.md) · [Security policy](SECURITY.md)
+[Download the beta](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.2.0-beta) · [Changelog](CHANGELOG.md) · [Security policy](SECURITY.md)
 
 ## Features
 
 - Live TV with bouquets, channel search and channel logos loaded from the receiver.
-- Multiview with two, three or four pictures and one selected audio source.
+- Multiview with two, three or four pictures and one selected audio source. Swap a small picture with the main picture while keeping each player's audio and volume settings.
 - Mute and volume controls, plus video-only fullscreen with Escape or double-click to return.
-- Electronic program guide (EPG) with 2-, 4- and 6-hour windows, a 20:15 shortcut and your own time shortcuts.
-- Up to three saved receivers, with passwords stored in the macOS Keychain.
-- Liquid Glass controls, System and Ocean themes, and automatic or manual light/dark appearance.
+- Electronic program guide (EPG) with 2-, 4- and 6-hour windows, a 20:15 shortcut and custom time shortcuts.
+- Receiver information for reported hardware and software details. Tuner use is shown when confirmed; streams without a usable tuner assignment are counted separately, so total tuner occupancy may remain unknown, including on FBC receivers.
+- Record the original receiver stream to a local `.ts` file from the player or a multiview tile. Stop the recording in the app and reveal the file in Finder.
+- Up to three saved receivers. Username and password are optional for receivers that allow unauthenticated access; passwords are stored in the macOS Keychain.
+- A System theme, plus Ocean, Ivory and Bronze themes with light and dark palettes. Choose automatic, light or dark appearance. Create a custom JSON theme from the template button in Appearance settings.
+- About tab links to the developer's homepage and the GitHub repository.
+- Playback requests Apple's VideoToolbox decoder when supported; the playback library can fall back to software decoding. Hardware use and CPU impact have not been measured.
 
 ## Custom themes
 
-[Create your own theme](Documentation/Themes/README.md) with the [JSON template](Documentation/Themes/theme-template.json?raw=true). The guide explains light and dark palettes, multiple theme files and which features are available in Beta 1.
+[Create your own theme](Documentation/Themes/README.md) with the [JSON template](Documentation/Themes/theme-template.json?raw=true). The guide covers light and dark palettes, gradients, multiple theme files and the template creation button.
 
 ## Screenshots
 
@@ -42,7 +46,7 @@ Click a preview to open the full-resolution image. The screenshots show the curr
 
 ## Install and open the beta
 
-Download the DMG or ZIP from the [official GitHub release](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.1.0-beta.1). Open the DMG and drag **e2Atlas Beta** to **Applications**, or extract the ZIP and move the app there.
+Download the DMG or ZIP from the [official GitHub release](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.2.0-beta). Open the DMG and drag **e2Atlas Beta** to **Applications**, or extract the ZIP and move the app there.
 
 ### First launch: Gatekeeper
 
@@ -57,13 +61,13 @@ This adds an exception for this app. [Apple's Gatekeeper instructions](https://s
 
 ## Connect your receiver
 
-On first launch, enter a receiver name, its IP address or hostname, and the OpenWebif username and password. Choose a bouquet and channel after connecting. Further receivers can be added in Settings. Beta and Dev keep separate settings, so a Dev profile must be entered again in the Beta.
+On first launch, enter a receiver name and its IP address or hostname. Leave the username and password empty if the receiver does not require authentication. A protected receiver may still require valid credentials to connect or stream. Choose a bouquet and channel after connecting. Further receivers can be added in Settings. Dev and Beta keep separate settings, theme folders and caches, so a Dev profile must be entered again in the Beta.
 
 Use your receiver on a trusted local network. Plain HTTP connections do not encrypt the password or TV stream. Receiver image compatibility depends on the OpenWebif and streaming services it provides.
 
 ## Beta status
 
-Recording and timer management are not included yet. Keychain permission prompts after rebuilding remain under investigation. Playback checks and automated tests ran on macOS 27; macOS 26 and further receiver images still need testing. See the [changelog](CHANGELOG.md) for release details.
+Recording saves the receiver's original stream to a local `.ts` file; it does not use the receiver's timer system. Timer management is not included. Keychain permission prompts after rebuilding remain under investigation, and protected receivers may require access to saved credentials. Playback checks and automated tests ran on macOS 27; macOS 26 and further receiver images still need testing. VideoToolbox is requested when supported, but hardware decoding and CPU impact have not been measured. See the [changelog](CHANGELOG.md) for release details.
 
 <details>
 <summary>Build e2Atlas from source</summary>
@@ -80,7 +84,7 @@ The output is `Build/Beta/e2Atlas Beta.app`. Build scripts resolve the project d
 
 Open `e2Atlas.xcodeproj` for development. `Scripts/generate-project.py` regenerates the project, and `Scripts/test.sh` runs the tests through Xcode. The SwiftPM manifest describes the modules; Xcode is the supported test runner because of VLCKit runtime loading.
 
-All build entry points live in `Scripts/`. Beta builds require a checkout on `beta`; Final builds require `main`. Dev stays local. `Scripts/package-beta.sh 0.1.0-beta.1` packages a clean, committed Beta checkout as ZIP and DMG with checksums. Build and packaging scripts do not publish releases.
+All build entry points live in `Scripts/`. Beta builds require a checkout on `beta`; Final builds require `main`. Dev stays local. `Scripts/package-beta.sh 0.2.0-beta` packages a clean, committed Beta checkout as ZIP and DMG with checksums. Build and packaging scripts do not publish releases.
 
 </details>
 

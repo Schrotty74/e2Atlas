@@ -88,8 +88,21 @@ public actor OpenWebifClient {
         let distro = info["imagedistro"] as? String ?? ""
         let name = [brand, model].filter { !$0.isEmpty }.joined(separator: " ")
         let image = distro.isEmpty ? (info["oever"] as? String ?? "") : distro
-        guard !name.isEmpty || !image.isEmpty else { throw AtlasFailure.invalidResponse }
+        guard !name.isEmpty || !image.isEmpty else {
+            let hardware = try await hardwareInfo()
+            let hardwareName = [hardware.brand, hardware.model].compactMap { $0 }.joined(separator: " ")
+            return ReceiverInfo(name: hardwareName.isEmpty ? "Enigma2" : hardwareName, image: hardware.image ?? "")
+        }
         return ReceiverInfo(name: name.isEmpty ? "Enigma2" : name, image: image)
+    }
+
+    public func hardwareInfo() async throws -> ReceiverHardware {
+        do {
+            return try ReceiverHardware.decode(await object(path: "/api/boxinfo"))
+        } catch AtlasFailure.invalidResponse {
+            // Older OpenWebif versions expose hardware under info in /api/about.
+            return try ReceiverHardware.decode(await object(path: "/api/about"))
+        }
     }
 
     public func bouquets() async throws -> [Bouquet] {

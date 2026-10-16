@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "id": "ivory",
+  "name": "Elfenbein",
+  "light": {
+    "background": "#FBF8F3",
+    "backgroundEnd": "#F0E8DD",
+    "surface": "#F3EDE4",
+    "accent": "#7D6046",
+    "text": "#332B24",
+    "secondary": "#6A5B4D",
+    "selection": "#E4D1B6"
+  },
+  "dark": {
+    "background": "#4A4A43",
+    "backgroundEnd": "#5A5A51",
+    "surface": "#62625A",
+    "accent": "#EBE4CF",
+    "text": "#FFFDF5",
+    "secondary": "#E2E0D3",
+    "selection": "#747469"
+  }
+}

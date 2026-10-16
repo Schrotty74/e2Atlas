@@ -123,6 +123,45 @@ struct PlaybackEngineTests {
         #expect(slot.channel?.id == "fullscreen")
     }
 
+    @Test("Swapping main and secondary video preserves both running engines")
+    func swappingRunningPlayersKeepsMediaAndVideoOutput() async throws {
+        let fixture = try await makeVideoFixture()
+        defer { try? FileManager.default.removeItem(at: fixture.directory) }
+        let first = PlaybackSlot()
+        let second = PlaybackSlot()
+        defer { first.stop(); second.stop() }
+        let main = VLCVideoContainer(frame: NSRect(x: 0, y: 0, width: 640, height: 360))
+        let small = VLCVideoContainer(frame: NSRect(x: 0, y: 0, width: 320, height: 180))
+        main.attach(first.vlcVideoView)
+        small.attach(second.vlcVideoView)
+        first.play(url: fixture.video, channel: testChannel("main"), username: "", password: "")
+        second.play(url: fixture.video, channel: testChannel("small"), username: "", password: "")
+        #expect(await waitUntil { Self.hasDecodedVideo(first) && Self.hasDecodedVideo(second) })
+        let firstMedia = first.vlcPlayer.media
+        let secondMedia = second.vlcPlayer.media
+        let firstTime = first.vlcPlayer.time.intValue
+        let secondTime = second.vlcPlayer.time.intValue
+        var arrangement = PlaybackArrangement(slots: [first, second])
+        first.volume = 0.35
+        first.isMuted = false
+        for _ in 0..<3 {
+            arrangement.swapWithMain(1)
+            main.attach(arrangement.slots[0].vlcVideoView)
+            small.attach(arrangement.slots[1].vlcVideoView)
+            #expect(arrangement.slots[0].vlcVideoView.superview === main)
+            #expect(arrangement.slots[1].vlcVideoView.superview === small)
+        }
+        #expect(first.vlcPlayer.media === firstMedia)
+        #expect(second.vlcPlayer.media === secondMedia)
+        #expect(first.channel?.id == "main")
+        #expect(second.channel?.id == "small")
+        #expect(arrangement.slots[arrangement.audibleIndex] === first)
+        #expect(first.vlcPlayer.audio?.isMuted == false)
+        #expect(second.vlcPlayer.audio?.isMuted == true)
+        #expect(first.vlcPlayer.audio?.volume == 35)
+        #expect(await waitUntil { first.vlcPlayer.time.intValue > firstTime && second.vlcPlayer.time.intValue > secondTime })
+    }
+
     @Test("AVPlayer retains volume and mute across stream replacement")
     func nativeVolumeAcrossStreams() throws {
         let slot = PlaybackSlot()

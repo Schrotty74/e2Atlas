@@ -1,75 +1,75 @@
 # Projektkontext – e2Atlas
 
-Stand: 16. Oktober 2026. Quellcode und tatsächlich ausgeführte Prüfungen sind maßgeblich. Ein Downloadpaket kann älter sein als der aktuelle Branch.
+Stand: 16. Oktober 2026. Dieser Quellstand ist für `0.2.0-beta` vorbereitet; die Veröffentlichung und abschließende Paketprüfung stehen noch aus.
 
 ## Produkt und Plattform
 
-e2Atlas ist eine native SwiftUI-App für Live-TV von Enigma2-Receivern über OpenWebif. Unterstützt werden Apple Silicon und macOS 26 oder neuer. Entwicklung und bisherige Prüfungen liefen mit Xcode 27 auf macOS 27.0.1. Ein Lauf auf macOS 26 steht aus.
+e2Atlas ist eine native SwiftUI-App für Live-TV von Enigma2-Receivern über OpenWebif. Sie unterstützt Apple Silicon ab M1 und macOS 26 oder neuer. Entwicklung und Tests laufen mit Xcode 27 auf macOS 27. Die Gestaltung verbindet Kino und Regie; Fernsehen, Multiview und Programmführer bilden eigene Ansichten. Liquid Glass dient den Bedienelementen. Das bearbeitbare Kino-Icon liegt unter `Resources/E2AtlasIcon.icon`; Xcode kompiliert helle, dunkle und getönte Darstellungen. Keine statische Dock-Icon-Zuweisung zur Laufzeit.
 
-Die Gestaltung verbindet Kino und Regie mit einer eigenen Programmansicht. Liquid Glass wird für Bedienelemente verwendet. Automatische, helle und dunkle Darstellung sowie System- und Ocean-Theme sind vorhanden. Das Kino-App-Icon liegt als bearbeitbare Icon-Composer-Datei unter `Resources/AppIcon.icon` vor; Xcode kompiliert die Varianten.
+## Funktionen und Module
 
-## Implementierte Funktionen und Module
+- `AtlasCore`: gemeinsame Modelle, Einstellungen, atomare Speicherung und EPG-Zeitfenster.
+- `AtlasReceiver`: OpenWebif-Verifikation, Bouquets, Sender, EPG, Logos, Stream-Adressen und Receiver-Hardwareinfos.
+- `AtlasPlayback`: getrennte Wiedergabeplätze, Tonsteuerung und Multiview-Anordnung. VLCKit für allgemeine und authentifizierte Streams, AVPlayer für nicht authentifizierte HLS-Streams.
+- `AtlasRecording`: Übertragung eines Originalstreams in eine neue lokale MPEG-TS-Datei.
+- `AtlasThemes`: validierte JSON-Themes mit getrennten hellen und dunklen Paletten, optionalem Verlauf und System als Rückfall.
+- `e2Atlas`: SwiftUI-Oberfläche, Einrichtung, Einstellungen und Koordination der Module.
 
-- `Sources/AtlasCore`: gemeinsame Modelle, validierte Einstellungen, atomare Speicherung, EPG-Zeitfenster.
-- `Sources/AtlasReceiver`: OpenWebif-Verifikation, Bouquets, Sender, EPG, Picons und Stream-Adressen.
-- `Sources/AtlasPlayback`: unabhängige Wiedergabeplätze; VLCKit für allgemeine und authentifizierte Streams, AVPlayer für nicht authentifizierte HLS-Streams.
-- `Sources/AtlasThemes`: versionierte JSON-Themes mit Validierung und System-Theme als Rückfall.
-- `Sources/e2Atlas`: SwiftUI-App, Einrichtung, Einstellungen, Fernsehen, Multiview und Programmführer.
+Bis zu drei Receiver können gespeichert werden. Benutzername und Passwort sind optional, wenn die Dienste des Receivers keine Anmeldung verlangen. OpenWebif und Streaming können getrennt geschützt sein. Eine automatische Netzwerksuche ist nicht implementiert.
 
-Bis zu drei Receiver, Sendersuche und Senderlogos vom Receiver werden unterstützt. Multiview zeigt bis zu vier Bilder mit höchstens einer Tonquelle. Stummschaltung und Lautstärke bleiben bei Senderwechseln erhalten. Der Programmführer bietet 2-, 4- und 6-Stunden-Fenster, 20:15 und eigene Zeitkürzel. Aufnahme- und Timer-Verwaltung fehlen.
+Multiview bietet bis zu vier Bilder mit einer Tonquelle. Ein kleines Bild kann mit dem Hauptbild tauschen; bestehende Player, Ton und Lautstärke bleiben erhalten. Anfragetokens verhindern, dass veraltete Senderanfragen nach einem Tausch oder Ausblenden Streams neu starten. „Nur Video“ blendet die App-Bedienung aus; Escape und Doppelklick führen zurück. VLC-Ausgabeflächen bleiben bei Containerwechseln erhalten. Der Ladekreis endet nach tatsächlicher Bildausgabe.
 
-Benutzername und Passwort dürfen leer bleiben, wenn der Receiver keine Anmeldung verlangt. OpenWebif liefert Daten und Logos, der Streaming-Dienst Bild und Ton. Ob ein Anmeldeschutz aktiv ist, hängt von der Receiver-Konfiguration ab.
+Der Programmführer bietet 2-, 4- und 6-Stunden-Fenster, den Sprung zu 20:15 und eigene Zeitkürzel. Senderlogos werden vom Receiver geladen.
 
-## Wiedergabe und behobene Fehler
+Receiver-Info liest `/api/boxinfo` und bei geeigneten älteren Antworten `/api/about`. Hardware- und Systemfelder sowie bestätigte Tuner-Nutzung werden dargestellt, soweit vorhanden. Nicht zugeordnete Streams werden getrennt gezählt. Mehrere Streams können denselben Tuner teilen; ihre Anzahl ist keine Tunerbelegung. Bei fehlender Zuordnung bleibt die Gesamtbelegung unbekannt. Das Fenster aktualisiert alle fünf Sekunden. Rohantworten, Client-Adressen, Seriennummern und MAC-Adressen werden nicht gespeichert.
 
-Der Ladekreis verschwindet nach tatsächlicher Bildausgabe, auch wenn VLC noch Buffering meldet. Senderwechsel und Stoppen setzen den Zustand pro Wiedergabeplatz zurück.
+## Lokale Aufnahme
 
-„Nur Video“ zeigt einen ausgewählten Wiedergabeplatz ohne App-Bedienung. Escape, Doppelklick oder Kontextmenü führen zurück. Command–Shift–F aktiviert den Modus. Ein zuvor aktives natives App-Vollbild bleibt erhalten.
+Der Aufnahme-Button liegt in der Player-Leiste und in kleinen Multiview-Bildern. Ein NSSavePanel wählt eine neue `.ts`-Datei. Eine Aufnahme kann gleichzeitig laufen, unabhängig von der sichtbaren Wiedergabe. Die App zeigt Laufzeit und Datenmenge, bietet Stoppen und anschließend die Anzeige im Finder. Vorhandene Dateien werden nicht überschrieben; ein exklusives Erstellen schützt auch gegen zwischenzeitliche Namenskollisionen. Bei Abbruch bleiben bereits gültig gespeicherte Streamdaten erhalten, leere Ausgabedateien werden entfernt. Receiver-Timer und Transcoding sind nicht implementiert.
 
-Der Schwarzbildfehler beim Wechsel in den Nur-Video-Modus ließ sich mit synthetischen VLC-Clips reproduzieren und wurde korrigiert. Die `VLCVideoView` bleibt pro Wiedergabeplatz bestehen. SwiftUI-Wrapper übernehmen sie ausschließlich in `makeNSView`, nicht erneut in `updateNSView`; alte Wrapper dürfen sie nicht vom neuen Container lösen. Ein Regressionstest prüft wiederholte Containerwechsel bei laufender Wiedergabe.
+Die Aufnahme verwendet eine flüchtige URLSession ohne Cookie-, Credential- oder Disk-Cache. HTTP-Basic-Zugangsdaten werden nur für den konfigurierten Ursprung verwendet; Weiterleitungen werden abgelehnt. Dateizugriffe und Session-Callbacks sind seriell, Abbruchzustand ist gesperrt. Fortschrittsmeldungen sind auf vier pro Sekunde begrenzt.
 
-## Zugangsdaten und Netzwerk
+VLCKit fordert VideoToolbox für unterstützte Codecs an und kann auf Software zurückfallen. Tatsächliche Hardware-Nutzung und CPU-Ersparnis sind nicht gemessen. Die Aufnahme kopiert Daten und benötigt keine Video-Neukodierung.
 
-Passwörter liegen im macOS-Schlüsselbund; erfolgreich gelesene Werte werden während der Sitzung im Speicher gehalten. Unveränderte Passwörter werden nicht erneut geschrieben. Abgewiesene Zugriffe ersetzen keine gespeicherten Zugangsdaten. Namen, Adressen, Benutzernamen und Anzeigeeinstellungen liegen in Application Support.
+## Themes und Links
 
-Der API-Client verwendet eine flüchtige URLSession, HTTP-Basic-Challenges für den konfigurierten Ursprung und lehnt fremde Weiterleitungsziele ab. HTTPS nutzt die normale System-Zertifikatsprüfung. HTTP bleibt für Receiver-Kompatibilität zulässig und ist unverschlüsselt. Die Netzwerklogik der Wiedergabe-Engines ist getrennt vom API-Client zu beurteilen.
+System, Ocean, Elfenbein und Bronze sind mitgeliefert. Farb-Themes haben helle und dunkle Paletten sowie dezente Verläufe. Automatisch folgt macOS. Eigene JSON-Dateien liegen im kanalgetrennten Theme-Ordner. Der Vorlagen-Button erstellt eine neue Datei und Anleitung ohne Überschreiben. Die Liste lädt während geöffneter Darstellungseinstellungen alle zwei Sekunden neu. Ungültige, doppelte oder über 64 KiB große Dateien werden gezählt und ausgelassen; mitgelieferte Kennungen haben Vorrang. Ein verlorenes ausgewähltes Theme führt zum System-Theme zurück.
 
-Ad-hoc-Builds können erneut Schlüsselbund-Freigaben auslösen. Sitzungscache und `LAContext.interactionNotAllowed` sind kein belegter Ersatz für eine stabile Signieridentität. Die wiederkehrende Abfrage ist noch nicht vollständig behoben. `E2ATLAS_SIGNING_IDENTITY` kann ein bereits vorhandenes Zertifikat auswählen; ohne Vorgabe bleibt Ad-hoc. Zertifikate und Freigaben nicht eigenmächtig ändern.
+Der About-Tab neben Receiver und Darstellung zeigt App-Icon, numerische Version, Build sowie Homepage- und GitHub-Links. Dieselben Links sind im Hilfe-Menü verfügbar. Öffentliche Theme-Anleitungen und JSON-Vorlage liegen unter `Documentation/Themes/`.
 
-## Build und Veröffentlichung
+## Daten und Zugangsdaten
 
-Alle Einstiegsskripte liegen in `Scripts/` und ermitteln den Projektordner aus ihrer eigenen Position. Xcode-Projekt und SwiftPM-Manifest beschreiben dieselben Module. `Scripts/generate-project.py` regeneriert das Xcode-Projekt; `Scripts/test.sh` verwendet Xcode, weil SwiftPM beim VLCKit-Testbundle eine Laufzeitladegrenze hat.
+Passwörter liegen im macOS-Schlüsselbund und nach erfolgreichem Lesen im Sitzungsspeicher. Automatische Lesezugriffe verwenden `LAContext.interactionNotAllowed` und ergänzend `kSecUseAuthenticationUIFail`. Verweigerter Zugriff wird als `credentialsUnavailable` behandelt: automatische Verbindungen versuchen ohne Passwort, ohne diesen Ersatz zu speichern oder das vorhandene Secret zu überschreiben. Andere Speicherfehler bleiben sichtbar. Bearbeiten und Speichern bleiben strikt; geschützte Receiver können gültige Zugangsdaten benötigen. Wiederkehrende Systemdialoge sind auf dem Nutzergerät noch nicht abschließend ausgeschlossen.
 
-| Kanal | App | Bundle-ID | Ausgabe |
-| --- | --- | --- | --- |
-| Dev | e2Atlas Dev | io.github.schrotty74.e2atlas.dev | `Build/Dev/` |
-| Beta | e2Atlas Beta | io.github.schrotty74.e2atlas.beta | `Build/Beta/` |
-| Final | e2Atlas | io.github.schrotty74.e2atlas | `Build/Final/` |
+Dev, Beta und Final haben getrennte Bundle-Kennungen, Einstellungen, Theme-Ordner, App-Caches und Schlüsselbund-Services. Nur die neue Dev-Kennung `io.github.schrotty74.e2atlas.development` wird auf seinen bisherigen `.dev`-Speicher abgebildet; Beta und Final bleiben unverändert. Namen, Adressen und Benutzernamen liegen in Application Support. Receiver-Daten und private Diagnosen gehören nicht ins Repository.
 
-Dev bleibt lokal. Beta verlangt einen getrennten Checkout auf `beta`, Final auf `main`. Der lokale Dev-Stand funktioniert auch ohne Git. Build und Paketierung veröffentlichen nichts automatisch.
+Der OpenWebif-API-Client verwendet eine flüchtige Session, Basic-Challenges nur vom eingerichteten Ursprung und keine fremden Weiterleitungsziele. HTTPS verwendet die System-Zertifikatsprüfung. HTTP ist für Receiver-Kompatibilität zulässig und unverschlüsselt. Wiedergabe-Engines haben eigene Netzwerklogik. Es gibt keine Telemetrie oder Cloud-Konten.
 
-VLCKit 3.7.3 wird projektgebunden von VideoLAN geladen und vor Extraktion gegen eine festgelegte SHA-256-Prüfsumme geprüft. Es wird als austauschbares dynamisches Framework unter LGPL eingebunden. Die App steht unter GPL v3.
+## Build und Release
 
-`Scripts/package-beta.sh` erstellt ZIP, DMG und Prüfsummen aus einem sauberen Beta-Checkout. Es prüft Version, Kanal, Architektur und lokale Entwicklungspfade im eigenen Release-Programm. Release-Ausgaben werden nicht überschrieben.
+Alle Einstiegsskripte liegen unter `Scripts/` und ermitteln Pfade aus ihrer Position. Xcode-Projekt und SwiftPM verwenden dieselben Module. `generate-project.py` erzeugt das Projekt; `test.sh` führt Swift-Testing-Tests über Xcode mit eingebundenem VLC aus. VLCKit 3.7.3 wird projektgebunden von VideoLAN geladen und gegen eine feste SHA-256-Prüfsumme geprüft. GPL v3 für die App, austauschbares dynamisches VLCKit unter LGPL; Hinweise und Quelllinks sind gebündelt.
 
-`Scripts/check-public-tree.sh` prüft eine Positivliste. Der Pre-Push-Hook begrenzt Branches, Zielrepository und unterstützte Beta-Tags und prüft ausgehende Historie. Auf einem neuen Mac ist die repository-lokale Aktivierung mit `git config core.hooksPath Scripts/git-hooks` erforderlich. Vor jedem Push dessen tatsächliche Aktivierung prüfen. Final-Paketierung und Final-Tags sind noch nicht implementiert.
+| Kanal | Bundle-Kennung | App-Ausgabe im Gesamtprojekt |
+| --- | --- | --- |
+| Dev | `io.github.schrotty74.e2atlas.development` | `Build/Dev/Application/e2Atlas Dev.app` |
+| Beta | `io.github.schrotty74.e2atlas.beta` | `Build/Beta/e2Atlas Beta.app` |
+| Final | `io.github.schrotty74.e2atlas` | `Build/Final/e2Atlas.app` |
 
-## Bisherige Prüfungen und Release-Stand
+Zusätzliche lokale Quell-Checkouts liegen unter `Local/Channels/`. Der Beta-Aufruf im Hauptprojekt verwendet den Beta-Checkout und dessen eigenen Xcode-Build-Cache. `E2ATLAS_OUTPUT_DIRECTORY` ändert ausschließlich die fertige App-Ausgabe; relative Werte gelten ab dem bauenden Checkout. Eigenständige Checkouts benötigen keine lokale Gesamtstruktur. Beta verlangt Branch `beta`, Final `main`. Final-Paketierung und Final-Tags fehlen weiterhin.
 
-Die erste Beta `0.1.0-beta.1` wurde am 15. Oktober 2026 veröffentlicht. Der Tag `v0.1.0-beta.1` zeigt auf `e585abd77d2dfc9c2b1fb70da4edef417c0f4ed7`. Spätere Branch-Commits ändern dieses Paket nicht. Download: https://github.com/Schrotty74/e2Atlas/releases/tag/v0.1.0-beta.1
+Versionsschema: drei Zahlen für Final-Generation, Beta-Schritt und Bugfix mit `-final`, `-beta` oder `-bugfix`. App-Metadaten trennen numerische Version und vollständigen Release-Namen. Beta `0.2.0-beta` verwendet Build 2. Dev bleibt lokal. Quellstände werden gezielt übernommen, keine Dev-Historie veröffentlicht. Positivliste und Pre-Push-Hook prüfen Zielrepository, Branches und alle ausgehenden Commits. Der Hook muss über `git config core.hooksPath Scripts/git-hooks` repository-lokal aktiviert sein.
 
-Alle 36 Xcode-Tests in sieben Suites bestanden für diese Beta. ZIP-Inhalt, App-Signatur und DMG wurden geprüft; veröffentlichte Dateigrößen und SHA-256-Digests stimmten mit den vorbereiteten Paketen überein. Die App ist ad-hoc signiert und nicht notarisiert.
+`package-beta.sh` verlangt einen sauberen, geprüften Beta-Commit und erstellt ZIP, DMG und SHA256SUMS. Es prüft Metadaten, arm64 und private Entwicklungspfade im eigenen Release-Programm. Ausgaben werden nicht überschrieben. Apps sind ad-hoc signiert und nicht notarisiert. Gatekeeper kann eine einmalige Freigabe erfordern. Build und Paketierung veröffentlichen nichts automatisch.
 
-Native Bedienungsprüfungen mit synthetischen Inhalten deckten Einrichtung, Multiview, EPG, Zeitkürzel, Tonsteuerung und Nur-Video-Wechsel ab. Live-TV wurde zusätzlich an einem realen Receiver bestätigt. Das ist kein vollständiger eigener Hardwaretest oder Nachweis für alle Images. macOS 26 und weitere Receiver-Images bleiben offen.
+## Prüfergebnisse und Grenzen
 
-## Änderungsprotokoll
+- 16. Oktober 2026: Beta-Build `0.2.0-beta`, Build 2, erfolgreich. Alle 66 Tests in neun Suites bestanden im Beta-Quellstand. App-Signatur erfolgreich geprüft. Native Demo-Prüfung bestätigt About mit Version 0.2.0 und Build 2, beide Links, System/Ocean/Elfenbein/Bronze in der Auswahl sowie die Aufnahme-Schaltfläche in der Player-Leiste. Paket- und frische Checkout-Prüfung sowie Veröffentlichung stehen noch aus.
+- Frühere native Prüfungen im Dev-Stand bestätigten synthetische Wiedergabe, Vollbildwechsel, Multiview-Tausch, Tonsteuerung, Themes und About. Live-TV ist zusätzlich durch einen Nutzer an einem realen Receiver bestätigt. FBC-Auswertung wurde mit bereinigten realen Zählern geprüft. Das ist kein vollständiger Hardware- oder Image-Kompatibilitätstest.
+- macOS 26, weitere Receiver-Images, tatsächliche Hardwaredekodierung, Aufnahmen bei realen Netzwerk-/Speicherfehlern und dauerhaft dialogfreier Schlüsselbund-Zugriff bleiben zu prüfen.
+- Beim lokalen Dev-Dock-Problem zeigte dasselbe Paket am alten Pfad das weiße dunkle Icon und an einem neuen Pfad das richtige. Nutzer bestätigte den neuen Pfad auch nach Paketersatz. Die genaue macOS-Ursache ist offen; dies belegt keinen allgemeinen Cache-Fix für alle Rechner.
 
-- 15. Oktober 2026, Beta 1: erste Veröffentlichung mit 36 erfolgreichen Xcode-Tests und geprüften Downloadpaketen.
-- 15. Oktober 2026, Beta-Branch: englische und deutsche README sowie SECURITY, Icon und kompakte Bildvorschauen veröffentlicht. Receiver-Abbildung anonymisiert, PNG-Metadaten entfernt. Skripte nach `Scripts/` verschoben. Beta-Build aus frischer Projektkopie mit Leerzeichen im Ordnernamen erfolgreich. Downloadpaket unverändert.
-- 15. Oktober 2026, Kontextpflege: vier bereinigte Kontextdateien unter `Documentation/Project/` zusammengeführt, Root-Einstieg für Codex ergänzt und Pflege nach jedem Build sowie Veröffentlichung nach beauftragten Beta-/Final-Releases festgelegt. Nur Dokumentation und Upload-Positivliste geändert; kein neuer App-Build.
+## Veröffentlichungshistorie
 
-## Öffentliche Theme-Dokumentation
-
-`Documentation/Themes/README.md` und `README.de.md` erklären das Erstellen eigener Themes, alle Felder, getrennte Paletten, mehrere Dateien, Fehler und Kanalordner. `Documentation/Themes/theme-template.json` ist die herunterladbare Vorlage. Beide Startseiten verlinken die passende Sprache. Die Anleitung unterscheidet die manuelle JSON-Unterstützung in Beta 1 von den noch nicht veröffentlichten Erweiterungen für Vorlagen-Button, Verlauf und weitere mitgelieferte Themes. Beta-Quellcode und Downloadpaket wurden für diese Dokumentationsveröffentlichung nicht ersetzt.
-
-- 16. Oktober 2026, Beta-Dokumentation: zweisprachige Theme-Anleitung und JSON-Vorlage für die Veröffentlichung vorbereitet; Links, JSON-Format und private Angaben geprüft. Sprachlich passende Humanizer angewendet. Kein neuer Beta-Build und keine Übernahme des lokalen Dev-Codes.
+- 15. Oktober 2026: erste Beta unter historischem Tag `v0.1.0-beta.1` veröffentlicht, 36 erfolgreiche Tests. Bilinguale READMEs, bereinigte Screenshots, Sicherheits- und Theme-Dokumentation folgten als Branch-Änderungen.
+- 16. Oktober 2026: Anzeigename dieses ersten Releases auf `e2Atlas 0.1.0-beta` geändert; historischer Tag und Download-Dateien erhalten.
+- 16. Oktober 2026: neue Beta `0.2.0-beta` mit Receiver-Info, Multiview-Tausch, lokaler Aufnahme, neuen Themes, Vorlagen, About und optionalem Anmeldehinweis vorbereitet. Feature-Listen, englischer Changelog und Kontextdateien werden auf diesen Quellstand gebracht. Veröffentlichung ist noch ausstehend.

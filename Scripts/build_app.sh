@@ -5,6 +5,17 @@ project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 source "$project_root/Scripts/build-channel.sh"
 channel="${APP_BUILD_CHANNEL:-dev}"
 configure_channel "$channel"
+output_relative="Build/$channel_name"
+if [[ "$channel" == dev ]]; then
+  # Avoid the former bundle URL whose dark Dock icon remained stale on macOS.
+  output_relative="$output_relative/Application"
+fi
+# Relative overrides are resolved against this source checkout.
+output_dir="${E2ATLAS_OUTPUT_DIRECTORY:-$output_relative}"
+case "$output_dir" in
+  /*) ;;
+  *) output_dir="$project_root/$output_dir" ;;
+esac
 [[ $# -le 1 ]] || { echo 'Too many arguments.' >&2; exit 64; }
 
 case "${1:-}" in
@@ -12,19 +23,20 @@ case "${1:-}" in
     echo 'Usage: APP_BUILD_CHANNEL=dev|beta|final ./Scripts/build_app.sh [--plan]'
     echo 'Builds a local Apple-Silicon app; never commits, pushes or publishes.'
     echo 'Optional: E2ATLAS_SIGNING_IDENTITY selects an existing signing certificate; default is ad-hoc.'
+    echo 'Optional: E2ATLAS_OUTPUT_DIRECTORY changes only the final app output, not caches or source.'
     exit 0 ;;
   --plan)
     printf 'Channel: %s\nBranch: %s\nConfiguration: %s\nApp: %s\nBundle: %s\nArchitecture: arm64\nMinimum macOS: 26.0\n' \
       "$channel" "$expected_branch" "$build_configuration" "$app_name" "$bundle_id"
-    printf 'Output: Build/%s/%s.app\nDerived data: Build/DerivedData/%s\n' "$channel_name" "$app_name" "$channel_name"
+    printf 'Output: %s/%s.app\nDerived data: Build/DerivedData/%s\n' "$output_dir" "$app_name" "$channel_name"
     exit 0 ;;
   '') ;;
   *) echo 'Unknown argument. Use --help or --plan.' >&2; exit 64 ;;
 esac
 require_channel_checkout "$project_root" "$channel"
 case "$channel" in
-  beta) release_version="${E2ATLAS_RELEASE_VERSION:-0.1.0-beta.1}" ;;
-  final) release_version="${E2ATLAS_RELEASE_VERSION:-0.1.0}" ;;
+  beta) release_version="${E2ATLAS_RELEASE_VERSION:-0.2.0-beta}" ;;
+  final) release_version="${E2ATLAS_RELEASE_VERSION:-1.0.0-final}" ;;
   dev) release_version="${E2ATLAS_RELEASE_VERSION:-0.1.0-dev}" ;;
 esac
 if [[ ! -d "$project_root/e2Atlas.xcodeproj" ]]; then
@@ -35,7 +47,25 @@ fi
 cd "$project_root"
 "$project_root/Scripts/fetch-vlckit.sh"
 derived_data="$project_root/Build/DerivedData/$channel_name"
-output_dir="$project_root/Build/$channel_name"
+# Give replaced local Dev bundles a new version for Launch Services / Icon Services.
+# Beta and Final keep their explicitly configured project build number.
+build_number_args=()
+if [[ "$channel" == dev ]]; then
+  dev_build_number="$(python3 - "$output_dir/$app_name.app/Contents/Info.plist" "$project_root/Build/Dev/$app_name.app/Contents/Info.plist" <<'PYBUILD'
+import plistlib, sys
+from pathlib import Path
+previous = next((Path(value) for value in sys.argv[1:] if Path(value).is_file()), Path(sys.argv[1]))
+version = "0"
+if previous.is_file():
+    with previous.open("rb") as stream:
+        version = str(plistlib.load(stream).get("CFBundleVersion", "0"))
+if not version.isdecimal():
+    raise SystemExit("The previous Dev build number is not numeric.")
+print(int(version) + 1)
+PYBUILD
+)"
+  build_number_args=("CURRENT_PROJECT_VERSION=$dev_build_number")
+fi
 # A stable existing signer can preserve Keychain trust across rebuilds.
 # This never creates, imports or changes a certificate or a Keychain ACL.
 signing_identity="${E2ATLAS_SIGNING_IDENTITY:--}"
@@ -48,8 +78,9 @@ xcrun xcodebuild -project e2Atlas.xcodeproj -scheme e2Atlas \
   ARCHS=arm64 ONLY_ACTIVE_ARCH=NO MACOSX_DEPLOYMENT_TARGET=26.0 \
   E2ATLAS_APP_NAME="$app_name" E2ATLAS_BUNDLE_IDENTIFIER="$bundle_id" \
   E2ATLAS_BUILD_CHANNEL="$channel" E2ATLAS_RELEASE_VERSION="$release_version" \
+  MARKETING_VERSION="${release_version%%-*}" \
   CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="$signing_identity" DEVELOPMENT_TEAM= \
-  build
+  ${build_number_args[@]+"${build_number_args[@]}"} build
 
 built_app="$derived_data/Build/Products/$build_configuration/$app_name.app"
 [[ -d "$built_app" ]] || { echo 'Xcode did not produce the expected app.' >&2; exit 1; }
@@ -67,4 +98,7 @@ if [[ -e "$output_dir/$app_name.app" ]]; then
 fi
 mv "$staging_dir/$app_name.app" "$output_dir/$app_name.app"
 if [[ -n "${previous_bundle:-}" ]]; then rm -rf "$previous_bundle"; fi
+# Register the final location after the staged bundle has been moved into place.
+# Xcode registers its DerivedData product, which is a different URL.
+xcrun swift "$project_root/Scripts/register-built-app.swift" "$output_dir/$app_name.app"
 printf '%s\n' "$output_dir/$app_name.app"

@@ -47,11 +47,12 @@ public struct ReceiverInfo: Sendable, Equatable {
 }
 
 public enum AtlasFailure: Error, LocalizedError, Sendable, Equatable {
-    case invalidAddress, unauthorized, unreachable, invalidResponse
+    case invalidAddress, unauthorized, unreachable, invalidResponse, credentialsUnavailable
     case unsupported(String), storage(String)
     public var errorDescription: String? {
         switch self {
         case .invalidAddress: "Bitte eine gültige IP-Adresse oder einen Hostnamen eingeben."
+        case .credentialsUnavailable: "Das gespeicherte Passwort ist für diesen App-Build ohne Schlüsselbund-Freigabe nicht verfügbar. Der Eintrag bleibt erhalten."
         case .unauthorized: "Die Anmeldung wurde abgelehnt. Bitte Benutzername und Passwort prüfen."
         case .unreachable: "Der Receiver ist nicht erreichbar. Bitte Adresse und Netzwerk prüfen."
         case .invalidResponse: "Die Antwort des Receivers konnte nicht gelesen werden."

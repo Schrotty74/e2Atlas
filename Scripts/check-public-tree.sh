@@ -12,7 +12,7 @@ git ls-tree -r --name-only -z "$revision" > "$list_file"
 failed=0
 while IFS= read -r -d '' file; do
   case "$file" in
-    Sources/*|Tests/*|Resources/*|Configuration/*|Scripts/*.sh|Scripts/generate-project.py|Scripts/git-hooks/pre-push|\
+    Sources/*|Tests/*|Resources/*|Configuration/*|Scripts/*.sh|Scripts/generate-project.py|Scripts/register-built-app.swift|Scripts/git-hooks/pre-push|\
     e2Atlas.xcodeproj/project.pbxproj|e2Atlas.xcodeproj/xcshareddata/xcschemes/*.xcscheme|\
     e2Atlas.xcworkspace/contents.xcworkspacedata|\
     AGENTS.md|Documentation/Project/AGENTS.md|Documentation/Project/PROJECT_CONTEXT.md|Documentation/Project/NEXT_STEPS.md|Documentation/Project/CHAT_TEMPLATE.md|\

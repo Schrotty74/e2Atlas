@@ -22,9 +22,11 @@ struct MainWindow: View {
     @State private var nowGuide = GuideStore()
     @State private var playback = PlaybackStore()
     @State private var videoOnly = VideoOnlyController()
+    @State private var recording = RecordingStore()
     @State private var search = ""
     @State private var localError: String?
     @Environment(\.atlasTheme) private var theme
+    @Environment(\.openWindow) private var openWindow
     @Environment(\.colorScheme) private var scheme
     private var filteredChannels: [Channel] { channels.channels.filter { search.isEmpty || $0.name.localizedCaseInsensitiveContains(search) } }
 
@@ -45,7 +47,11 @@ struct MainWindow: View {
             }
         }
         .background(VideoWindowReader(controller: videoOnly))
-        .background(videoOnly.isActive ? Color.black : Color(atlasHex: theme.palette(for: scheme).background))
+        .background {
+            if videoOnly.isActive { Color.black }
+            else { AtlasThemeBackground() }
+        }
+        .foregroundStyle(theme.id == "system" ? Color.primary : Color(atlasHex: theme.palette(for: scheme).text))
         .tint(theme.id == "system" ? .accentColor : Color(atlasHex: theme.palette(for: scheme).accent))
         .frame(minWidth: videoOnly.isActive ? 100 : 960, minHeight: videoOnly.isActive ? 100 : 680)
         .toolbar { appToolbar }
@@ -65,11 +71,12 @@ struct MainWindow: View {
             if value != .guide { playback.setMultiview(value == .multiview) }
         }
         .onChange(of: settings.preferences) { settings.persist() }
-        .onDisappear { videoOnly.exit(); playback.stopAll() }
+        .onDisappear { videoOnly.exit(); playback.stopAll(); recording.stop() }
     }
 
     private var appContent: some View {
         VStack(spacing: 0) {
+            if recording.isActive || recording.message != nil { recordingStatus }
             if let error = localError ?? channels.error { ErrorNotice(message: error).padding([.horizontal, .top], 16) }
             if section == .guide {
                 GuideView(store: guide, channels: filteredChannels, picons: channels.picons, settings: settings, playback: playback, demo: demo, onPlay: { channel in play(channel, index: 0) }, onPicon: { channel in await channels.loadPicon(channel) })
@@ -99,6 +106,11 @@ struct MainWindow: View {
                     }.frame(maxWidth: 180)
                 }
             }
+            ToolbarItem(placement: .automatic) {
+                Button("Receiver-Info", systemImage: "info.circle") { openWindow(id: "receiver-info") }
+                    .help("Hardware und Tuner des ausgewählten Receivers anzeigen")
+                    .disabled(demo || settings.selectedReceiver == nil)
+            }
             ToolbarItem(placement: .automatic) { SettingsLink { Label("Einstellungen", systemImage: "slider.horizontal.3") } }
             ToolbarItem(placement: .automatic) {
                 Button("Nur Video", systemImage: "play.rectangle.fill") { enterVideoOnly(playback.targetIndex) }
@@ -106,6 +118,40 @@ struct MainWindow: View {
                     .help("Nur das ausgewählte Video zeigen · Escape zum Zurückkehren")
                     .disabled(!demo && playback.slots[playback.targetIndex].channel == nil)
             }
+    }
+
+    private var recordingStatus: some View {
+        HStack(spacing: 12) {
+            if recording.isActive {
+                Image(systemName: "record.circle.fill").foregroundStyle(.red)
+                Text(recording.channelName).fontWeight(.semibold).lineLimit(1)
+                TimelineView(.periodic(from: recording.startedAt, by: 1)) { context in
+                    Text(Duration.seconds(max(0, context.date.timeIntervalSince(recording.startedAt))).formatted(.time(pattern: .hourMinuteSecond)))
+                        .monospacedDigit()
+                }
+                Text(ByteCountFormatter.string(fromByteCount: recording.bytes, countStyle: .file)).monospacedDigit()
+                Spacer()
+                Button(recording.isStopping ? "Wird gespeichert …" : "Aufnahme stoppen") { recording.stop() }.disabled(recording.isStopping)
+            } else {
+                Text(recording.message ?? "").lineLimit(2)
+                Spacer()
+                if recording.canReveal { Button("Im Finder zeigen") { recording.reveal() } }
+                Button("Schließen", systemImage: "xmark") { recording.dismissMessage() }.labelStyle(.iconOnly)
+            }
+        }
+        .font(.callout).padding(.horizontal, 20).padding(.vertical, 10)
+        .accessibilityElement(children: .contain)
+    }
+
+    private func isRecording(_ slot: PlaybackSlot) -> Bool {
+        recording.isActive && recording.channelID == slot.channel?.id && recording.receiverID == settings.selectedReceiver?.id
+    }
+
+    private func toggleRecording(_ slot: PlaybackSlot) {
+        if isRecording(slot) { recording.stop(); return }
+        guard !recording.isActive, !demo, let channel = slot.channel,
+              let profile = settings.selectedReceiver, let client = channels.client else { return }
+        recording.start(channel: channel, profile: profile, client: client, settings: settings)
     }
 
     private func enterVideoOnly(_ index: Int) {
@@ -139,12 +185,14 @@ struct MainWindow: View {
             }.padding(.horizontal, 20).padding(.vertical, 12)
             GeometryReader { geometry in
                 HStack(spacing: 12) {
-                    VideoTile(slot: playback.slots[0], selected: playback.targetIndex == 0, audible: !playback.slots[0].isMuted, audioSelected: playback.audibleIndex == 0, volume: volumeBinding, demo: demo, large: true, select: { playback.targetIndex = 0 }, audio: { playback.toggleAudio(0) }, videoOnly: { enterVideoOnly(0) })
+                    VideoTile(slot: playback.slots[0], selected: playback.targetIndex == 0, audible: !playback.slots[0].isMuted, audioSelected: playback.audibleIndex == 0, volume: volumeBinding, demo: demo, large: true, select: { playback.targetIndex = 0 }, audio: { playback.toggleAudio(0) }, videoOnly: { enterVideoOnly(0) }, swapWithMain: nil, recordingActive: isRecording(playback.slots[0]), recordingEnabled: !recording.isStopping && (!recording.isActive || isRecording(playback.slots[0])), record: { toggleRecording(playback.slots[0]) })
+                        .id(playback.slots[0].id)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     if section == .multiview {
                         VStack(spacing: 12) {
-                            ForEach(1..<playback.visibleCount, id: \.self) { index in
-                                VideoTile(slot: playback.slots[index], selected: playback.targetIndex == index, audible: !playback.slots[index].isMuted, audioSelected: playback.audibleIndex == index, volume: volumeBinding, demo: demo, large: false, select: { playback.targetIndex = index }, audio: { playback.toggleAudio(index) }, videoOnly: { enterVideoOnly(index) })
+                            ForEach(Array(playback.slots[1..<playback.visibleCount])) { slot in
+                                let index = playback.slots.firstIndex(where: { $0.id == slot.id }) ?? 1
+                                VideoTile(slot: slot, selected: playback.targetIndex == index, audible: !playback.slots[index].isMuted, audioSelected: playback.audibleIndex == index, volume: volumeBinding, demo: demo, large: false, select: { playback.targetIndex = index }, audio: { playback.toggleAudio(index) }, videoOnly: { enterVideoOnly(index) }, swapWithMain: { playback.swapWithMain(index) }, recordingActive: isRecording(slot), recordingEnabled: !recording.isStopping && (!recording.isActive || isRecording(slot)), record: { toggleRecording(slot) })
                             }
                         }.frame(width: max(220, geometry.size.width * 0.26))
                     }
@@ -211,7 +259,7 @@ struct MainWindow: View {
         guard !demo, let profile = settings.selectedReceiver, let client = channels.client else { return }
         Task {
             do {
-                let password = try settings.credentials.password(for: profile.id)
+                let password = try settings.credentials.availablePassword(for: profile.id)
                 await playback.play(channel, client: client, profile: profile, password: password, index: index)
             } catch { localError = error.localizedDescription }
         }
@@ -224,7 +272,7 @@ struct MainWindow: View {
             return
         }
         guard let profile = settings.selectedReceiver else { return }
-        do { await channels.connect(profile, password: try settings.credentials.password(for: profile.id)) }
+        do { await channels.connect(profile, password: try settings.credentials.availablePassword(for: profile.id)) }
         catch { localError = error.localizedDescription }
     }
 }
@@ -240,6 +288,13 @@ struct VideoTile: View {
     let select: () -> Void
     let audio: () -> Void
     let videoOnly: () -> Void
+    let swapWithMain: (() -> Void)?
+    let recordingActive: Bool
+    let recordingEnabled: Bool
+    let record: () -> Void
+    @Environment(\.atlasTheme) private var theme
+    @Environment(\.colorScheme) private var scheme
+    private var accent: Color { theme.id == "system" ? .accentColor : Color(atlasHex: theme.palette(for: scheme).accent) }
     private var audioLabel: String {
         audible ? "Ton aktiv" : audioSelected ? "Stumm" : "Ton wählen"
     }
@@ -250,6 +305,14 @@ struct VideoTile: View {
             .accessibilityValue("\(Int((volume.wrappedValue * 100).rounded())) Prozent")
             .help("Lautstärke der aktiven Tonquelle")
     }
+    private var recordingButton: some View {
+        Button(recordingActive ? "Aufnahme stoppen" : "Stream aufnehmen", systemImage: recordingActive ? "stop.circle.fill" : "record.circle", action: record)
+            .labelStyle(.iconOnly)
+            .foregroundStyle(recordingActive ? Color.red : Color.white)
+            .help(recordingActive ? "Aufnahme dieses Senders stoppen" : "Dieses Bild als Originalstream aufnehmen")
+            .disabled(demo || slot.channel == nil || !recordingEnabled)
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             ZStack(alignment: .bottom) {
@@ -267,6 +330,7 @@ struct VideoTile: View {
                         volumeControl
                         if slot.channel != nil || demo { Text(demo ? "Demo" : "Live").font(.caption) }
                         Spacer()
+                        recordingButton
                         Button("Stoppen", systemImage: "stop.fill") { slot.stop() }.labelStyle(.iconOnly).disabled(demo)
                         Button("Nur Video", systemImage: "play.rectangle.fill", action: videoOnly).labelStyle(.iconOnly)
                             .help("Nur dieses Video zeigen · Escape zum Zurückkehren").disabled(!demo && slot.channel == nil)
@@ -280,14 +344,21 @@ struct VideoTile: View {
                 Button(action: select) { Text(slot.channel?.name ?? (demo ? "Beispielsender" : "Freies Bild")).font(.caption.weight(.semibold)).lineLimit(1) }.buttonStyle(.plain)
                 Spacer()
                 if !large {
+                    if let swapWithMain {
+                        Button("Ins Hauptbild tauschen", systemImage: "arrow.up.arrow.down", action: swapWithMain)
+                            .labelStyle(.iconOnly)
+                            .help("Dieses Bild mit dem großen Bild tauschen")
+                            .disabled(demo || slot.channel == nil)
+                    }
                     volumeControl
+                    recordingButton
                     Button("Nur Video", systemImage: "play.rectangle.fill", action: videoOnly).labelStyle(.iconOnly)
                         .help("Nur dieses Video zeigen · Escape zum Zurückkehren").disabled(!demo && slot.channel == nil)
                     Button(action: audio) { Image(systemName: audible ? "speaker.wave.2.fill" : "speaker.slash") }.buttonStyle(.plain).accessibilityLabel(audioLabel)
                 }
-            }.foregroundStyle(.white).padding(10).background(Color(white: 0.13))
+            }.foregroundStyle(.white).padding(10).background(theme.id == "system" ? Color(white: 0.13) : Color(atlasHex: theme.dark.surface))
         }
         .clipShape(.rect(cornerRadius: 10))
-        .overlay { RoundedRectangle(cornerRadius: 10).strokeBorder(audible ? Color.accentColor : selected ? .white.opacity(0.5) : .clear, lineWidth: 2) }
+        .overlay { RoundedRectangle(cornerRadius: 10).strokeBorder(audible ? accent : selected ? .white.opacity(0.5) : .clear, lineWidth: 2) }
     }
 }

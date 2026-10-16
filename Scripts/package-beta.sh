@@ -3,17 +3,22 @@ set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 cd "$root"
 version="${1:-}"
-[[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]] || { echo 'Usage: Scripts/package-beta.sh VERSION-beta.NUMBER' >&2; exit 64; }
+[[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+-(beta|bugfix)$ ]] || { echo 'Usage: Scripts/package-beta.sh X.Y.Z-beta or X.Y.Z-bugfix' >&2; exit 64; }
 [[ "$(git branch --show-current)" == beta ]] || { echo 'Beta packaging requires the beta checkout.' >&2; exit 1; }
 git diff --quiet && git diff --cached --quiet || { echo 'Commit the reviewed source before packaging.' >&2; exit 1; }
 [[ -z "$(git ls-files --others --exclude-standard)" ]] || { echo 'Untracked source files must be reviewed first.' >&2; exit 1; }
 ./Scripts/check-public-tree.sh HEAD
 E2ATLAS_RELEASE_VERSION="$version" ./Scripts/build_beta_app.sh
-app='Build/Beta/e2Atlas Beta.app'
+app_directory="${E2ATLAS_OUTPUT_DIRECTORY:-$root/Build/Beta}"
+case "$app_directory" in
+  /*) ;;
+  *) app_directory="$root/$app_directory" ;;
+esac
+app="$app_directory/e2Atlas Beta.app"
 plist="$app/Contents/Info.plist"
 [[ "$(plutil -extract CFBundleIdentifier raw -o - "$plist")" == 'io.github.schrotty74.e2atlas.beta' ]]
 [[ "$(plutil -extract E2AtlasReleaseVersion raw -o - "$plist")" == "$version" ]]
-[[ "$(plutil -extract CFBundleShortVersionString raw -o - "$plist")" == "${version%-beta.*}" ]]
+[[ "$(plutil -extract CFBundleShortVersionString raw -o - "$plist")" == "${version%%-*}" ]]
 [[ "$(plutil -extract E2AtlasBuildChannel raw -o - "$plist")" == beta ]]
 [[ "$(lipo -archs "$app/Contents/MacOS/e2Atlas Beta")" == arm64 ]]
 release_dir="dist/releases/beta/$version"

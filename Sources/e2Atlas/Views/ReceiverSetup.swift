@@ -51,8 +51,10 @@ struct ReceiverEditor: View {
                 TextField("Receiver-Name", text: $name, prompt: Text("z. B. Wohnzimmer"))
                 TextField("IP-Adresse oder Hostname", text: $address, prompt: Text("Adresse deines Receivers"))
                     .autocorrectionDisabled()
-                TextField("Benutzername", text: $username).autocorrectionDisabled()
-                SecureField("Passwort", text: $password)
+                TextField("Benutzername (optional)", text: $username).autocorrectionDisabled()
+                SecureField("Passwort (optional)", text: $password)
+                Text("Benutzername und Passwort sind nur erforderlich, wenn am Receiver ein Anmeldeschutz aktiviert ist.")
+                    .font(.caption).foregroundStyle(.secondary)
                 DisclosureGroup("Weitere Einstellungen") {
                     TextField("Streaming-Port", value: $port, format: .number.grouping(.never))
                     Text("Standard: 8001. Die Web-Adresse kann einen eigenen Port enthalten.").font(.caption).foregroundStyle(.secondary)

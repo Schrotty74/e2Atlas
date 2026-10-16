@@ -3,24 +3,28 @@
 
 # e2Atlas — Enigma2-TV-Player für macOS
 
-Mit e2Atlas siehst du Live-TV von deinem Enigma2-Receiver auf dem Mac. Die Verbindung läuft über OpenWebif. Du kannst einen Sender ansehen, bis zu vier Programme im Multiview verfolgen oder im elektronischen Programmführer stöbern, während das Fernsehbild sichtbar bleibt. Die native SwiftUI-Oberfläche folgt auf Wunsch der hellen oder dunklen Darstellung deines Mac.
+Mit e2Atlas siehst du Live-TV von deinem Enigma2-Receiver auf dem Mac. Die Verbindung läuft über OpenWebif. Du kannst einen Sender ansehen, bis zu vier Programme im Multiview verfolgen oder im elektronischen Programmführer stöbern, während das Fernsehbild sichtbar bleibt. Die native SwiftUI-Oberfläche folgt der hellen oder dunklen Darstellung deines Mac.
 
-**Voraussetzungen: ein Mac mit Apple Silicon (M1 oder neuer), macOS 26 oder neuer und ein Enigma2-Receiver mit erreichbarem OpenWebif und Streaming-Dienst.** Die aktuelle Version ist **0.1.0-beta.1**. Intel-Macs werden nicht unterstützt.
+**Voraussetzungen: ein Mac mit Apple Silicon (M1 oder neuer), macOS 26 oder neuer und ein Enigma2-Receiver mit erreichbarem OpenWebif und Streaming-Dienst.** Die aktuelle Version ist **0.2.0-beta**. Intel-Macs werden nicht unterstützt.
 
-[Beta herunterladen](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.1.0-beta.1) · [Changelog auf Englisch](CHANGELOG.md) · [Sicherheitsrichtlinie](SECURITY.de.md)
+[Beta herunterladen](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.2.0-beta) · [Changelog auf Englisch](CHANGELOG.md) · [Sicherheitsrichtlinie](SECURITY.de.md)
 
 ## Funktionen
 
 - Live-TV mit Bouquets, Sendersuche und Senderlogos direkt vom Receiver.
-- Multiview mit zwei, drei oder vier Bildern und einer ausgewählten Tonquelle.
+- Multiview mit zwei, drei oder vier Bildern und einer ausgewählten Tonquelle. Ein kleines Bild lässt sich mit dem Hauptbild tauschen; Audio und Lautstärke bleiben beim jeweiligen Player.
 - Stummschaltung und Lautstärkeregler sowie reines Video-Vollbild mit Rückkehr per Escape oder Doppelklick.
 - Elektronischer Programmführer (EPG) mit 2-, 4- und 6-Stunden-Ansicht, Sprung zu 20:15 Uhr und eigenen Zeitkürzeln.
-- Bis zu drei gespeicherte Receiver; Passwörter liegen im macOS-Schlüsselbund.
-- Liquid-Glass-Bedienelemente, die Themes System und Ocean sowie automatische oder manuelle Hell-/Dunkel-Darstellung.
+- Receiver-Info mit gemeldeten Hardware- und Systemdaten. Die Ansicht zeigt bestätigte Tunernutzung und zählt Streams ohne verwendbare Tuner-Zuordnung separat. Die gesamte Belegung kann unbekannt bleiben, auch bei FBC-Receivern.
+- Den Originalstream des Receivers als lokale `.ts`-Datei aufnehmen. Die Aufnahme lässt sich im Player und in kleinen Multiview-Bildern starten, in der App stoppen und anschließend im Finder anzeigen.
+- Bis zu drei gespeicherte Receiver. Benutzername und Passwort sind optional, wenn der Receiver keinen Zugangsschutz verlangt. Passwörter liegen im macOS-Schlüsselbund.
+- Neben dem System-Theme gibt es Ocean, Elfenbein und Bronze mit jeweils heller und dunkler Palette. Du kannst automatisch der macOS-Darstellung folgen oder Hell und Dunkel manuell wählen. In den Darstellungseinstellungen lässt sich eine JSON-Vorlage erstellen.
+- Der About-Tab verlinkt auf die Homepage und das GitHub-Repository.
+- Die Wiedergabe fordert VideoToolbox an, wenn Codec und Mac dies unterstützen. Die Wiedergabebibliothek kann auf Software-Decodierung zurückfallen. Hardware-Nutzung und CPU-Auswirkung wurden nicht gemessen.
 
 ## Eigene Themes
 
-[Erstelle dein eigenes Theme](Documentation/Themes/README.de.md) mit der [JSON-Vorlage](Documentation/Themes/theme-template.json?raw=true). Die Anleitung erklärt helle und dunkle Paletten, mehrere Theme-Dateien und die verfügbaren Funktionen in Beta 1.
+[Erstelle dein eigenes Theme](Documentation/Themes/README.de.md) mit der [JSON-Vorlage](Documentation/Themes/theme-template.json?raw=true). Die Anleitung behandelt helle und dunkle Paletten, Verläufe, mehrere Theme-Dateien und den Button zum Erstellen einer Vorlage.
 
 ## Screenshots
 
@@ -42,7 +46,7 @@ Ein Klick auf eine Vorschau öffnet das Bild in voller Auflösung. Die Bilder ze
 
 ## Beta installieren und öffnen
 
-Lade das DMG oder ZIP aus dem [offiziellen GitHub-Release](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.1.0-beta.1). Öffne das DMG und ziehe **e2Atlas Beta** nach **Programme**. Beim ZIP entpackst du zuerst die Datei und verschiebst die App anschließend dorthin.
+Lade das DMG oder ZIP aus dem [offiziellen GitHub-Release](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.2.0-beta). Öffne das DMG und ziehe **e2Atlas Beta** nach **Programme**. Beim ZIP entpackst du zuerst die Datei und verschiebst die App anschließend dorthin.
 
 ### Erster Start: Gatekeeper
 
@@ -57,13 +61,13 @@ Damit legst du eine Ausnahme für diese App an. [Apples Gatekeeper-Anleitung](ht
 
 ## Receiver verbinden
 
-Beim ersten Start gibst du einen Receiver-Namen, die IP-Adresse oder den Hostnamen sowie die OpenWebif-Zugangsdaten ein. Nach dem Verbinden wählst du Bouquet und Sender. Weitere Receiver fügst du in den Einstellungen hinzu. Beta und Dev speichern ihre Einstellungen getrennt; ein Dev-Profil musst du deshalb in der Beta erneut eingeben.
+Gib beim ersten Start einen Namen und die IP-Adresse oder den Hostnamen des Receivers ein. Benutzername und Passwort können leer bleiben, wenn der Receiver keinen Zugangsschutz verwendet. Ein geschützter Receiver kann gültige Zugangsdaten für Verbindung oder Stream verlangen. Nach dem Verbinden wählst du Bouquet und Sender. Weitere Receiver fügst du in den Einstellungen hinzu. Dev und Beta verwenden getrennte Einstellungen, Theme-Ordner und Caches. Ein Dev-Profil musst du daher in der Beta erneut eingeben.
 
 Verwende den Receiver in einem vertrauenswürdigen lokalen Netzwerk. Bei einer einfachen HTTP-Verbindung werden Passwort und TV-Stream nicht verschlüsselt. Die Kompatibilität eines Receiver-Images hängt von dessen OpenWebif- und Streaming-Diensten ab.
 
 ## Stand der Beta
 
-Aufnahmen und Timer-Verwaltung sind noch nicht enthalten. Schlüsselbund-Abfragen nach einem Neubuild werden weiterhin untersucht. Die Wiedergabeprüfungen und automatischen Tests liefen auf macOS 27; Tests auf macOS 26 und mit weiteren Receiver-Images stehen aus. Einzelheiten zur Version findest du im [englischen Changelog](CHANGELOG.md).
+Die Aufnahme speichert den Originalstream als lokale `.ts`-Datei und verwendet keine Receiver-Timer. Eine Timer-Verwaltung ist nicht enthalten. Schlüsselbund-Abfragen nach einem Neubuild werden weiterhin untersucht; geschützte Receiver benötigen möglicherweise Zugriff auf gespeicherte Zugangsdaten. Die Wiedergabe fordert VideoToolbox an, wenn sie unterstützt wird. Hardware-Decodierung und CPU-Auswirkung wurden nicht gemessen. Wiedergabeprüfungen und automatische Tests liefen auf macOS 27; Tests auf macOS 26 und mit weiteren Receiver-Images stehen aus. Einzelheiten findest du im [englischen Changelog](CHANGELOG.md).
 
 <details>
 <summary>e2Atlas aus dem Quellcode bauen</summary>
@@ -80,7 +84,7 @@ Die App entsteht unter `Build/Beta/e2Atlas Beta.app`. Die Skripte ermitteln den 
 
 Zur Entwicklung öffnest du `e2Atlas.xcodeproj`. `Scripts/generate-project.py` erzeugt das Projekt neu; `Scripts/test.sh` führt die Tests über Xcode aus. Das SwiftPM-Manifest beschreibt die Module. Wegen des Ladens der VLCKit-Bibliothek ist Xcode der unterstützte Testweg.
 
-Alle Build-Einstiege liegen in `Scripts/`. Beta-Builds verlangen einen Checkout auf `beta`, Final-Builds auf `main`. Dev bleibt lokal. `Scripts/package-beta.sh 0.1.0-beta.1` erstellt aus einem sauberen, committed Beta-Checkout ZIP und DMG samt Prüfsummen. Die Build- und Paketierungsskripte veröffentlichen keine Releases.
+Alle Build-Einstiege liegen in `Scripts/`. Beta-Builds verlangen einen Checkout auf `beta`, Final-Builds auf `main`. Dev bleibt lokal. `Scripts/package-beta.sh 0.2.0-beta` erstellt aus einem sauberen, committed Beta-Checkout ZIP und DMG samt Prüfsummen. Die Build- und Paketierungsskripte veröffentlichen keine Releases.
 
 </details>
 

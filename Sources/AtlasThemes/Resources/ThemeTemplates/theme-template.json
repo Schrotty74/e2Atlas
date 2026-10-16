@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "id": "mein-theme",
+  "name": "Mein Theme",
+  "light": { "background": "#DFF5FF", "backgroundEnd": "#BDEEEA", "surface": "#C8EAF7", "accent": "#006A94", "text": "#073249", "secondary": "#305F75", "selection": "#8CD6EA" },
+  "dark": { "background": "#071D3B", "backgroundEnd": "#063D4A", "surface": "#103C5A", "accent": "#55DAEF", "text": "#E4F8FF", "secondary": "#A0D1E3", "selection": "#12617C" }
+}

@@ -109,6 +109,9 @@ public final class PlaybackSlot: Identifiable {
         } else {
             #if canImport(VLCKit)
             let media = VLCMedia(url: url)
+            // Prefer Apple's hardware decoder when the codec and Mac support it.
+            // libVLC retains its software fallback for unsupported streams.
+            media.addOption(":videotoolbox=1")
             if !username.isEmpty {
                 media.addOption(":http-user=\(username)")
             }

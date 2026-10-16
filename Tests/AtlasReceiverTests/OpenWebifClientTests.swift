@@ -143,4 +143,107 @@ struct OpenWebifClientTests {
         #expect(url.password == nil)
         #expect(url.absoluteString.contains("http%3a//example.test/live"))
     }
+    @Test func decodesBoxInfoAndReportedTunerUsage() async throws {
+        let client = makeClient { request in
+            #expect(request.url?.path == "/api/boxinfo")
+            return .response(200, Data(#"{"brand":"Example","model":"DVB Receiver","imagedistro":"example-image","chipset":"example-chip","mem3":"512 MB free / 2 GB total","ifaces":[{"mac":"discard-this"}],"tuners":[{"name":"Tuner A","type":"DVB-S2 FBC","live":"19.2E / Example","rec":"","stream":"19.2E / Example"},{"name":"Tuner B","type":"DVB-S2","live":"","rec":"19.2E / Recording","stream":""},{"name":"Tuner C","type":"DVB-S2","live":"","rec":"","stream":""}]}"#.utf8))
+        }
+        let info = try await client.hardwareInfo()
+        #expect(info.model == "DVB Receiver")
+        #expect(info.chipset == "example-chip")
+        #expect(info.tuners.count == 3)
+        #expect(info.activeTunerCount == 2)
+        #expect(info.allTunerStatusesAvailable)
+        #expect(info.tuners[0].live && info.tuners[0].streaming)
+        #expect(info.tuners[1].recording)
+        #expect(!info.tuners[2].isActive)
+    }
+
+    @Test func fallsBackToLegacyAboutWithoutInventingTunerStatus() async throws {
+        let client = makeClient { request in
+            if request.url?.path == "/api/boxinfo" { return .response(404, Data()) }
+            #expect(request.url?.path == "/api/about")
+            return .response(200, Data(#"{"info":{"model":"Legacy Receiver","tuners":[{"name":"Tuner A","type":"DVB-C"}]}}"#.utf8))
+        }
+        let info = try await client.hardwareInfo()
+        #expect(info.model == "Legacy Receiver")
+        #expect(info.tuners.count == 1)
+        #expect(!info.tuners[0].statusAvailable)
+        #expect(!info.allTunerStatusesAvailable)
+    }
+
+    @Test func preservesUnknownMissingTunersAndPartialUsage() throws {
+        let missing = try ReceiverHardware.decode(["model": "Receiver"])
+        #expect(!missing.tunerListAvailable)
+        #expect(!missing.allTunerStatusesAvailable)
+        let partial = try ReceiverHardware.decode(["model": "Receiver", "EX": "synthetic status failure",
+            "tuners": [["name": "A", "live": "", "rec": "", "stream": ""],
+                       ["name": "B", "stream": "Example stream"]]])
+        #expect(!partial.tuners[0].statusAvailable)
+        #expect(!partial.tuners[0].isActive)
+        #expect(partial.tuners[1].isActive)
+        #expect(!partial.tuners[1].statusAvailable)
+    }
+
+    @Test func hardwareAuthenticationFailureDoesNotTryOtherEndpoints() async {
+        let client = makeClient { request in
+            #expect(request.url?.path == "/api/boxinfo")
+            return .response(401, Data())
+        }
+        await #expect(throws: AtlasFailure.unauthorized) { try await client.hardwareInfo() }
+    }
+
+    @Test func verifiesModernAboutVersionOnlyUsingBoxInfo() async throws {
+        let client = makeClient { request in
+            if request.url?.path == "/api/about" {
+                return .response(200, Data(#"{"info":{"owiver":"2.0"}}"#.utf8))
+            }
+            #expect(request.url?.path == "/api/boxinfo")
+            return .response(200, Data(#"{"brand":"Example","model":"Receiver","imagedistro":"example-image"}"#.utf8))
+        }
+        let info = try await client.verify()
+        #expect(info.name == "Example Receiver")
+        #expect(info.image == "example-image")
+    }
+
+    @Test func rejectsVersionOnlyHardwareResponse() async {
+        let client = makeClient { _ in .response(200, Data(#"{"info":{"owiver":"2.0"}}"#.utf8)) }
+        await #expect(throws: AtlasFailure.invalidResponse) { try await client.hardwareInfo() }
+    }
+
+    @Test func marksUnmappedFBCStreamsAsIncompleteInsteadOfCountingThemAsTuners() throws {
+        let info = try ReceiverHardware.decode(["model": "FBC Fixture", "tuners": [
+            ["name": "A", "live": "Example TV", "rec": "", "stream": ""],
+            ["name": "B", "live": "", "rec": "", "stream": ""],
+            ["name": "C", "live": "", "rec": "", "stream": ""]],
+            "streams": [["ref": "synthetic-1", "type": "stream"], ["ref": "synthetic-2", "type": "stream"]]])
+        #expect(info.activeTunerCount == 1)
+        #expect(info.streamCount == 2)
+        #expect(info.unassignedStreamCount == 2)
+        #expect(!info.allTunerStatusesAvailable)
+        #expect(!info.tuners[1].statusAvailable)
+    }
+
+    @Test func mapsStreamTunerIDsAndCountsSharedFrontendsOnce() throws {
+        let info = try ReceiverHardware.decode(["model": "FBC Fixture", "tuners": [
+            ["name": "A", "live": "Example TV", "rec": "", "stream": ""],
+            ["name": "B", "live": "", "rec": "", "stream": ""]],
+            "streams": [["tuner_number": 0], ["tuner_number": "1"], ["tuner_number": 1]]])
+        #expect(info.activeTunerCount == 2)
+        #expect(info.streamCount == 3)
+        #expect(info.unassignedStreamCount == 0)
+        #expect(info.allTunerStatusesAvailable)
+        #expect(info.tuners[0].streaming && info.tuners[1].streaming)
+    }
+
+    @Test func rejectsInvalidStreamTunerIDsWithoutInventingUsage() throws {
+        let info = try ReceiverHardware.decode(["model": "Fixture", "tuners": [
+            ["name": "A", "live": "", "rec": "", "stream": ""]],
+            "streams": [["tuner_number": true], ["tuner_number": -1], ["tuner_number": 999],
+                        ["tuner_number": 0.5], ["tuner_number": "invalid"]]])
+        #expect(info.activeTunerCount == 0)
+        #expect(info.unassignedStreamCount == 5)
+        #expect(!info.allTunerStatusesAvailable)
+    }
+
 }

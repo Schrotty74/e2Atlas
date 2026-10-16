@@ -55,6 +55,75 @@ struct AtlasThemeTests {
         }
     }
 
+    @Test func acceptsLegacyPaletteAndRejectsInvalidGradient() throws {
+        var object = try #require(JSONSerialization.jsonObject(with: JSONEncoder().encode(validTheme())) as? [String: Any])
+        var light = try #require(object["light"] as? [String: Any])
+        light.removeValue(forKey: "backgroundEnd")
+        object["light"] = light
+        #expect(try AtlasTheme.decode(JSONSerialization.data(withJSONObject: object)).light.backgroundEnd == nil)
+        light["backgroundEnd"] = "#XYZ123"
+        object["light"] = light
+        #expect(throws: (any Error).self) { try AtlasTheme.decode(JSONSerialization.data(withJSONObject: object)) }
+    }
+
+    @Test @MainActor func loadsOceanAndSeveralCustomThemesWithReservedIDs() throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("e2Atlas-Themes-\(UUID())")
+        defer { try? FileManager.default.removeItem(at: directory) }
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        var first = validTheme(); first.id = "custom-first"; first.name = "First"
+        var second = validTheme(); second.id = "custom-second"; second.name = "Second"
+        try JSONEncoder().encode(first).write(to: directory.appendingPathComponent("a.json"))
+        try JSONEncoder().encode(second).write(to: directory.appendingPathComponent("b.json"))
+        first.name = "Duplicate"
+        try JSONEncoder().encode(first).write(to: directory.appendingPathComponent("c.json"))
+        first.id = "ocean"
+        try JSONEncoder().encode(first).write(to: directory.appendingPathComponent("ocean.json"))
+        let catalog = ThemeCatalog()
+        catalog.reload(customDirectory: directory)
+        #expect(catalog.theme(id: "ocean").name == "Ocean")
+        #expect(catalog.theme(id: "ocean").dark.backgroundEnd != nil)
+        #expect(catalog.theme(id: "custom-first").name == "First")
+        #expect(catalog.theme(id: "custom-second").name == "Second")
+        #expect(catalog.invalidFileCount == 2)
+        #expect(!catalog.themes.contains { $0.id == "mein-theme" }, "Bundled template must not be a built-in theme")
+        try FileManager.default.removeItem(at: directory.appendingPathComponent("b.json"))
+        catalog.reload(customDirectory: directory)
+        #expect(catalog.theme(id: "custom-second") == .system)
+    }
+
+    @Test @MainActor func exportsEditableTemplatesWithoutOverwritingExistingFiles() throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("e2Atlas-Template-\(UUID())")
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let catalog = ThemeCatalog()
+        catalog.reload(customDirectory: directory)
+        let first = try catalog.createTemplate(in: directory)
+        let original = try Data(contentsOf: first.url)
+        let second = try catalog.createTemplate(in: directory)
+        #expect(first.url != second.url)
+        #expect(first.theme.id != second.theme.id)
+        #expect(try Data(contentsOf: first.url) == original)
+        #expect(try AtlasTheme.decode(original).light.backgroundEnd != nil)
+        #expect(FileManager.default.fileExists(atPath: directory.appendingPathComponent("Theme-README.md").path))
+        catalog.reload(customDirectory: directory)
+        #expect(catalog.theme(id: first.theme.id) == first.theme)
+        #expect(catalog.theme(id: second.theme.id) == second.theme)
+    }
+
+    @Test @MainActor func warmThemesProvideDistinctValidLightAndDarkPalettes() throws {
+        let catalog = ThemeCatalog()
+        catalog.reload(customDirectory: nil)
+        for id in ["ivory", "bronze"] {
+            let theme = catalog.theme(id: id)
+            #expect(theme.id == id)
+            #expect(theme.light != theme.dark)
+            #expect(theme.light.backgroundEnd != nil)
+            #expect(theme.dark.backgroundEnd != nil)
+            #expect(try AtlasTheme.decode(JSONEncoder().encode(theme)) == theme)
+        }
+        #expect(catalog.theme(id: "ivory").light.background == "#FBF8F3")
+        #expect(catalog.theme(id: "ivory").light != catalog.theme(id: "bronze").light)
+    }
+
     private func validTheme() -> AtlasTheme {
         AtlasTheme(
             version: 1,

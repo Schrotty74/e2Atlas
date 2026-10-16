@@ -2,16 +2,26 @@ import Foundation
 import Security
 import LocalAuthentication
 
+public enum AppIdentity {
+    public static let developmentBundleIdentifier = "io.github.schrotty74.e2atlas.development"
+    public static let legacyDevelopmentIdentifier = "io.github.schrotty74.e2atlas.dev"
+
+    public static func storageIdentifier(for applicationID: String) -> String {
+        applicationID == developmentBundleIdentifier ? legacyDevelopmentIdentifier : applicationID
+    }
+}
+
 public struct AppPaths: Sendable {
     public let support: URL
     public let cache: URL
-    public init(fileManager: FileManager = .default, applicationID: String = Bundle.main.bundleIdentifier ?? "io.github.schrotty74.e2atlas.dev") throws {
+    public init(fileManager: FileManager = .default, applicationID: String = Bundle.main.bundleIdentifier ?? AppIdentity.developmentBundleIdentifier) throws {
         guard let supportBase = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first,
               let cacheBase = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first else {
             throw AtlasFailure.storage("Die macOS-Datenverzeichnisse sind nicht verfügbar.")
         }
-        support = supportBase.appendingPathComponent(applicationID, isDirectory: true)
-        cache = cacheBase.appendingPathComponent(applicationID, isDirectory: true)
+        let storageID = AppIdentity.storageIdentifier(for: applicationID)
+        support = supportBase.appendingPathComponent(storageID, isDirectory: true)
+        cache = cacheBase.appendingPathComponent(storageID, isDirectory: true)
     }
 }
 
@@ -50,8 +60,8 @@ public final class CredentialStore {
     private let backend: any CredentialBackend
     private var passwords: [UUID: String] = [:]
 
-    public init(service: String = Bundle.main.bundleIdentifier ?? "io.github.schrotty74.e2atlas.dev") {
-        backend = KeychainCredentialBackend(service: service)
+    public init(service: String = Bundle.main.bundleIdentifier ?? AppIdentity.developmentBundleIdentifier) {
+        backend = KeychainCredentialBackend(service: AppIdentity.storageIdentifier(for: service))
     }
 
     init(backend: any CredentialBackend) { self.backend = backend }
@@ -61,6 +71,13 @@ public final class CredentialStore {
         let password = try backend.password(for: id)
         passwords[id] = password
         return password
+    }
+
+    /// Automatic connections may proceed unauthenticated when macOS refuses access.
+    /// Never caches that fallback or overwrites an existing stored password.
+    public func availablePassword(for id: UUID) throws -> String {
+        do { return try password(for: id) }
+        catch AtlasFailure.credentialsUnavailable { return "" }
     }
 
     public func save(_ password: String, for id: UUID) throws {
@@ -98,6 +115,9 @@ private struct KeychainCredentialBackend: CredentialBackend {
 
     func password(for id: UUID) throws -> String {
         var request = query(id)
+        // The LAContext policy above does not reliably suppress legacy login
+        // Keychain ACL dialogs. Explicitly disallow UI for this read as well.
+        request[kSecUseAuthenticationUI as String] = kSecUseAuthenticationUIFail
         request[kSecReturnData as String] = true
         request[kSecMatchLimit as String] = kSecMatchLimitOne
         var result: CFTypeRef?
@@ -135,7 +155,7 @@ private struct KeychainCredentialBackend: CredentialBackend {
 
     private func failure(_ status: OSStatus, fallback: String) -> AtlasFailure {
         if status == errSecInteractionNotAllowed || status == errSecAuthFailed || status == errSecUserCanceled {
-            return .storage("macOS hat den Schlüsselbund-Zugriff für diesen App-Build nicht freigegeben. Das gespeicherte Passwort bleibt erhalten.")
+            return .credentialsUnavailable
         }
         return .storage(fallback)
     }

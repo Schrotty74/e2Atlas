@@ -14,4 +14,8 @@ Die App verwendet SwiftUI, unterstützt Apple Silicon ab macOS 26 und folgt Kino
 
 Keine Funktionen, Builds, Testergebnisse oder behobenen Fehler erfinden. Keine privaten Daten dokumentieren. Keine Git-Änderungen oder Veröffentlichungen ohne passenden Auftrag. Nach jedem Build alle vier Kontextdateien prüfen und relevante Änderungen samt Ergebnis nachführen. Nach jedem beauftragten Beta-/Final-Release den bereinigten Kontextstand im passenden Branch veröffentlichen.
 
+Falls die lokale Gesamtstruktur vorhanden ist, liegen weitere Kanal-Quellstände unter `Local/Channels/`. Verwende für lokale Kanal-Builds die Einstiegsskripte im Hauptprojekt. App-Caches und Xcode-Build-Caches aller Kanäle bleiben getrennt.
+
+Beachte das bestätigte Versionsschema in `AGENTS.md`: drei Zahlen mit der Endung `-final`, `-beta` oder `-bugfix`; keine zusätzliche Nummer nach `-beta`.
+
 Mein aktueller Auftrag folgt als nächste Nachricht.

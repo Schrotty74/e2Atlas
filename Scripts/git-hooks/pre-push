@@ -21,8 +21,8 @@ while read -r local_ref local_oid remote_ref remote_oid; do
     refs/heads/main) expected_local='refs/heads/main' ;;
     refs/heads/beta) expected_local='refs/heads/beta' ;;
     refs/tags/v*)
-      if [[ ! "$remote_ref" =~ ^refs/tags/v[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]; then
-        echo 'Only numbered beta release tags are supported.' >&2; exit 1
+      if [[ ! "$remote_ref" =~ ^refs/tags/v[0-9]+\.[0-9]+\.[0-9]+-(beta|bugfix)$ ]]; then
+        echo 'Beta release tags must use vX.Y.Z-beta or vX.Y.Z-bugfix.' >&2; exit 1
       fi
       expected_local="$remote_ref"
       tag_commit="$(git rev-parse "${local_oid}^{commit}")"

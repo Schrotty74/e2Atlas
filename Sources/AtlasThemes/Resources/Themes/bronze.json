@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "id": "bronze",
+  "name": "Bronze",
+  "light": {
+    "background": "#F6E9D8",
+    "backgroundEnd": "#EBD1B1",
+    "surface": "#EDDBC2",
+    "accent": "#89551F",
+    "text": "#392716",
+    "secondary": "#70583F",
+    "selection": "#DCB887"
+  },
+  "dark": {
+    "background": "#2A1C14",
+    "backgroundEnd": "#49301C",
+    "surface": "#4D3522",
+    "accent": "#E1AA68",
+    "text": "#FFF1DF",
+    "secondary": "#D8BC97",
+    "selection": "#77512F"
+  }
+}

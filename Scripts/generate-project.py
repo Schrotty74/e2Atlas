@@ -13,13 +13,13 @@ def ref(value): return Ref(value)
 def file(path, kind): return ref(put('file:'+path, 'PBXFileReference', lastKnownFileType=kind, path=path, sourceTree='<group>'))
 def phase(key, isa, files, **kw): return ref(put(key, isa, buildActionMask=2147483647, files=files, runOnlyForDeploymentPostprocessing=0, **kw))
 def build(key, f, **kw): return ref(put(key,'PBXBuildFile',fileRef=f,**kw))
-modules=['AtlasCore','AtlasReceiver','AtlasThemes','AtlasPlayback']
+modules=['AtlasCore','AtlasReceiver','AtlasThemes','AtlasPlayback','AtlasRecording']
 names=modules+['e2Atlas']
 targets={n:ref(ident('target:'+n)) for n in names}
 products={n:ref(put('product:'+n,'PBXFileReference',explicitFileType='wrapper.application' if n=='e2Atlas' else 'wrapper.framework',includeInIndex=0,path='e2Atlas Dev.app' if n=='e2Atlas' else n+'.framework',sourceTree='BUILT_PRODUCTS_DIR')) for n in names}
 vlc=file('Build/Dependencies/VLCKit - binary package/VLCKit.xcframework/macos-arm64_x86_64/VLCKit.framework','wrapper.framework')
-allfiles=[vlc]; depmap={'AtlasCore':[],'AtlasReceiver':['AtlasCore'],'AtlasThemes':[],'AtlasPlayback':['AtlasCore'],'e2Atlas':modules}
-base={'SDKROOT':'macosx','MACOSX_DEPLOYMENT_TARGET':'26.0','ARCHS':'arm64','SWIFT_VERSION':'6.0','SWIFT_STRICT_CONCURRENCY':'complete','CLANG_ENABLE_MODULES':'YES','CODE_SIGN_IDENTITY':'-','CODE_SIGN_STYLE':'Manual','DEVELOPMENT_TEAM':'','ENABLE_USER_SCRIPT_SANDBOXING':'NO','E2ATLAS_APP_NAME':'e2Atlas Dev','E2ATLAS_BUNDLE_IDENTIFIER':'io.github.schrotty74.e2atlas.dev','E2ATLAS_BUILD_CHANNEL':'dev','MARKETING_VERSION':'0.1.0','CURRENT_PROJECT_VERSION':'1','E2ATLAS_RELEASE_VERSION':'0.1.0-dev','OTHER_SWIFT_FLAGS':['$(inherited)','-debug-prefix-map','"$(SRCROOT)=."','-file-prefix-map','"$(SRCROOT)=."'],'FRAMEWORK_SEARCH_PATHS':['$(inherited)','"$(SRCROOT)/Build/Dependencies/VLCKit - binary package/VLCKit.xcframework/macos-arm64_x86_64"']}
+allfiles=[vlc]; depmap={'AtlasCore':[],'AtlasRecording':[],'AtlasReceiver':['AtlasCore'],'AtlasThemes':[],'AtlasPlayback':['AtlasCore'],'e2Atlas':modules}
+base={'SDKROOT':'macosx','MACOSX_DEPLOYMENT_TARGET':'26.0','ARCHS':'arm64','SWIFT_VERSION':'6.0','SWIFT_STRICT_CONCURRENCY':'complete','CLANG_ENABLE_MODULES':'YES','CODE_SIGN_IDENTITY':'-','CODE_SIGN_STYLE':'Manual','DEVELOPMENT_TEAM':'','ENABLE_USER_SCRIPT_SANDBOXING':'NO','E2ATLAS_APP_NAME':'e2Atlas Dev','E2ATLAS_BUNDLE_IDENTIFIER':'io.github.schrotty74.e2atlas.development','E2ATLAS_BUILD_CHANNEL':'dev','MARKETING_VERSION':'0.1.0','CURRENT_PROJECT_VERSION':'2','E2ATLAS_RELEASE_VERSION':'0.1.0-dev','OTHER_SWIFT_FLAGS':['$(inherited)','-debug-prefix-map','"$(SRCROOT)=."','-file-prefix-map','"$(SRCROOT)=."'],'FRAMEWORK_SEARCH_PATHS':['$(inherited)','"$(SRCROOT)/Build/Dependencies/VLCKit - binary package/VLCKit.xcframework/macos-arm64_x86_64"']}
 def configs(key, extra):
     cs=[]
     for c in ['Debug','Release']:
@@ -35,7 +35,7 @@ for n in names:
     phases=[phase(n+'sources','PBXSourcesBuildPhase',srcs),phase(n+'frameworks','PBXFrameworksBuildPhase',link)]
     resources=[]
     if n=='e2Atlas':
-        for path,kind in [('Sources/AtlasThemes/Resources/Themes','folder'),('Resources/ThirdPartyNotices.txt','text'),('LICENSE','text'),('Resources/VLCKit-LICENSE.txt','text'),('Resources/AppIcon.icon','folder.iconcomposer.icon')]:
+        for path,kind in [('Sources/AtlasThemes/Resources/Themes','folder'),('Sources/AtlasThemes/Resources/ThemeTemplates','folder'),('Resources/ThirdPartyNotices.txt','text'),('LICENSE','text'),('Resources/VLCKit-LICENSE.txt','text'),('Resources/E2AtlasIcon.icon','folder.iconcomposer.icon')]:
             f=file(path,kind); allfiles.append(f); resources.append(build('resource'+path,f))
         phases.append(phase(n+'embed','PBXCopyFilesBuildPhase',[build('embedvlc',vlc,settings={'ATTRIBUTES':['CodeSignOnCopy','RemoveHeadersOnCopy']})],dstPath='',dstSubfolderSpec=10,name='Embed VLCKit'))
     if n=='AtlasPlayback':
@@ -46,7 +46,7 @@ for n in names:
         proxy=ref(put(n+'proxy'+d,'PBXContainerItemProxy',containerPortal=ref(ident('project')),proxyType=1,remoteGlobalIDString=targets[d],remoteInfo=d))
         deps.append(ref(put(n+'dep'+d,'PBXTargetDependency',target=targets[d],targetProxy=proxy)))
     opts={'PRODUCT_NAME':n,'PRODUCT_MODULE_NAME':n,'PRODUCT_BUNDLE_IDENTIFIER':'io.github.schrotty74.e2atlas.'+n.lower(),'GENERATE_INFOPLIST_FILE':'YES','DEFINES_MODULE':'YES','MACH_O_TYPE':'staticlib','SKIP_INSTALL':'YES','SWIFT_INSTALL_OBJC_HEADER':'NO','ENABLE_TESTABILITY':'YES'}
-    if n=='e2Atlas': opts={'PRODUCT_NAME':'$(E2ATLAS_APP_NAME)','PRODUCT_MODULE_NAME':'e2Atlas','PRODUCT_BUNDLE_IDENTIFIER':'$(E2ATLAS_BUNDLE_IDENTIFIER)','INFOPLIST_FILE':'Resources/Info.plist','GENERATE_INFOPLIST_FILE':'NO','LD_RUNPATH_SEARCH_PATHS':['$(inherited)','@executable_path/../Frameworks'],'ENABLE_HARDENED_RUNTIME':'YES','COMBINE_HIDPI_IMAGES':'YES','ASSETCATALOG_COMPILER_APPICON_NAME':'AppIcon'}
+    if n=='e2Atlas': opts={'PRODUCT_NAME':'$(E2ATLAS_APP_NAME)','PRODUCT_MODULE_NAME':'e2Atlas','PRODUCT_BUNDLE_IDENTIFIER':'$(E2ATLAS_BUNDLE_IDENTIFIER)','INFOPLIST_FILE':'Resources/Info.plist','GENERATE_INFOPLIST_FILE':'NO','LD_RUNPATH_SEARCH_PATHS':['$(inherited)','@executable_path/../Frameworks'],'ENABLE_HARDENED_RUNTIME':'YES','COMBINE_HIDPI_IMAGES':'YES','ASSETCATALOG_COMPILER_APPICON_NAME':'E2AtlasIcon'}
     put('target:'+n,'PBXNativeTarget',buildConfigurationList=configs(n,opts),buildPhases=phases,buildRules=[],dependencies=deps,name=n,productName=n,productReference=products[n],productType='com.apple.product-type.application' if n=='e2Atlas' else 'com.apple.product-type.framework')
 # Xcode uses the same Swift Testing sources as SwiftPM, with a bundled VLC runtime.
 testname='e2AtlasTests'
@@ -60,7 +60,7 @@ testdeps=[]
 for d in modules:
     proxy=ref(put('testproxy'+d,'PBXContainerItemProxy',containerPortal=ref(ident('project')),proxyType=1,remoteGlobalIDString=targets[d],remoteInfo=d))
     testdeps.append(ref(put('testdep'+d,'PBXTargetDependency',target=targets[d],targetProxy=proxy)))
-put('target:'+testname,'PBXNativeTarget',buildConfigurationList=configs(testname,{'PRODUCT_NAME':testname,'PRODUCT_MODULE_NAME':testname,'PRODUCT_BUNDLE_IDENTIFIER':'io.github.schrotty74.e2atlas.tests','GENERATE_INFOPLIST_FILE':'YES','LD_RUNPATH_SEARCH_PATHS':['$(inherited)','@loader_path/../Frameworks','@loader_path/Frameworks'],'ENABLE_TESTABILITY':'YES'}),buildPhases=[phase('testsources','PBXSourcesBuildPhase',testfiles),phase('testlinks','PBXFrameworksBuildPhase',[build('testlink'+d,products[d]) for d in modules]+[build('testlinkvlc',vlc)]),phase('testembed','PBXCopyFilesBuildPhase',[build('testembedvlc',vlc,settings={'ATTRIBUTES':['CodeSignOnCopy','RemoveHeadersOnCopy']})],dstPath='',dstSubfolderSpec=10,name='Embed test VLC runtime')],buildRules=[],dependencies=testdeps,name=testname,productName=testname,productReference=testproduct,productType='com.apple.product-type.bundle.unit-test')
+put('target:'+testname,'PBXNativeTarget',buildConfigurationList=configs(testname,{'PRODUCT_NAME':testname,'PRODUCT_MODULE_NAME':testname,'PRODUCT_BUNDLE_IDENTIFIER':'io.github.schrotty74.e2atlas.tests','GENERATE_INFOPLIST_FILE':'YES','LD_RUNPATH_SEARCH_PATHS':['$(inherited)','@loader_path/../Frameworks','@loader_path/Frameworks'],'ENABLE_TESTABILITY':'YES'}),buildPhases=[phase('testsources','PBXSourcesBuildPhase',testfiles),phase('testresources','PBXResourcesBuildPhase',[build('testresource'+p,ref(ident('file:'+p))) for p in ['Sources/AtlasThemes/Resources/Themes','Sources/AtlasThemes/Resources/ThemeTemplates']]),phase('testlinks','PBXFrameworksBuildPhase',[build('testlink'+d,products[d]) for d in modules]+[build('testlinkvlc',vlc)]),phase('testembed','PBXCopyFilesBuildPhase',[build('testembedvlc',vlc,settings={'ATTRIBUTES':['CodeSignOnCopy','RemoveHeadersOnCopy']})],dstPath='',dstSubfolderSpec=10,name='Embed test VLC runtime')],buildRules=[],dependencies=testdeps,name=testname,productName=testname,productReference=testproduct,productType='com.apple.product-type.bundle.unit-test')
 targets[testname]=testtarget
 productgroup=ref(put('products','PBXGroup',children=list(products.values()),name='Products',sourceTree='<group>'))
 main=ref(put('main','PBXGroup',children=allfiles+[productgroup],sourceTree='<group>'))

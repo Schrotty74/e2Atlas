@@ -6,9 +6,16 @@ import AtlasReceiver
 
 @MainActor @Observable
 final class PlaybackStore {
-    let slots = (0..<4).map { _ in PlaybackSlot() }
-    var targetIndex = 0
-    private(set) var audibleIndex = 0
+    private var arrangement = PlaybackArrangement(slots: (0..<4).map { _ in PlaybackSlot() })
+    var slots: [PlaybackSlot] { arrangement.slots }
+    var targetIndex: Int {
+        get { arrangement.targetIndex }
+        set { arrangement.targetIndex = newValue }
+    }
+    private(set) var audibleIndex: Int {
+        get { arrangement.audibleIndex }
+        set { arrangement.audibleIndex = newValue }
+    }
     private(set) var isAudioMuted = false
     private(set) var volume: Double = 1
     @ObservationIgnored private var lastAudibleVolume: Double = 1
@@ -16,8 +23,15 @@ final class PlaybackStore {
     var visibleCount = 4
     var error: String?
     @ObservationIgnored private var generation = UUID()
+    @ObservationIgnored private var pendingPlay: [UUID: UUID] = [:]
 
     init() { applyAudio() }
+
+    func swapWithMain(_ index: Int) {
+        guard isMultiview, index > 0, index < visibleCount,
+              slots.indices.contains(index), slots[index].channel != nil else { return }
+        arrangement.swapWithMain(index)
+    }
 
     func selectAudio(_ index: Int) {
         guard slots.indices.contains(index) else { return }
@@ -59,23 +73,34 @@ final class PlaybackStore {
         let selectedIndex = index ?? (isMultiview ? targetIndex : 0)
         guard slots.indices.contains(selectedIndex) else { return }
         let token = generation
+        // A pending channel change follows this player if its tile is swapped.
+        let selectedSlot = slots[selectedIndex]
+        let request = UUID()
+        pendingPlay[selectedSlot.id] = request
         do {
             let url = try await client.streamURL(for: channel)
-            guard token == generation, !Task.isCancelled else { return }
-            slots[selectedIndex].play(url: url, channel: channel, username: profile.username, password: password)
-            selectAudio(selectedIndex)
+            guard token == generation, pendingPlay[selectedSlot.id] == request, !Task.isCancelled,
+                  let currentIndex = slots.firstIndex(where: { $0 === selectedSlot }),
+                  currentIndex < (isMultiview ? visibleCount : 1) else { return }
+            pendingPlay[selectedSlot.id] = nil
+            selectedSlot.play(url: url, channel: channel, username: profile.username, password: password)
+            selectAudio(currentIndex)
             error = nil
-        } catch { self.error = error.localizedDescription }
+        } catch {
+            guard token == generation, pendingPlay[selectedSlot.id] == request, !Task.isCancelled else { return }
+            pendingPlay[selectedSlot.id] = nil
+            self.error = error.localizedDescription
+        }
     }
     func setMultiview(_ active: Bool) {
         isMultiview = active; targetIndex = 0
-        if !active { for slot in slots.dropFirst() { slot.stop() }; selectAudio(0) }
+        if !active { for slot in slots.dropFirst() { pendingPlay[slot.id] = nil; slot.stop() }; selectAudio(0) }
     }
     func setCount(_ count: Int) {
         visibleCount = min(max(count, 2), 4)
-        for index in visibleCount..<slots.count { slots[index].stop() }
+        for index in visibleCount..<slots.count { pendingPlay[slots[index].id] = nil; slots[index].stop() }
         if audibleIndex >= visibleCount { selectAudio(0) }
         if targetIndex >= visibleCount { targetIndex = 0 }
     }
-    func stopAll() { generation = UUID(); for slot in slots { slot.stop() }; error = nil; targetIndex = 0; selectAudio(0) }
+    func stopAll() { generation = UUID(); pendingPlay.removeAll(); for slot in slots { slot.stop() }; error = nil; targetIndex = 0; selectAudio(0) }
 }
