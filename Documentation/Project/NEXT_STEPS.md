@@ -23,4 +23,3 @@ Nach jedem Build gelten die Kontextpflege-Regeln in `AGENTS.md`; nach Beta-/Fina
 
 - Bei der ersten Final-Vorbereitung den getrennten `main`-Checkout unter `Local/Channels/Final` anlegen und die Ausgabe nach `Build/Final` sowie die getrennten Kanal-Caches prüfen.
 
-- Veröffentlichung `0.2.0-beta` abschließen: frischen Checkout, Downloadpakete und GitHub-Artefakte prüfen; den tatsächlichen Abschluss anschließend dokumentieren.

@@ -1,29 +1,38 @@
 # Changelog
 
-## 0.2.0-beta (2026-10-16)
+## 0.2.0-beta
 
 ### Added
 
-- Receiver information with reported hardware and software details. Confirmed tuner use and streams without a usable tuner assignment are shown separately; total tuner occupancy may remain unknown, including on FBC receivers.
-- Swap a multiview picture with the main picture while keeping each player's audio and volume state.
-- Record the original receiver stream to a local `.ts` file from the player or a small multiview tile. Stop the recording in the app and reveal the file in Finder.
-- Ocean blue and cyan gradients, plus Ivory and Bronze themes with light and dark palettes and automatic appearance.
-- Create a custom JSON theme from Appearance settings. The app supplies a template and guide, reloads the theme list while the settings pane is open, and supports optional diagonal background gradients.
+- Receiver information with reported hardware and software details, confirmed tuner use and separately counted streams without a usable tuner assignment.
+- Swap a small multiview picture with the main picture while preserving each player's audio and volume.
+- Record the receiver's original stream to a local `.ts` file from the player or a multiview tile, stop the recording and reveal it in Finder.
+- Ocean blue and cyan gradients, plus Ivory and Bronze themes with light and dark palettes.
+- Create custom JSON themes from a template in Appearance settings, with automatic list refresh and optional background gradients.
 - Homepage and GitHub links in the About tab.
-- Label receiver usernames and passwords as optional when the receiver allows unauthenticated access.
+- Mark receiver usernames and passwords as optional when the receiver allows unauthenticated access.
 
-### Changed
+### Fixed
 
-- Automatic Keychain reads disallow authentication UI. If access is unavailable, automatic connections try without a password while preserving saved credentials. Receivers that require authentication may reject that attempt.
-- Refresh the native Icon Composer resources and register the built app at its final output location. Dev, Beta and Final continue to use separate settings and caches.
+- Disallow authentication UI during automatic Keychain reads. If access is unavailable, try without a password while preserving saved credentials; protected receivers may reject that connection.
+- Register the built app at its final output location for native Icon Composer resources.
+- Exclude Xcode debug sidecars from distributed builds and remove local development paths from all own program binaries.
 
 ### Known limitations
 
-- Receiver authentication can still require access to saved Keychain credentials. Keychain permission prompts after rebuilding remain under investigation.
-- Recording captures the original stream to a local file. Receiver timer management is not included.
-- The beta is ad-hoc signed and is not notarized. macOS may require approval before first launch.
-- Automated tests and native playback checks ran on macOS 27. Compatibility with macOS 26 and different receiver images still needs testing.
-- Playback requests VideoToolbox when supported, with software fallback available through the playback library. Actual hardware decoding and CPU impact have not been measured.
+- Total tuner occupancy may remain unknown when the receiver does not assign streams to tuners, including on FBC receivers.
+- Receiver timer management is not included; recordings save the original stream locally.
+- Keychain permission prompts after rebuilding remain under investigation. Protected receivers may require access to saved credentials.
+- The beta is ad-hoc signed and not notarized. macOS may require first-launch approval; see the [Gatekeeper instructions](https://github.com/Schrotty74/e2Atlas/blob/beta/README.md#first-launch-gatekeeper).
+- macOS 26 and further receiver images still need testing.
+- Playback requests VideoToolbox when supported and can fall back to software decoding. Hardware use and CPU impact have not been measured.
+
+### Validation
+
+- 66 tests passed on macOS 27 with Xcode 27.
+- Beta startup in demo mode, About version and links, theme selection and the recording control checked.
+- Fresh checkout built successfully from a path with spaces.
+- ZIP and DMG contents, app signatures, architecture and SHA-256 checksums verified; bundles checked for local home paths.
 
 ## 0.1.0-beta.1
 

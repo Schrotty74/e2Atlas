@@ -18,4 +18,6 @@ Falls die lokale Gesamtstruktur vorhanden ist, liegen weitere Kanal-Quellstände
 
 Beachte das bestätigte Versionsschema in `AGENTS.md`: drei Zahlen mit der Endung `-final`, `-beta` oder `-bugfix`; keine zusätzliche Nummer nach `-beta`.
 
+Fasse die notwendigen Prüfungen zu einem Abschlusscheck zusammen. Wiederhole nach einer Korrektur nur betroffene Teile. Changelog und Release-Notes verwenden das Beta-1-Muster.
+
 Mein aktueller Auftrag folgt als nächste Nachricht.

@@ -86,3 +86,8 @@
 - Der Kanal bleibt unabhängig vom Versionsnamen explizit konfiguriert. Ein Bugfix für eine Beta wird weiterhin als Beta gebaut und als Vorabrelease veröffentlicht; seine Caches bleiben vom Final-Kanal getrennt. Die Endung allein darf den Kanal nicht wechseln.
 - App-Metadaten verwenden die drei Zahlen als `CFBundleShortVersionString`; der vollständige Name einschließlich Endung steht in `E2AtlasReleaseVersion`. Künftige Tags verwenden `v` vor dem vollständigen Versionsnamen. Die Final-Paketierung und Final-Tags bleiben bis zu ihrer ausdrücklich beauftragten Implementierung offen.
 - Das bestehende erste Release wurde nur im Anzeigenamen auf `e2Atlas 0.1.0-beta` geändert. Sein historischer Tag `v0.1.0-beta.1`, Download-Dateien und ursprüngliche App-Metadaten bleiben erhalten.
+
+## Abschlussprüfungen und Release-Texte
+
+- Notwendige Prüfungen zu einem gebündelten Abschlusscheck zusammenfassen. Bestandene Prüfungen nicht ohne neuen Anlass wiederholen. Nach einem konkreten Fehler nur die von der Korrektur betroffenen Teile erneut prüfen.
+- Englischer Changelog und GitHub-Release-Notes folgen dem Muster der ersten Beta: `Added`, `Fixed`, `Known limitations`, `Validation` mit kurzen Aufzählungen. Tatsächlich ausgeführte Prüfungen und offene Grenzen benennen. Keine neuen App-Builds für reine Begleittextänderungen.
