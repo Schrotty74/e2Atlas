@@ -50,6 +50,7 @@
 
 ### Fixed
 
+- Remove local development paths from the distributed binaries without changing the app version or features.
 - Hide the loading indicator once a stream has displayed its first video frame.
 - Keep VLC video output attached when entering or leaving fullscreen.
 
