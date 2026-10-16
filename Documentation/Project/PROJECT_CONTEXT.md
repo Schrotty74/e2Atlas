@@ -1,6 +1,6 @@
 # Projektkontext – e2Atlas
 
-Stand: 15. Oktober 2026. Quellcode und tatsächlich ausgeführte Prüfungen sind maßgeblich. Ein Downloadpaket kann älter sein als der aktuelle Branch.
+Stand: 16. Oktober 2026. Quellcode und tatsächlich ausgeführte Prüfungen sind maßgeblich. Ein Downloadpaket kann älter sein als der aktuelle Branch.
 
 ## Produkt und Plattform
 
@@ -67,3 +67,9 @@ Native Bedienungsprüfungen mit synthetischen Inhalten deckten Einrichtung, Mult
 - 15. Oktober 2026, Beta 1: erste Veröffentlichung mit 36 erfolgreichen Xcode-Tests und geprüften Downloadpaketen.
 - 15. Oktober 2026, Beta-Branch: englische und deutsche README sowie SECURITY, Icon und kompakte Bildvorschauen veröffentlicht. Receiver-Abbildung anonymisiert, PNG-Metadaten entfernt. Skripte nach `Scripts/` verschoben. Beta-Build aus frischer Projektkopie mit Leerzeichen im Ordnernamen erfolgreich. Downloadpaket unverändert.
 - 15. Oktober 2026, Kontextpflege: vier bereinigte Kontextdateien unter `Documentation/Project/` zusammengeführt, Root-Einstieg für Codex ergänzt und Pflege nach jedem Build sowie Veröffentlichung nach beauftragten Beta-/Final-Releases festgelegt. Nur Dokumentation und Upload-Positivliste geändert; kein neuer App-Build.
+
+## Öffentliche Theme-Dokumentation
+
+`Documentation/Themes/README.md` und `README.de.md` erklären das Erstellen eigener Themes, alle Felder, getrennte Paletten, mehrere Dateien, Fehler und Kanalordner. `Documentation/Themes/theme-template.json` ist die herunterladbare Vorlage. Beide Startseiten verlinken die passende Sprache. Die Anleitung unterscheidet die manuelle JSON-Unterstützung in Beta 1 von den noch nicht veröffentlichten Erweiterungen für Vorlagen-Button, Verlauf und weitere mitgelieferte Themes. Beta-Quellcode und Downloadpaket wurden für diese Dokumentationsveröffentlichung nicht ersetzt.
+
+- 16. Oktober 2026, Beta-Dokumentation: zweisprachige Theme-Anleitung und JSON-Vorlage für die Veröffentlichung vorbereitet; Links, JSON-Format und private Angaben geprüft. Sprachlich passende Humanizer angewendet. Kein neuer Beta-Build und keine Übernahme des lokalen Dev-Codes.

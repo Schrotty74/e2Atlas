@@ -18,6 +18,10 @@ e2Atlas brings live TV from your Enigma2 receiver to your Mac through OpenWebif.
 - Up to three saved receivers, with passwords stored in the macOS Keychain.
 - Liquid Glass controls, System and Ocean themes, and automatic or manual light/dark appearance.
 
+## Custom themes
+
+[Create your own theme](Documentation/Themes/README.md) with the [JSON template](Documentation/Themes/theme-template.json?raw=true). The guide explains light and dark palettes, multiple theme files and which features are available in Beta 1.
+
 ## Screenshots
 
 Click a preview to open the full-resolution image. The screenshots show the current German interface; the receiver address has been anonymized.

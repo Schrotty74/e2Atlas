@@ -1,6 +1,6 @@
 # Nächste Schritte
 
-Stand: 15. Oktober 2026.
+Stand: 16. Oktober 2026.
 
 1. Lauf und zentrale Bedienung auf macOS 26 prüfen.
 2. Weitere Receiver und Images mit OpenWebif, EPG, Picons und Wiedergabe prüfen. Live-TV ist durch einen Nutzer bestätigt; eine vollständige eigene Hardwareprüfung fehlt.
@@ -12,3 +12,5 @@ Stand: 15. Oktober 2026.
 8. Nach dem ersten erfolgreichen Final-Build die zweisprachigen READMEs und Bilder auf den Final-Stand anpassen und nach `main` übernehmen.
 
 Nach jedem Build gelten die Kontextpflege-Regeln in `AGENTS.md`; nach Beta-/Final-Veröffentlichungen gehört die bereinigte Aktualisierung aller vier Kontextdateien zum Abschluss.
+
+- Bei der nächsten beauftragten Beta die Versionshinweise in der öffentlichen Theme-Anleitung auf die tatsächlich enthaltenen Funktionen aktualisieren.

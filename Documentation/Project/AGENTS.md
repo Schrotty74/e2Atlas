@@ -74,3 +74,5 @@
 - Im Projektkontext ein datiertes Änderungsprotokoll führen: Kanal, konkrete Änderung, Build-Ergebnis und tatsächlich ausgeführte Prüfungen. Offene Aufgaben nachführen; erledigte Aufgaben entfernen. Keine Zugangsdaten, privaten Pfade oder vollständigen lokalen Logs übernehmen.
 - Nach jeder ausdrücklich beauftragten Beta- oder Final-Veröffentlichung den zum veröffentlichten Quellstand passenden Stand aller vier Dateien bereinigen, prüfen und im jeweiligen Branch hochladen. Diese Pflege gehört zum Release-Auftrag. Dev-Code, Dev-Historie und nur lokal vorhandene Änderungen nicht als veröffentlicht darstellen oder automatisch hochladen.
 - Build-Skripte führen weiterhin keine automatischen Commits oder Pushes aus. Die inhaltliche Kontextpflege und Veröffentlichung sind verbindliche Arbeitsschritte des ausführenden Agenten; ein erfolgreicher Compilerlauf allein ersetzt sie nicht.
+
+- Öffentliche Theme-Anleitungen und die bereinigte JSON-Vorlage unter `Documentation/Themes/` sind ausdrücklich freigegeben. Versionsabhängige Funktionen in der Anleitung dem tatsächlich veröffentlichten Download zuordnen.

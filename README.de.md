@@ -18,6 +18,10 @@ Mit e2Atlas siehst du Live-TV von deinem Enigma2-Receiver auf dem Mac. Die Verbi
 - Bis zu drei gespeicherte Receiver; Passwörter liegen im macOS-Schlüsselbund.
 - Liquid-Glass-Bedienelemente, die Themes System und Ocean sowie automatische oder manuelle Hell-/Dunkel-Darstellung.
 
+## Eigene Themes
+
+[Erstelle dein eigenes Theme](Documentation/Themes/README.de.md) mit der [JSON-Vorlage](Documentation/Themes/theme-template.json?raw=true). Die Anleitung erklärt helle und dunkle Paletten, mehrere Theme-Dateien und die verfügbaren Funktionen in Beta 1.
+
 ## Screenshots
 
 Ein Klick auf eine Vorschau öffnet das Bild in voller Auflösung. Die Bilder zeigen die aktuelle deutsche Oberfläche; die Receiver-Adresse wurde anonymisiert.
