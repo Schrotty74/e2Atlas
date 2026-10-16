@@ -1,6 +1,6 @@
 # Projektkontext – e2Atlas
 
-Stand: 16. Oktober 2026. Dieser Quellstand ist für `0.2.0-beta` vorbereitet; die Veröffentlichung und abschließende Paketprüfung stehen noch aus.
+Stand: 16. Oktober 2026. Dieser Quellstand gehört zur Beta `0.2.0-beta`, Build 2. ZIP, DMG und Prüfsummen sind für die Veröffentlichung erstellt und geprüft.
 
 ## Produkt und Plattform
 
@@ -63,7 +63,7 @@ Versionsschema: drei Zahlen für Final-Generation, Beta-Schritt und Bugfix mit `
 
 ## Prüfergebnisse und Grenzen
 
-- 16. Oktober 2026: Beta-Build `0.2.0-beta`, Build 2, erfolgreich. Alle 66 Tests in neun Suites bestanden im Beta-Quellstand. App-Signatur erfolgreich geprüft. Native Demo-Prüfung bestätigt About mit Version 0.2.0 und Build 2, beide Links, System/Ocean/Elfenbein/Bronze in der Auswahl sowie die Aufnahme-Schaltfläche in der Player-Leiste. Paket- und frische Checkout-Prüfung sowie Veröffentlichung stehen noch aus.
+- 16. Oktober 2026: Beta-Build `0.2.0-beta`, Build 2, erfolgreich. Alle 66 Tests in neun Suites bestanden im Beta-Quellstand. App-Signatur erfolgreich geprüft. Native Demo-Prüfung bestätigt About mit Version 0.2.0 und Build 2, beide Links, System/Ocean/Elfenbein/Bronze in der Auswahl sowie die Aufnahme-Schaltfläche in der Player-Leiste. ZIP und DMG samt App-Signaturen, Metadaten, arm64 und privaten Entwicklungspfaden geprüft. Frischer Checkout mit Leerzeichen im Pfad erfolgreich gebaut, mit getrennter Prüfkennung und deaktivierter Debug-Bibliothek. GitHub-Veröffentlichung folgt.
 - Frühere native Prüfungen im Dev-Stand bestätigten synthetische Wiedergabe, Vollbildwechsel, Multiview-Tausch, Tonsteuerung, Themes und About. Live-TV ist zusätzlich durch einen Nutzer an einem realen Receiver bestätigt. FBC-Auswertung wurde mit bereinigten realen Zählern geprüft. Das ist kein vollständiger Hardware- oder Image-Kompatibilitätstest.
 - macOS 26, weitere Receiver-Images, tatsächliche Hardwaredekodierung, Aufnahmen bei realen Netzwerk-/Speicherfehlern und dauerhaft dialogfreier Schlüsselbund-Zugriff bleiben zu prüfen.
 - Beim lokalen Dev-Dock-Problem zeigte dasselbe Paket am alten Pfad das weiße dunkle Icon und an einem neuen Pfad das richtige. Nutzer bestätigte den neuen Pfad auch nach Paketersatz. Die genaue macOS-Ursache ist offen; dies belegt keinen allgemeinen Cache-Fix für alle Rechner.
@@ -72,6 +72,8 @@ Versionsschema: drei Zahlen für Final-Generation, Beta-Schritt und Bugfix mit `
 
 - 15. Oktober 2026: erste Beta unter historischem Tag `v0.1.0-beta.1` veröffentlicht, 36 erfolgreiche Tests. Bilinguale READMEs, bereinigte Screenshots, Sicherheits- und Theme-Dokumentation folgten als Branch-Änderungen.
 - 16. Oktober 2026: Anzeigename dieses ersten Releases auf `e2Atlas 0.1.0-beta` geändert; historischer Tag und Download-Dateien erhalten.
-- 16. Oktober 2026: neue Beta `0.2.0-beta` mit Receiver-Info, Multiview-Tausch, lokaler Aufnahme, neuen Themes, Vorlagen, About und optionalem Anmeldehinweis vorbereitet. Feature-Listen, englischer Changelog und Kontextdateien werden auf diesen Quellstand gebracht. Veröffentlichung ist noch ausstehend.
+- 16. Oktober 2026: neue Beta `0.2.0-beta` mit Receiver-Info, Multiview-Tausch, lokaler Aufnahme, neuen Themes, Vorlagen, About und optionalem Anmeldehinweis vorbereitet. Feature-Listen, englischer Changelog und alle vier Kontextdateien sind auf diesen Quellstand gebracht.
 
 - Beta-Paketprüfung, 16. Oktober 2026: erster ZIP-Kandidat enthielt lokale Entwicklungspfade in einer zusätzlichen Xcode-Debug-Bibliothek. Nicht veröffentlicht und zur lokalen Diagnose aufbewahrt. Verteilte Builds deaktivieren künftig diese Bibliothek; die Paketierung strippt und prüft alle eigenen Mach-O-Dateien. Erneuter Build und Paketprüfung folgen.
+
+- Abschließende Paketierung: Debug-Bibliothek für verteilte Builds deaktiviert. Neuer ZIP-/DMG-Kandidat besteht Signatur-, Metadaten-, Architektur- und vollständige Home-Pfad-Prüfung. SHA256SUMS erstellt; frischer Checkout erneut erfolgreich gebaut. Keine weiteren Tests gestartet.
