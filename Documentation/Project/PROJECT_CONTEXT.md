@@ -1,6 +1,6 @@
 # Projektkontext – e2Atlas
 
-Stand: 18. Oktober 2026. Dieser Quellstand gehört zur Beta `0.3.0-beta`, Build 3. App und Tests sind geprüft; Quell-Commit und Downloadpakete sind erstellt. Die ausdrücklich beauftragte GitHub-Veröffentlichung folgt nach dem abschließenden Nachweis-Commit.
+Stand: 18. Oktober 2026. Dieser Quellstand gehört zur Beta `0.3.0-beta`, Build 3. GitHub-Vorabrelease mit ZIP, DMG und SHA256SUMS veröffentlicht. Quellstand und Tag sind hochgeladen; veröffentlichte Dateien sind anhand ihrer SHA-256-Digests abgeglichen.
 
 ## Produkt und Plattform
 
@@ -116,3 +116,10 @@ Stand: 16. Oktober 2026 nach Veröffentlichung und Bereinigung der Downloads.
 - 18. Oktober 2026: Quellstand als 78ef67c committed. Das vorhandene Paketierungsskript hat den unveränderten App-Quellstand aus dem sauberen Beta-Checkout inkrementell gebaut und ZIP, DMG sowie SHA256SUMS erstellt. Alle vier Kontextdateien nach dem Build geprüft; Regeln und Startvorlage bleiben nach dem vorherigen Abgleich unverändert.
 - ZIP vollständig auf CRC-Fehler geprüft und eigene Programmdatei, Metadaten, Signaturmanifest sowie beide Sprachdateien mit dem vorbereiteten App-Paket abgeglichen. DMG-Integrität geprüft, schreibgeschützt eingebunden und enthaltene App mit Signatur, Metadaten und Programmdigest abgeglichen. Programme-Verknüpfung vorhanden; DMG wieder ausgehängt und eigenes temporäres Mountverzeichnis entfernt. Beide SHA-256-Prüfsummen erfolgreich geprüft. Die lokale Beta-App enthält ebenfalls die bereinigte Programmdatei und besteht die strenge Signaturprüfung.
 - Keine erneuten Funktionstests und keine zusätzliche Prüf-App oder Projektkopie. Paketkopien sind die beauftragten Veröffentlichungsartefakte. Englische Release-Texte nach Humanizer und deutsche Kontexttexte nach Humanizer-DE geprüft. Pre-Push-Hook ist repository-lokal aktiviert; vollständige ausgehende Commits werden bei Push geprüft.
+
+
+## Veröffentlichung 0.3.0-beta bestätigt
+
+- 18. Oktober 2026: Beta 0.3.0-beta, Build 3, als GitHub-Vorabrelease veröffentlicht: https://github.com/Schrotty74/e2Atlas/releases/tag/v0.3.0-beta . Tag v0.3.0-beta liegt auf c2844ec. Quellstand und Tag wurden gemeinsam auf das vorgesehene Repository gepusht; der aktivierte Pre-Push-Hook prüfte beide Referenzen und sämtliche ausgehenden Commits erfolgreich.
+- ZIP, DMG und SHA256SUMS vollständig hochgeladen. GitHub meldet alle drei Dateien als uploaded; deren serverseitige SHA-256-Digests stimmen mit den vorbereiteten lokalen Dateien überein. Release ist öffentlich, kein Entwurf, und ausdrücklich als Vorabrelease markiert. Prüfungen der tatsächlichen Pakete und Signaturen vor Upload bestanden. Die frühere Entwurfsabfrage über den Tag-Endpunkt war vor Veröffentlichung nicht verfügbar; die abschließende Prüfung erfolgte erfolgreich über die Release-Liste.
+- Alle vier Kontextdateien auf den bestätigten Stand geprüft und relevante Ergebnisse nachgeführt. Dieser Dokumentationsnachtrag ändert das App-Paket und den Release-Tag nicht. Dev bleibt lokal, main/Final unverändert. Künftig umfasst neue Beta erstellen gemäß Nutzerklarstellung auch Commit, Upload und Veröffentlichung. Eigene temporäre Mount- und Staging-Verzeichnisse entfernt; lokale Pakete, Logs und die Sicherung vorbestehender Kontextänderungen bleiben als benötigte Ergebnisse erhalten.

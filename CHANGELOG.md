@@ -32,6 +32,7 @@
 
 ### Validation
 
+- Published as a GitHub prerelease under v0.3.0-beta. All three uploaded asset digests match the prepared ZIP, DMG and SHA256SUMS.
 - ZIP contents and CRC, mounted DMG contents and signatures, arm64, version/build metadata and SHA-256 checksums verified. Both downloads contain the sanitized own executable.
 - Beta 0.3.0-beta, build 3, built successfully. Signature, beta identity/channel, numeric version, arm64, macOS 26 minimum, both languages and absence of a debug sidecar verified.
 - Own executable stripped and checked for private development paths; app signature renewed and verified. Runtime sources, resources and tests match the tested Dev source byte for byte.
