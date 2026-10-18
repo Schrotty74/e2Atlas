@@ -134,6 +134,12 @@ private final class FixtureURLProtocol: URLProtocol, @unchecked Sendable {
 
 @Suite("MPEG-TS stream recording", .serialized)
 struct StreamRecorderTests {
+    @Test func recordingFilenameUsesSenderAndOptionalProgramme() {
+        #expect(StreamRecorder.filenameStem(channelName: "BBC One") == "BBC One")
+        #expect(StreamRecorder.filenameStem(channelName: "BBC One", programmeTitle: "News: at 10") == "BBC One - News_ at 10")
+        #expect(StreamRecorder.filenameStem(channelName: "***", programmeTitle: "  ") == "e2Atlas")
+    }
+
     private func transport(_ packetCount: Int = 5) -> Data {
         var result = Data()
         for packet in 0..<packetCount {

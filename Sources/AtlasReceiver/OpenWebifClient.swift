@@ -1,4 +1,5 @@
 import Foundation
+import CoreFoundation
 import AtlasCore
 
 // The delegate is retained by URLSession and only reads immutable origin and credential values.
@@ -55,7 +56,7 @@ private final class ReceiverSessionDelegate: NSObject, URLSessionTaskDelegate, @
 }
 
 public actor OpenWebifClient {
-    public let profile: ReceiverProfile
+    public nonisolated let profile: ReceiverProfile
     private let baseURL: URL?
     private let session: URLSession
 
@@ -155,6 +156,62 @@ public actor OpenWebifClient {
         }.sorted { $0.start < $1.start }
     }
 
+    public func timers() async throws -> [ReceiverTimer] {
+        let json = try await object(path: "/api/timerlist")
+        guard let rows = json["timers"] as? [[String: Any]] else { throw AtlasFailure.invalidResponse }
+        var seen = Set<String>()
+        return rows.compactMap(ReceiverTimer.decode).filter { seen.insert($0.id).inserted }
+    }
+
+    public func addTimer(_ draft: ReceiverTimerDraft) async throws {
+        guard draft.end > draft.begin, draft.end > Date(), !draft.serviceReference.isEmpty else { throw AtlasFailure.invalidResponse }
+        guard Self.validTimerDate(draft.begin), Self.validTimerDate(draft.end) else { throw AtlasFailure.invalidResponse }
+        try await timerMutation(path: "/api/timeradd", query: draft.queryItems)
+    }
+
+    public func editTimer(_ timer: ReceiverTimer, with draft: ReceiverTimerDraft) async throws {
+        guard timer.isEditable, draft.end > draft.begin, draft.end > Date(), !draft.serviceReference.isEmpty else {
+            throw AtlasFailure.unsupported("Dieser Timer-Typ kann in e2Atlas nicht bearbeitet werden.")
+        }
+        guard Self.validTimerDate(draft.begin), Self.validTimerDate(draft.end) else { throw AtlasFailure.invalidResponse }
+        let query = draft.queryItems + [
+            URLQueryItem(name: "channelOld", value: timer.serviceReference),
+            URLQueryItem(name: "beginOld", value: String(timer.beginEpoch)),
+            URLQueryItem(name: "endOld", value: String(timer.endEpoch))
+        ]
+        try await timerMutation(path: "/api/timerchange", query: query)
+    }
+
+    public func deleteTimer(_ timer: ReceiverTimer) async throws {
+        let query = [
+            URLQueryItem(name: "sRef", value: timer.serviceReference),
+            URLQueryItem(name: "begin", value: String(timer.beginEpoch)),
+            URLQueryItem(name: "end", value: String(timer.endEpoch))
+        ]
+        try await timerMutation(path: "/api/timerdelete", query: query)
+    }
+
+    private func timerMutation(path: String, query: [URLQueryItem]) async throws {
+        let json = try await object(path: path, query: query, checkResult: false)
+        guard let result = Self.jsonBoolean(json["result"]) else { throw AtlasFailure.invalidResponse }
+        guard result else {
+            if json["conflicts"] != nil {
+                throw ReceiverTimerMutationError.conflict
+            }
+            throw ReceiverTimerMutationError.rejected
+        }
+    }
+
+    private static func validTimerDate(_ date: Date) -> Bool {
+        let value = date.timeIntervalSince1970
+        return value.isFinite && value >= -62_135_596_800 && value <= 253_402_300_799
+    }
+
+    private static func jsonBoolean(_ value: Any?) -> Bool? {
+        guard let number = value as? NSNumber, CFGetTypeID(number) == CFBooleanGetTypeID() else { return nil }
+        return number.boolValue
+    }
+
     public func piconData(for channel: Channel) async throws -> Data {
         let reference = channel.id.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !reference.isEmpty else { throw AtlasFailure.invalidResponse }
@@ -182,7 +239,7 @@ public actor OpenWebifClient {
         return url
     }
 
-    private func object(path: String, query: [URLQueryItem] = []) async throws -> [String: Any] {
+    private func object(path: String, query: [URLQueryItem] = [], checkResult: Bool = true) async throws -> [String: Any] {
         guard let baseURL else { throw AtlasFailure.invalidAddress }
         var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)
         components?.path = path
@@ -192,7 +249,7 @@ public actor OpenWebifClient {
         guard let value = try? JSONSerialization.jsonObject(with: bytes), let object = value as? [String: Any] else {
             throw AtlasFailure.invalidResponse
         }
-        if let result = object["result"] as? Bool, !result { throw AtlasFailure.invalidResponse }
+        if checkResult, let result = object["result"] as? Bool, !result { throw AtlasFailure.invalidResponse }
         return object
     }
 

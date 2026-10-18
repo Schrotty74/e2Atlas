@@ -31,6 +31,10 @@ public struct AppPreferences: Codable, Sendable, Equatable {
     public var themeID = "system"
     public var guideDuration: GuideDuration = .two
     public var shortcuts: [TimeShortcut] = []
+    public var multiviewPresets: [MultiviewPreset]?
+    public var language: AppLanguage?
+    public var autoConnectOnLaunch: Bool?
+    public var connectsOnLaunch: Bool { autoConnectOnLaunch ?? true }
     public init() {
         if let evening = try? TimeShortcut(hour: 20, minute: 15) { shortcuts = [evening] }
     }
@@ -47,6 +51,7 @@ public struct AppPreferences: Codable, Sendable, Equatable {
     }
     public mutating func removeReceiver(id: UUID) {
         receivers.removeAll { $0.id == id }
+        multiviewPresets?.removeAll { $0.receiverID == id }
         if selectedReceiverID == id { selectedReceiverID = receivers.first?.id }
     }
     public mutating func addShortcut(_ value: TimeShortcut) {

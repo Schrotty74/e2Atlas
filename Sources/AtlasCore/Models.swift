@@ -60,3 +60,37 @@ public enum AtlasFailure: Error, LocalizedError, Sendable, Equatable {
         }
     }
 }
+
+/// A channel-local layout stores receiver references, never stream URLs or credentials.
+public struct MultiviewPreset: Codable, Identifiable, Sendable, Equatable {
+    public var id: UUID
+    public var name: String
+    public var receiverID: UUID
+    public var channels: [Channel?]
+    public var audibleIndex: Int
+    public var volume: Double
+    public var isMuted: Bool
+    public init(id: UUID = UUID(), name: String, receiverID: UUID, channels: [Channel?], audibleIndex: Int, volume: Double, isMuted: Bool) {
+        self.id = id; self.name = name; self.receiverID = receiverID; self.channels = channels
+        self.audibleIndex = audibleIndex; self.volume = volume; self.isMuted = isMuted
+    }
+    public var isValid: Bool {
+        !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && name.count <= 80
+            && (2...4).contains(channels.count) && channels.indices.contains(audibleIndex)
+            && volume.isFinite && (0...1).contains(volume)
+            && channels.contains(where: { $0 != nil })
+            && channels.compactMap { $0 }.allSatisfy { !$0.id.isEmpty && !$0.name.isEmpty }
+    }
+}
+
+public extension Programme {
+    func progress(at date: Date) -> Double {
+        guard end > start else { return 0 }
+        return min(1, max(0, date.timeIntervalSince(start) / end.timeIntervalSince(start)))
+    }
+    static func search(_ query: String, in events: [Programme]) -> [Programme] {
+        let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        return events.filter { query.isEmpty || $0.title.localizedStandardContains(query) || $0.summary.localizedStandardContains(query) }
+            .sorted { $0.start == $1.start ? $0.id < $1.id : $0.start < $1.start }
+    }
+}

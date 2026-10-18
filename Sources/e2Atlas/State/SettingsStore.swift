@@ -18,8 +18,19 @@ final class SettingsStore {
         storage = paths.map { PreferencesStore(fileURL: $0.support.appendingPathComponent("settings.json")) }
         do { preferences = try storage?.load() ?? AppPreferences() }
         catch { preferences = AppPreferences(); self.error = error.localizedDescription; canSave = false }
+        updateNativeLanguagePreference()
     }
     var selectedReceiver: ReceiverProfile? { preferences.receivers.first { $0.id == preferences.selectedReceiverID } ?? preferences.receivers.first }
+    var language: AppLanguage { preferences.language ?? .system }
+    func setLanguage(_ language: AppLanguage) {
+        preferences.language = language
+        persist()
+        if error == nil { updateNativeLanguagePreference() }
+    }
+    private func updateNativeLanguagePreference() {
+        if language == .system { UserDefaults.standard.removeObject(forKey: "AppleLanguages") }
+        else { UserDefaults.standard.set([language.rawValue], forKey: "AppleLanguages") }
+    }
     func persist() {
         guard canSave, let storage else { error = error ?? "Die Einstellungen können nicht gespeichert werden."; return }
         do { try storage.save(preferences); error = nil } catch { self.error = error.localizedDescription }

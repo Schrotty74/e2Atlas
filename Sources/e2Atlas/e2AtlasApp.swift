@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 import AtlasCore
 import AtlasThemes
@@ -18,6 +19,8 @@ struct E2AtlasApp: App {
                     MainWindow(settings: settings, themes: themes, demo: demo)
                 }
             }
+            .background(MainWindowCloseHandler())
+            .environment(\.locale, settings.language.locale)
             .environment(\.atlasTheme, themes.theme(id: settings.preferences.themeID))
             .preferredColorScheme(settings.preferences.appearance == .automatic ? nil : settings.preferences.appearance == .dark ? .dark : .light)
             .task { themes.reload(customDirectory: settings.paths?.support.appendingPathComponent("Themes", isDirectory: true)) }
@@ -25,19 +28,30 @@ struct E2AtlasApp: App {
         .defaultSize(width: 1120, height: 780)
         .windowResizability(.contentMinSize)
         .commands {
-            CommandMenu("Receiver") {
-                Button("Receiver-Info …", systemImage: "info.circle") { openWindow(id: "receiver-info") }
+            CommandMenu(settings.language.localized("Receiver")) {
+                Button(settings.language.localized("Receiver-Info …"), systemImage: "info.circle") { openWindow(id: "receiver-info") }
                     .disabled(settings.selectedReceiver == nil)
             }
+            CommandMenu(settings.language.localized("Sprache")) {
+                Picker(settings.language.localized("Sprache"), selection: Binding(
+                    get: { settings.language },
+                    set: { settings.setLanguage($0) }
+                )) {
+                    Text(verbatim: settings.language.localized("System")).tag(AppLanguage.system)
+                    Text(verbatim: "Deutsch").tag(AppLanguage.german)
+                    Text(verbatim: "English").tag(AppLanguage.english)
+                }.pickerStyle(.inline)
+            }
             CommandGroup(replacing: .help) {
-                if let url = URL(string: "https://github.com/Schrotty74/e2Atlas") { Link("e2Atlas auf GitHub", destination: url) }
-                if let url = URL(string: "https://schrotty74.github.io/Portfolio/") { Link("Homepage", destination: url) }
+                if let url = URL(string: "https://github.com/Schrotty74/e2Atlas") { Link(settings.language.localized("e2Atlas auf GitHub"), destination: url) }
+                if let url = URL(string: "https://schrotty74.github.io/Portfolio/") { Link(settings.language.localized("Homepage"), destination: url) }
                 Divider()
-                if let url = URL(string: "https://github.com/oe-alliance/OpenWebif") { Link("OpenWebif-Projekt", destination: url) }
+                if let url = URL(string: "https://github.com/oe-alliance/OpenWebif") { Link(settings.language.localized("OpenWebif-Projekt"), destination: url) }
             }
         }
-        Window("Receiver-Info", id: "receiver-info") {
+        Window(settings.language.localized("Receiver-Info"), id: "receiver-info") {
             ReceiverInfoView(settings: settings)
+                .environment(\.locale, settings.language.locale)
                 .environment(\.atlasTheme, themes.theme(id: settings.preferences.themeID))
                 .preferredColorScheme(settings.preferences.appearance == .automatic ? nil : settings.preferences.appearance == .dark ? .dark : .light)
         }
@@ -45,8 +59,41 @@ struct E2AtlasApp: App {
         .windowResizability(.contentMinSize)
         Settings {
             AppSettingsView(settings: settings, themes: themes)
+                .environment(\.locale, settings.language.locale)
                 .environment(\.atlasTheme, themes.theme(id: settings.preferences.themeID))
                 .preferredColorScheme(settings.preferences.appearance == .automatic ? nil : settings.preferences.appearance == .dark ? .dark : .light)
         }
     }
+}
+
+
+/// Observe only the main scene's window; leave auxiliary windows independent.
+private struct MainWindowCloseHandler: NSViewRepresentable {
+    func makeNSView(context: Context) -> MainWindowCloseObserver { MainWindowCloseObserver() }
+    func updateNSView(_ nsView: MainWindowCloseObserver, context: Context) { }
+}
+
+private final class MainWindowCloseObserver: NSView {
+    private var closeObserver: NSObjectProtocol?
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        removeCloseObserver()
+        guard let window else { return }
+        closeObserver = NotificationCenter.default.addObserver(
+            forName: NSWindow.willCloseNotification, object: window, queue: .main
+        ) { [weak self] _ in
+            MainActor.assumeIsolated {
+                self?.removeCloseObserver()
+                NSApplication.shared.terminate(nil)
+            }
+        }
+    }
+
+    private func removeCloseObserver() {
+        if let closeObserver { NotificationCenter.default.removeObserver(closeObserver) }
+        closeObserver = nil
+    }
+
+    isolated deinit { removeCloseObserver() }
 }

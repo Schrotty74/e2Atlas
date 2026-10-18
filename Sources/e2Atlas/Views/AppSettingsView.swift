@@ -20,18 +20,25 @@ private struct ThemeSettingsView: View {
     @Bindable var settings: SettingsStore
     let themes: ThemeCatalog
     @State private var folderError: String?
-    @State private var notice: String?
+    @State private var notice: LocalizedStringResource?
     @Environment(\.atlasTheme) private var theme
     @Environment(\.colorScheme) private var scheme
     private var folder: URL? { settings.paths?.support.appendingPathComponent("Themes", isDirectory: true) }
 
     var body: some View {
         Form {
+            Picker("Sprache", selection: Binding(get: { settings.language }, set: { settings.setLanguage($0) })) {
+                Text("System").tag(AppLanguage.system)
+                Text(verbatim: "Deutsch").tag(AppLanguage.german)
+                Text(verbatim: "English").tag(AppLanguage.english)
+            }
+            Text("System folgt der Sprache von macOS.").font(.caption).foregroundStyle(.secondary)
+            Text("Die Oberfläche wechselt sofort. Einige macOS-Menüs und Dialoge übernehmen die Sprache beim nächsten App-Start.").font(.caption).foregroundStyle(.secondary)
             Picker("Darstellung", selection: $settings.preferences.appearance) {
-                ForEach(Appearance.allCases, id: \.self) { Text($0.title).tag($0) }
+                ForEach(Appearance.allCases, id: \.self) { Text(LocalizedStringKey($0.title)).tag($0) }
             }
             Picker("Theme", selection: $settings.preferences.themeID) {
-                ForEach(themes.themes) { Text($0.name).tag($0.id) }
+                ForEach(themes.themes) { value in Text(["system", "ocean", "ivory", "bronze"].contains(value.id) ? settings.language.localized(value.name) : value.name).tag(value.id) }
             }
             Text("Automatisch folgt der hellen oder dunklen Darstellung von macOS.").font(.callout).foregroundStyle(.secondary)
             Section("Eigene Themes") {
@@ -40,7 +47,7 @@ private struct ThemeSettingsView: View {
                 Button("Theme-Vorlage erstellen", systemImage: "doc.badge.plus") {
                     do {
                         guard let folder else { throw CocoaError(.fileNoSuchFile) }
-                        let created = try themes.createTemplate(in: folder)
+                        let created = try themes.createTemplate(in: folder, language: settings.language.resolved.rawValue)
                         reload()
                         settings.preferences.themeID = created.theme.id
                         folderError = nil
@@ -61,7 +68,7 @@ private struct ThemeSettingsView: View {
                 }
                 Text("Die Liste wird hier alle zwei Sekunden aktualisiert. Verwende pro Theme eine eigene Kennung. Die Kennungen mitgelieferter Themes sind reserviert.")
                     .font(.caption).foregroundStyle(.secondary)
-                if let notice { Text(notice).font(.callout).foregroundStyle(.secondary) }
+                if let notice { AppLocalizedText(resource: notice).font(.callout).foregroundStyle(.secondary) }
             }
             if themes.invalidFileCount > 0 {
                 Text("\(themes.invalidFileCount) ungültige oder doppelte Theme-Dateien wurden ausgelassen. Hinweise zum Format stehen in der Anleitung bei der Vorlage.")

@@ -3,6 +3,26 @@ import Darwin
 
 /// Records a receiver's raw MPEG-TS stream to a new local file.
 public enum StreamRecorder {
+    /// Builds a filesystem-safe recording name from a sender and optional programme title.
+    public static func filenameStem(channelName: String, programmeTitle: String? = nil) -> String {
+        let allowed = CharacterSet.alphanumerics.union(CharacterSet(charactersIn: " -_"))
+        func clean(_ value: String) -> String {
+            value.components(separatedBy: allowed.inverted).joined(separator: "_")
+                .split(whereSeparator: { $0.isWhitespace }).joined(separator: " ")
+                .trimmingCharacters(in: .whitespacesAndNewlines.union(CharacterSet(charactersIn: "-_")))
+        }
+        let channel = clean(channelName)
+        var parts = [channel.isEmpty ? "e2Atlas" : channel]
+        if let programme = programmeTitle.map(clean), !programme.isEmpty { parts.append(programme) }
+        // Leave room for the timestamp and extension on filesystems with a 255-byte component limit.
+        var stem = ""
+        for character in parts.joined(separator: " - ") {
+            guard stem.utf8.count + String(character).utf8.count <= 160 else { break }
+            stem.append(character)
+        }
+        return stem
+    }
+
     public enum RecordingError: Error, LocalizedError, Sendable, Equatable {
         case invalidAddress
         case invalidStream

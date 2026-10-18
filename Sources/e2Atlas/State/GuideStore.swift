@@ -10,12 +10,21 @@ final class GuideStore {
     private(set) var errors: [String: String] = [:]
     private(set) var isLoading = false
     var selection: Programme?
+    var searchText = ""
+    private var windowEvents: [Programme] {
+        events.values.flatMap { $0 }.filter { $0.end > window.start && $0.start < window.end }
+    }
+    var searchResults: [Programme] { Programme.search(searchText, in: windowEvents) }
+    func otherAirings(of event: Programme) -> [Programme] {
+        windowEvents.filter { $0.id != event.id && $0.start >= Date() && $0.title.localizedCompare(event.title) == .orderedSame }.sorted { $0.start < $1.start }
+    }
     @ObservationIgnored private var generation = UUID()
 
     func load(channels: [Channel], client: OpenWebifClient?) async {
         let token = UUID(); generation = token
+        events = [:]; errors = [:]; selection = nil
         guard let client else { isLoading = false; return }
-        let query = window; isLoading = true; errors = [:]
+        let query = window; isLoading = true
         // Bounded batches avoid flooding small receiver web servers.
         for offset in stride(from: 0, to: channels.count, by: 4) {
             if Task.isCancelled || token != generation { break }

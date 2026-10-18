@@ -12,6 +12,12 @@ private struct ReceiverSelection: Equatable {
     let revision: Int
 }
 
+private struct TimerRequest: Identifiable {
+    let id = UUID()
+    let programme: Programme?
+    let channel: Channel?
+}
+
 struct MainWindow: View {
     @Bindable var settings: SettingsStore
     let themes: ThemeCatalog
@@ -24,10 +30,18 @@ struct MainWindow: View {
     @State private var videoOnly = VideoOnlyController()
     @State private var recording = RecordingStore()
     @State private var search = ""
+    @State private var showPresets = false
+    @State private var showRecordingOptions = false
+    @State private var timerRequest: TimerRequest?
+    @State private var sleepDeadline: Date?
+    @State private var restoreTask: Task<Void, Never>?
+    @State private var presetGuideChannels: [Channel] = []
+    @State private var hasInitializedReceiver = false
     @State private var localError: String?
     @Environment(\.atlasTheme) private var theme
     @Environment(\.openWindow) private var openWindow
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.locale) private var locale
     private var filteredChannels: [Channel] { channels.channels.filter { search.isEmpty || $0.name.localizedCaseInsensitiveContains(search) } }
 
     var body: some View {
@@ -57,37 +71,78 @@ struct MainWindow: View {
         .toolbar { appToolbar }
         .toolbarVisibility(videoOnly.isActive ? .hidden : .visible, for: .windowToolbar)
         .onExitCommand { videoOnly.exit() }
-        .task(id: ReceiverSelection(profile: settings.selectedReceiver, revision: settings.connectionRevision)) { await connect() }
-        .task(id: guideQueryID) {
-            if !demo { await guide.load(channels: filteredChannels, client: channels.client) }
+        .task(id: ReceiverSelection(profile: settings.selectedReceiver, revision: settings.connectionRevision)) {
+            let loadMetadata = hasInitializedReceiver || settings.preferences.connectsOnLaunch
+            hasInitializedReceiver = true
+            await connect(loadMetadata: loadMetadata)
         }
-        .task(id: channels.channels.map(\.id)) {
+        .task(id: guideQueryID) {
+            if !demo { await guide.load(channels: channels.channels, client: channels.client) }
+        }
+        .task(id: nowGuideQueryID) {
             if !demo {
                 nowGuide.reset(); nowGuide.window = GuideWindow(start: Date(), duration: .six)
-                await nowGuide.load(channels: channels.channels, client: channels.client)
+                await nowGuide.load(channels: currentGuideChannels, client: channels.client)
             }
         }
         .onChange(of: section) { _, value in
             if value != .guide { playback.setMultiview(value == .multiview) }
         }
         .onChange(of: settings.preferences) { settings.persist() }
-        .onDisappear { videoOnly.exit(); playback.stopAll(); recording.stop() }
+        .sheet(isPresented: $showPresets) {
+            MultiviewPresetsView(settings: settings, playback: playback, onRestore: restorePreset)
+        }
+        .sheet(isPresented: $showRecordingOptions) {
+            VStack {
+                RecordingOptionsView(recording: recording)
+                Button("Fertig") { showRecordingOptions = false }.keyboardShortcut(.cancelAction)
+            }.padding().frame(width: 560, height: 340)
+        }
+        .sheet(item: $timerRequest) { request in
+            ReceiverTimersView(client: channels.client, programme: request.programme, channel: request.channel)
+        }
+        .task(id: sleepDeadline) {
+            guard let deadline = sleepDeadline else { return }
+            do { try await Task.sleep(for: .seconds(max(0, deadline.timeIntervalSinceNow))) } catch { return }
+            guard !Task.isCancelled, sleepDeadline == deadline else { return }
+            restoreTask?.cancel(); playback.stopAll(); videoOnly.exit(); sleepDeadline = nil
+        }
+        .onDisappear { restoreTask?.cancel(); videoOnly.exit(); playback.stopAll(); recording.stop() }
     }
 
     private var appContent: some View {
         VStack(spacing: 0) {
             if recording.isActive || recording.message != nil { recordingStatus }
-            if let error = localError ?? channels.error { ErrorNotice(message: error).padding([.horizontal, .top], 16) }
+            if let error = localError { ErrorNotice(message: error).padding([.horizontal, .top], 16) }
+            else if let error = channels.error {
+                ErrorNotice(message: error == AtlasFailure.unreachable.localizedDescription
+                    ? settings.language.localized("Die Receiver-Weboberfläche ist nicht erreichbar. Bild und Ton können trotzdem weiterlaufen.")
+                    : settings.language.localized("Receiver-Weboberfläche:") + " " + settings.language.localized(error))
+                    .padding([.horizontal, .top], 16)
+            }
             if section == .guide {
-                GuideView(store: guide, channels: filteredChannels, picons: channels.picons, settings: settings, playback: playback, demo: demo, onPlay: { channel in play(channel, index: 0) }, onPicon: { channel in await channels.loadPicon(channel) })
+                GuideView(store: guide, channels: channels.channels, picons: channels.picons, settings: settings, playback: playback, demo: demo, onPlay: { channel in play(channel, index: 0) }, onPicon: { channel in await channels.loadPicon(channel) }, onSchedule: { event, channel in
+                    timerRequest = TimerRequest(programme: event, channel: channel)
+                })
             } else {
                 television
             }
             Divider()
             HStack {
-                Label(demo ? "Demo · keine Receiver-Verbindung" : settings.selectedReceiver?.name ?? "Kein Receiver", systemImage: "tv")
+                Label {
+                    if demo { Text("Demo · keine Receiver-Verbindung") }
+                    else if let receiver = settings.selectedReceiver { Text(receiver.name) }
+                    else { Text("Kein Receiver") }
+                } icon: { Image(systemName: "tv") }
                 if channels.isLoading { ProgressView().controlSize(.mini); Text("Sender werden geladen …") }
                 Spacer()
+                if let deadline = sleepDeadline {
+                    TimelineView(.periodic(from: .now, by: 1)) { context in
+                        Text("Wiedergabestopp in \(Duration.seconds(max(0, deadline.timeIntervalSince(context.date))).formatted(.time(pattern: .hourMinuteSecond).locale(locale)))")
+                            .monospacedDigit()
+                    }
+                    Button("Abbrechen") { sleepDeadline = nil }
+                }
                 if let info = channels.receiverInfo { Text("\(info.name) · \(info.image)") }
                 if demo { Text("Synthetische Beispieldaten") }
             }.font(.caption).foregroundStyle(.secondary).padding(.horizontal, 18).padding(.vertical, 10)
@@ -96,7 +151,7 @@ struct MainWindow: View {
 
     @ToolbarContentBuilder private var appToolbar: some ToolbarContent {
             ToolbarItem(placement: .principal) {
-                Picker("Ansicht", selection: $section) { ForEach(MainSection.allCases, id: \.self) { Text($0.rawValue).tag($0) } }
+                Picker("Ansicht", selection: $section) { ForEach(MainSection.allCases, id: \.self) { Text(LocalizedStringKey($0.rawValue)).tag($0) } }
                     .pickerStyle(.segmented).frame(width: 340)
             }
             ToolbarItem(placement: .automatic) {
@@ -110,6 +165,20 @@ struct MainWindow: View {
                 Button("Receiver-Info", systemImage: "info.circle") { openWindow(id: "receiver-info") }
                     .help("Hardware und Tuner des ausgewählten Receivers anzeigen")
                     .disabled(demo || settings.selectedReceiver == nil)
+            }
+            ToolbarItem(placement: .automatic) {
+                Menu {
+                    Button("Receiver-Timer …") { timerRequest = TimerRequest(programme: nil, channel: nil) }.disabled(demo || channels.client == nil)
+                    Button("Multiview-Belegungen …") { showPresets = true }.disabled(demo || settings.selectedReceiver == nil)
+                    Button("Aufnahmeoptionen …") { showRecordingOptions = true }
+                    Menu("Sleep-Timer") {
+                        ForEach([15, 30, 60, 90, 120], id: \.self) { minutes in
+                            Button("In \(minutes) Minuten Wiedergabe stoppen") { sleepDeadline = Date().addingTimeInterval(Double(minutes * 60)) }
+                        }
+                        if sleepDeadline != nil { Button("Sleep-Timer abbrechen") { sleepDeadline = nil } }
+                        Text("Lokale Aufnahmen laufen weiter.")
+                    }
+                } label: { Label("Weitere Funktionen", systemImage: "ellipsis.circle") }
             }
             ToolbarItem(placement: .automatic) { SettingsLink { Label("Einstellungen", systemImage: "slider.horizontal.3") } }
             ToolbarItem(placement: .automatic) {
@@ -126,14 +195,14 @@ struct MainWindow: View {
                 Image(systemName: "record.circle.fill").foregroundStyle(.red)
                 Text(recording.channelName).fontWeight(.semibold).lineLimit(1)
                 TimelineView(.periodic(from: recording.startedAt, by: 1)) { context in
-                    Text(Duration.seconds(max(0, context.date.timeIntervalSince(recording.startedAt))).formatted(.time(pattern: .hourMinuteSecond)))
+                    Text(Duration.seconds(max(0, context.date.timeIntervalSince(recording.startedAt))).formatted(.time(pattern: .hourMinuteSecond).locale(locale)))
                         .monospacedDigit()
                 }
-                Text(ByteCountFormatter.string(fromByteCount: recording.bytes, countStyle: .file)).monospacedDigit()
+                Text(recording.bytes, format: .byteCount(style: .file)).monospacedDigit()
                 Spacer()
-                Button(recording.isStopping ? "Wird gespeichert …" : "Aufnahme stoppen") { recording.stop() }.disabled(recording.isStopping)
+                Button(LocalizedStringKey(recording.isStopping ? "Wird gespeichert …" : "Aufnahme stoppen")) { recording.stop() }.disabled(recording.isStopping)
             } else {
-                Text(recording.message ?? "").lineLimit(2)
+                AppLocalizedText(resource: recording.message ?? "").lineLimit(2)
                 Spacer()
                 if recording.canReveal { Button("Im Finder zeigen") { recording.reveal() } }
                 Button("Schließen", systemImage: "xmark") { recording.dismissMessage() }.labelStyle(.iconOnly)
@@ -151,7 +220,8 @@ struct MainWindow: View {
         if isRecording(slot) { recording.stop(); return }
         guard !recording.isActive, !demo, let channel = slot.channel,
               let profile = settings.selectedReceiver, let client = channels.client else { return }
-        recording.start(channel: channel, profile: profile, client: client, settings: settings)
+        let title = nowGuide.events[channel.id]?.first { $0.start <= Date() && $0.end > Date() }?.title
+        recording.start(channel: channel, profile: profile, client: client, settings: settings, programmeTitle: title)
     }
 
     private func enterVideoOnly(_ index: Int) {
@@ -160,8 +230,17 @@ struct MainWindow: View {
         videoOnly.enter(slot: index)
     }
 
+    private var currentGuideChannels: [Channel] {
+        var seen = Set<String>()
+        return (channels.channels + presetGuideChannels).filter { seen.insert($0.id).inserted }
+    }
+
+    private var nowGuideQueryID: String {
+        "\(channels.metadataRevision)|\(currentGuideChannels.map(\.id).joined(separator: ";"))"
+    }
+
     private var guideQueryID: String {
-        "\(settings.preferences.selectedReceiverID?.uuidString ?? "")|\(channels.selectedBouquetID ?? "")|\(channels.channels.map(\.id).joined(separator: ";"))|\(guide.window.start.timeIntervalSince1970)|\(guide.window.duration.rawValue)|\(search)"
+        "\(channels.metadataRevision)|\(settings.preferences.selectedReceiverID?.uuidString ?? "")|\(channels.selectedBouquetID ?? "")|\(channels.channels.map(\.id).joined(separator: ";"))|\(guide.window.start.timeIntervalSince1970)|\(guide.window.duration.rawValue)"
     }
 
     private var volumeBinding: Binding<Double> {
@@ -172,27 +251,27 @@ struct MainWindow: View {
         VStack(spacing: 0) {
             HStack(spacing: 12) {
                 Picker("Bouquet", selection: $channels.selectedBouquetID) {
-                    ForEach(channels.bouquets) { Text($0.name).tag(Optional($0.id)) }
+                    ForEach(channels.bouquets) { Text(demo ? settings.language.localized($0.name) : $0.name).tag(Optional($0.id)) }
                 }.frame(maxWidth: 280)
                 Spacer()
                 if section == .multiview {
-                    Picker("Bilder", selection: Binding(get: { playback.visibleCount }, set: { playback.setCount($0) })) {
+                    Picker("Bilder", selection: Binding(get: { playback.visibleCount }, set: { restoreTask?.cancel(); playback.setCount($0) })) {
                         Text("2 Bilder").tag(2); Text("3 Bilder").tag(3); Text("4 Bilder").tag(4)
                     }.frame(width: 130)
                 }
                 TextField("Sender suchen", text: $search).textFieldStyle(.roundedBorder).frame(width: 190)
-                Button("Neu laden", systemImage: "arrow.clockwise") { Task { await connect() } }.labelStyle(.iconOnly)
+                Button("Neu laden", systemImage: "arrow.clockwise") { Task { await channels.refresh() } }.labelStyle(.iconOnly).disabled(channels.isLoading)
             }.padding(.horizontal, 20).padding(.vertical, 12)
             GeometryReader { geometry in
                 HStack(spacing: 12) {
-                    VideoTile(slot: playback.slots[0], selected: playback.targetIndex == 0, audible: !playback.slots[0].isMuted, audioSelected: playback.audibleIndex == 0, volume: volumeBinding, demo: demo, large: true, select: { playback.targetIndex = 0 }, audio: { playback.toggleAudio(0) }, videoOnly: { enterVideoOnly(0) }, swapWithMain: nil, recordingActive: isRecording(playback.slots[0]), recordingEnabled: !recording.isStopping && (!recording.isActive || isRecording(playback.slots[0])), record: { toggleRecording(playback.slots[0]) })
+                    VideoTile(slot: playback.slots[0], selected: playback.targetIndex == 0, audible: !playback.slots[0].isMuted, audioSelected: playback.audibleIndex == 0, volume: volumeBinding, demo: demo, large: true, select: { playback.targetIndex = 0 }, audio: { playback.toggleAudio(0) }, videoOnly: { enterVideoOnly(0) }, swapWithMain: nil, recordingActive: isRecording(playback.slots[0]), recordingEnabled: !recording.isStopping && (!recording.isActive || isRecording(playback.slots[0])), record: { toggleRecording(playback.slots[0]) }, stop: { playback.stop(playback.slots[0]) })
                         .id(playback.slots[0].id)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     if section == .multiview {
                         VStack(spacing: 12) {
                             ForEach(Array(playback.slots[1..<playback.visibleCount])) { slot in
                                 let index = playback.slots.firstIndex(where: { $0.id == slot.id }) ?? 1
-                                VideoTile(slot: slot, selected: playback.targetIndex == index, audible: !playback.slots[index].isMuted, audioSelected: playback.audibleIndex == index, volume: volumeBinding, demo: demo, large: false, select: { playback.targetIndex = index }, audio: { playback.toggleAudio(index) }, videoOnly: { enterVideoOnly(index) }, swapWithMain: { playback.swapWithMain(index) }, recordingActive: isRecording(slot), recordingEnabled: !recording.isStopping && (!recording.isActive || isRecording(slot)), record: { toggleRecording(slot) })
+                                VideoTile(slot: slot, selected: playback.targetIndex == index, audible: !playback.slots[index].isMuted, audioSelected: playback.audibleIndex == index, volume: volumeBinding, demo: demo, large: false, select: { playback.targetIndex = index }, audio: { playback.toggleAudio(index) }, videoOnly: { enterVideoOnly(index) }, swapWithMain: { playback.swapWithMain(index) }, recordingActive: isRecording(slot), recordingEnabled: !recording.isStopping && (!recording.isActive || isRecording(slot)), record: { toggleRecording(slot) }, stop: { playback.stop(slot) })
                             }
                         }.frame(width: max(220, geometry.size.width * 0.26))
                     }
@@ -205,7 +284,7 @@ struct MainWindow: View {
                     Text(nowTitle(channel)).font(.callout).lineLimit(1)
                     Spacer()
                     if let next = nowGuide.events[channel.id]?.first(where: { $0.start > Date() }) {
-                        Text("Danach: \(next.start.formatted(date: .omitted, time: .shortened)) · \(next.title)").font(.caption).foregroundStyle(.secondary).lineLimit(1)
+                        Text("Danach: \(next.start.formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(locale))) · \(next.title)").font(.caption).foregroundStyle(.secondary).lineLimit(1)
                     }
                 }.padding(.horizontal, 24).padding(.vertical, 12)
             }
@@ -253,9 +332,13 @@ struct MainWindow: View {
 
     private func nowTitle(_ channel: Channel) -> String {
         let now = Date()
-        return (demo ? guide.events[channel.id] : nowGuide.events[channel.id])?.first(where: { $0.start <= now && $0.end > now })?.title ?? "Programminformationen"
+        if let title = (demo ? guide.events[channel.id] : nowGuide.events[channel.id])?.first(where: { $0.start <= now && $0.end > now })?.title {
+            return demo ? settings.language.localized(title) : title
+        }
+        return settings.language.localized("Programminformationen")
     }
     private func play(_ channel: Channel, index: Int? = nil) {
+        restoreTask?.cancel()
         guard !demo, let profile = settings.selectedReceiver, let client = channels.client else { return }
         Task {
             do {
@@ -264,15 +347,36 @@ struct MainWindow: View {
             } catch { localError = error.localizedDescription }
         }
     }
-    private func connect() async {
-        playback.stopAll(); guide.reset(); nowGuide.reset(); guide.window.duration = settings.preferences.guideDuration; localError = nil
+    private func restorePreset(_ preset: MultiviewPreset) {
+        guard let profile = settings.selectedReceiver, preset.receiverID == profile.id, let client = channels.client else { return }
+        restoreTask?.cancel()
+        section = .multiview
+        restoreTask = Task {
+            do {
+                let password = try settings.credentials.availablePassword(for: profile.id)
+                await playback.restore(preset, client: client, profile: profile, password: password)
+                guard !Task.isCancelled, settings.selectedReceiver == profile else { return }
+                while channels.isLoading {
+                    try await Task.sleep(for: .milliseconds(100))
+                    guard !Task.isCancelled, settings.selectedReceiver == profile else { return }
+                }
+                if channels.error != nil || channels.channels.isEmpty { await channels.refresh() }
+                guard !Task.isCancelled, settings.selectedReceiver == profile else { return }
+                presetGuideChannels = preset.channels.compactMap { $0 }
+            } catch is CancellationError { }
+            catch { localError = error.localizedDescription }
+        }
+    }
+    private func connect(loadMetadata: Bool) async {
+        restoreTask?.cancel(); timerRequest = nil; showPresets = false
+        playback.stopAll(); presetGuideChannels = []; guide.reset(); nowGuide.reset(); guide.window.duration = settings.preferences.guideDuration; localError = nil
         if demo {
             channels.loadDemo()
             guide.loadDemo(channels: channels.channels)
             return
         }
         guard let profile = settings.selectedReceiver else { return }
-        do { await channels.connect(profile, password: try settings.credentials.availablePassword(for: profile.id)) }
+        do { await channels.connect(profile, password: try settings.credentials.availablePassword(for: profile.id), loadMetadata: loadMetadata) }
         catch { localError = error.localizedDescription }
     }
 }
@@ -292,8 +396,10 @@ struct VideoTile: View {
     let recordingActive: Bool
     let recordingEnabled: Bool
     let record: () -> Void
+    let stop: () -> Void
     @Environment(\.atlasTheme) private var theme
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.locale) private var locale
     private var accent: Color { theme.id == "system" ? .accentColor : Color(atlasHex: theme.palette(for: scheme).accent) }
     private var audioLabel: String {
         audible ? "Ton aktiv" : audioSelected ? "Stumm" : "Ton wählen"
@@ -306,10 +412,10 @@ struct VideoTile: View {
             .help("Lautstärke der aktiven Tonquelle")
     }
     private var recordingButton: some View {
-        Button(recordingActive ? "Aufnahme stoppen" : "Stream aufnehmen", systemImage: recordingActive ? "stop.circle.fill" : "record.circle", action: record)
+        Button(LocalizedStringKey(recordingActive ? "Aufnahme stoppen" : "Stream aufnehmen"), systemImage: recordingActive ? "stop.circle.fill" : "record.circle", action: record)
             .labelStyle(.iconOnly)
             .foregroundStyle(recordingActive ? Color.red : Color.white)
-            .help(recordingActive ? "Aufnahme dieses Senders stoppen" : "Dieses Bild als Originalstream aufnehmen")
+            .help(Text(LocalizedStringKey(recordingActive ? "Aufnahme dieses Senders stoppen" : "Dieses Bild als Originalstream aufnehmen")))
             .disabled(demo || slot.channel == nil || !recordingEnabled)
     }
 
@@ -324,14 +430,21 @@ struct VideoTile: View {
                         Text("Sender wählen").font(large ? .headline : .callout)
                     }.foregroundStyle(.white.opacity(0.7)).frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
+                if slot.isReconnecting {
+                    VStack(spacing: 8) {
+                        Text("Verbindung wird wiederhergestellt · Versuch \(slot.reconnectAttempt) von 3")
+                        Button("Wiederverbindung abbrechen", action: stop)
+                    }.font(.caption).padding(12).background(.black.opacity(0.85), in: .rect(cornerRadius: 8))
+                    .foregroundStyle(.white).frame(maxHeight: .infinity)
+                }
                 if large {
                     HStack(spacing: 14) {
-                        Button(action: audio) { Label(audioLabel, systemImage: audible ? "speaker.wave.2" : "speaker.slash") }
+                        Button(action: audio) { Label(LocalizedStringKey(audioLabel), systemImage: audible ? "speaker.wave.2" : "speaker.slash") }
                         volumeControl
-                        if slot.channel != nil || demo { Text(demo ? "Demo" : "Live").font(.caption) }
+                        if slot.channel != nil || demo { Text(LocalizedStringKey(demo ? "Demo" : "Live")).font(.caption) }
                         Spacer()
                         recordingButton
-                        Button("Stoppen", systemImage: "stop.fill") { slot.stop() }.labelStyle(.iconOnly).disabled(demo)
+                        Button("Stoppen", systemImage: "stop.fill", action: stop).labelStyle(.iconOnly).disabled(demo)
                         Button("Nur Video", systemImage: "play.rectangle.fill", action: videoOnly).labelStyle(.iconOnly)
                             .help("Nur dieses Video zeigen · Escape zum Zurückkehren").disabled(!demo && slot.channel == nil)
                         Button("Vollbild", systemImage: "arrow.up.left.and.arrow.down.right") { NSApplication.shared.keyWindow?.toggleFullScreen(nil) }.labelStyle(.iconOnly)
@@ -341,7 +454,7 @@ struct VideoTile: View {
             }
             .contentShape(Rectangle()).onTapGesture(perform: select)
             HStack {
-                Button(action: select) { Text(slot.channel?.name ?? (demo ? "Beispielsender" : "Freies Bild")).font(.caption.weight(.semibold)).lineLimit(1) }.buttonStyle(.plain)
+                Button(action: select) { Text(slot.channel?.name ?? AppLanguage(locale: locale).localized(demo ? "Beispielsender" : "Freies Bild")).font(.caption.weight(.semibold)).lineLimit(1) }.buttonStyle(.plain)
                 Spacer()
                 if !large {
                     if let swapWithMain {
@@ -354,7 +467,7 @@ struct VideoTile: View {
                     recordingButton
                     Button("Nur Video", systemImage: "play.rectangle.fill", action: videoOnly).labelStyle(.iconOnly)
                         .help("Nur dieses Video zeigen · Escape zum Zurückkehren").disabled(!demo && slot.channel == nil)
-                    Button(action: audio) { Image(systemName: audible ? "speaker.wave.2.fill" : "speaker.slash") }.buttonStyle(.plain).accessibilityLabel(audioLabel)
+                    Button(action: audio) { Image(systemName: audible ? "speaker.wave.2.fill" : "speaker.slash") }.buttonStyle(.plain).accessibilityLabel(Text(LocalizedStringKey(audioLabel)))
                 }
             }.foregroundStyle(.white).padding(10).background(theme.id == "system" ? Color(white: 0.13) : Color(atlasHex: theme.dark.surface))
         }

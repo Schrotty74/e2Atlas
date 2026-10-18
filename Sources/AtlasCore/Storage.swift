@@ -49,6 +49,9 @@ public struct PreferencesStore: Sendable {
               Set(value.receivers.map(\.id)).count == value.receivers.count,
               value.receivers.allSatisfy({ !$0.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !$0.address.isEmpty && (1...65535).contains($0.streamPort) }),
               value.selectedReceiverID == nil || value.receivers.contains(where: { $0.id == value.selectedReceiverID }),
+              (value.multiviewPresets ?? []).count <= 30,
+              Set((value.multiviewPresets ?? []).map(\.id)).count == (value.multiviewPresets ?? []).count,
+              (value.multiviewPresets ?? []).allSatisfy({ preset in preset.isValid && value.receivers.contains(where: { $0.id == preset.receiverID }) }),
               value.shortcuts.allSatisfy({ (0...23).contains($0.hour) && (0...59).contains($0.minute) }) else { throw AtlasFailure.invalidResponse }
     }
 }

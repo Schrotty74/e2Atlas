@@ -137,9 +137,14 @@ struct ReceiverManagementView: View {
             if let error { ErrorNotice(message: error) }
             Button("Receiver hinzufügen", systemImage: "plus") { adding = true }
                 .disabled(settings.preferences.receivers.count >= 3)
+            Divider()
+            Toggle("Beim Start automatisch verbinden", isOn: Binding(
+                get: { settings.preferences.connectsOnLaunch },
+                set: { settings.preferences.autoConnectOnLaunch = $0; settings.persist() }
+            ))
             Spacer(minLength: 0)
         }
-        .padding(24).frame(width: 570, height: 390)
+        .padding(24).frame(width: 570, height: 450)
         .sheet(isPresented: $adding) { ReceiverEditor(settings: settings, profile: nil, onSaved: { adding = false }).padding(24).frame(width: 570) }
         .sheet(item: $editing) { profile in ReceiverEditor(settings: settings, profile: profile, onSaved: { editing = nil }).padding(24).frame(width: 570) }
         .confirmationDialog("Receiver entfernen?", isPresented: Binding(get: { deleteTarget != nil }, set: { if !$0 { deleteTarget = nil } }), titleVisibility: .visible) {

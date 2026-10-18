@@ -33,9 +33,12 @@ case "${1:-}" in
   '') ;;
   *) echo 'Unknown argument. Use --help or --plan.' >&2; exit 64 ;;
 esac
+if [[ "${E2ATLAS_LOG_ACTIVE:-}" != 1 ]]; then
+  exec python3 "$project_root/Scripts/run-logged.py" "$channel_name" -- /bin/bash "$0" "$@"
+fi
 require_channel_checkout "$project_root" "$channel"
 case "$channel" in
-  beta) release_version="${E2ATLAS_RELEASE_VERSION:-0.2.0-beta}" ;;
+  beta) release_version="${E2ATLAS_RELEASE_VERSION:-0.3.0-beta}" ;;
   final) release_version="${E2ATLAS_RELEASE_VERSION:-1.0.0-final}" ;;
   dev) release_version="${E2ATLAS_RELEASE_VERSION:-0.1.0-dev}" ;;
 esac
@@ -50,11 +53,9 @@ derived_data="$project_root/Build/DerivedData/$channel_name"
 # Give replaced local Dev bundles a new version for Launch Services / Icon Services.
 # Beta and Final keep their explicitly configured project build number.
 build_number_args=()
-distribution_build_args=()
-if [[ "$channel" != dev ]]; then
-  # Distribution bundles must not carry Xcode's separate debug-only image.
-  distribution_build_args=("ENABLE_DEBUG_DYLIB=NO")
-fi
+# A normal executable avoids the shared UUID of Xcode's debug launcher stub.
+# Local-network privacy uses the main executable UUID to identify applications.
+executable_build_args=("ENABLE_DEBUG_DYLIB=NO")
 if [[ "$channel" == dev ]]; then
   dev_build_number="$(python3 - "$output_dir/$app_name.app/Contents/Info.plist" "$project_root/Build/Dev/$app_name.app/Contents/Info.plist" <<'PYBUILD'
 import plistlib, sys
@@ -86,7 +87,7 @@ xcrun xcodebuild -project e2Atlas.xcodeproj -scheme e2Atlas \
   MARKETING_VERSION="${release_version%%-*}" \
   CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="$signing_identity" DEVELOPMENT_TEAM= \
   ${build_number_args[@]+"${build_number_args[@]}"} \
-  ${distribution_build_args[@]+"${distribution_build_args[@]}"} build
+  ${executable_build_args[@]+"${executable_build_args[@]}"} build
 
 built_app="$derived_data/Build/Products/$build_configuration/$app_name.app"
 [[ -d "$built_app" ]] || { echo 'Xcode did not produce the expected app.' >&2; exit 1; }

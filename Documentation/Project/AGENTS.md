@@ -33,7 +33,7 @@
 - In dauerhaft gespeicherten Projektdateien keine absoluten lokalen Pfade verwenden, auch keine anonymisierten oder synthetischen Beispiele solcher Pfade. Benutzer-, Installations-, Datenträger- und Entwicklungsrechner-Pfade nicht fest einbauen.
 - Laufzeitverzeichnisse über macOS-APIs ermitteln; Ressourcen über das App-/Modul-Bundle laden. Application Support, Caches und temporäre Dateien entsprechend ihrem Zweck verwenden.
 - Normaler lokaler Build ohne persönliche Zertifikate, Developer-Team-ID oder Secrets. Lokale Ad-hoc-Signierung ist zulässig.
-- Reproduzierbarkeit zusätzlich in einer frischen Projektkopie prüfen. Einen erfolgreichen Build im vorhandenen Arbeitsordner nicht als vollständigen Portabilitätsnachweis ausgeben.
+- Reproduzierbarkeit in einer frischen Prüf-Projektkopie nur auf ausdrücklichen Nutzerauftrag prüfen. Einen erfolgreichen Build im vorhandenen Arbeitsordner nicht als vollständigen Portabilitätsnachweis ausgeben.
 
 ## Datenschutz und Zugangsdaten
 
@@ -53,6 +53,8 @@
 - Öffentliche und nutzergerichtete Fließtexte mit dem sprachlich passenden vorhandenen Humanizer prüfen. Technische Literale, Fakten und Aussagen erhalten; keine zusätzliche Skill-Installation ohne Auftrag.
 
 ## Git und Veröffentlichung
+
+- Ein Nutzerauftrag wie „neue Beta erstellen“ umfasst die Vorbereitung des aktuellen freigegebenen Funktionsstands, Beta-Build, erforderliche Prüfungen, bereinigte Dokumentation, Commit und Push auf beta, passenden Beta-Tag sowie GitHub-Vorabrelease mit ZIP, DMG und SHA256SUMS. Nur bei ausdrücklich lokalem Build-Auftrag ohne Veröffentlichung bleiben Upload und Release aus. Dev und Final werden dadurch nicht veröffentlicht.
 
 - Changelog-Einträge immer auf Englisch verfassen.
 
@@ -89,5 +91,7 @@
 
 ## Abschlussprüfungen und Release-Texte
 
+- Build- und Test-Logs zentral unter `Build/Logs/Dev`, `Beta`, `Final` beziehungsweise `Tests` ablegen. Die lokalen Einstiegsskripte verwenden `Scripts/run-logged.py`; dieser ersetzt Projekt-, Home- und temporäre Benutzerpfade im Text und behält pro Kategorie die letzten fünf abgeschlossenen Läufe. Historische Nachweise liegen getrennt unter `Build/Logs/Archive`. Logs bleiben lokal und sind keine Veröffentlichungsartefakte.
+- Zusätzliche temporäre Prüfdateien in einem aufgabenbezogenen Verzeichnis unter `Build/Temporary` anlegen. Nach Abschluss Herkunft, Referenzen und weiteren Bedarf prüfen und erledigte Hilfsdateien sowie eigene Prüfkopien entfernen. Bei Skripten temporäre Verzeichnisse mit `mktemp` und einem Exit-Trap verwalten; notwendige Fehlernachweise vor der Bereinigung in den Log-Ordner übernehmen. Unklare oder fremde Dateien nicht pauschal löschen. Zusätzliche Test-/Prüf-Apps und Prüf-Projektkopien ausschließlich auf ausdrücklichen Nutzerauftrag erstellen. Ein allgemeiner Entwicklungs-, Fehlerbehebungs- oder Prüfauftrag genügt dafür nicht. Aufwand, Laufzeit und Tokenverbrauch berücksichtigen; beauftragte Prüf-Apps und Prüfkopien nach Abschluss entfernen, sobald sie nicht mehr benötigt werden.
 - Notwendige Prüfungen zu einem gebündelten Abschlusscheck zusammenfassen. Bestandene Prüfungen nicht ohne neuen Anlass wiederholen. Nach einem konkreten Fehler nur die von der Korrektur betroffenen Teile erneut prüfen.
 - Englischer Changelog und GitHub-Release-Notes folgen dem Muster der ersten Beta: `Added`, `Fixed`, `Known limitations`, `Validation` mit kurzen Aufzählungen. Tatsächlich ausgeführte Prüfungen und offene Grenzen benennen. Keine neuen App-Builds für reine Begleittextänderungen.

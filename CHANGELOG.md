@@ -1,5 +1,42 @@
 # Changelog
 
+## 0.3.0-beta
+
+### Added
+
+- German and English interfaces with a saved language choice. Views switch immediately; native macOS menus and dialogs use the choice after reopening.
+- Receiver recording timers: schedule from the guide, list timers, edit supported single recordings and confirm deletion.
+- Saved multiview layouts per receiver, including channels, audio source, volume and mute state.
+- Independent playback recovery with up to three retries per picture and a cancel control.
+- Search loaded programme titles and descriptions, show programme progress and other loaded broadcasts of the same title.
+- Local recording folder and duration options, programme titles in filenames and a stop when disk space runs low.
+- A sleep timer that stops playback while local recordings continue.
+- An optional automatic startup connection under Settings → Receiver, enabled by default, with two retries for unreachable services.
+
+### Fixed
+
+- Start restored multiview streams in stages, with the selected audio source first; leave unchanged mute and volume settings intact during buffering.
+- Avoid reconnect timeouts while VLC continues displaying new pictures.
+- Reload failed receiver metadata after restoring layouts and refresh EPG even when channel IDs stay the same. Current-programme queries include saved channels outside the selected bouquet.
+- Reload receiver data without stopping playback and identify web-interface errors separately from ongoing streams.
+- Quit the application when the main window closes, including when auxiliary windows remain open.
+- Preserve older settings files when the new language, layout and startup options are absent.
+
+### Known limitations
+
+- Timer editing supports ordinary single recordings; unknown or special timer types remain read-only. Actual timer execution, further receiver images and conflict handling need hardware validation.
+- EPG search covers the loaded bouquet and time window.
+- macOS 26, Keychain permission prompts after rebuilds, longer sessions, real network recovery and local recording during shutdown or low-space conditions remain open.
+- Hardware decoding and CPU impact have not been measured. Total tuner occupancy may remain unknown without a receiver-provided stream assignment.
+- Ad-hoc signed and not notarized; macOS may require first-launch approval.
+
+### Validation
+
+- Beta 0.3.0-beta, build 3, built successfully. Signature, beta identity/channel, numeric version, arm64, macOS 26 minimum, both languages and absence of a debug sidecar verified.
+- Own executable stripped and checked for private development paths; app signature renewed and verified. Runtime sources, resources and tests match the tested Dev source byte for byte.
+- Dev user checks confirmed timer creation, stable playback, restored multiview audio, EPG loading, startup connection, the Receiver settings control and full quit from the main-window close button. These are not separate Beta hardware checks.
+- 96 test functions passed across the initial run and targeted follow-ups on matching Dev sources. The initial run was stopped for a VLC teardown lock; the five outstanding functions then passed in isolated runs. No production change, additional test app or project copy was needed.
+
 ## 0.2.0-beta
 
 ### Added

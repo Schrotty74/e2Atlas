@@ -13,6 +13,7 @@ struct ReceiverInfoView: View {
     let settings: SettingsStore
     @Environment(\.atlasTheme) private var theme
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.locale) private var locale
     @State private var hardware: ReceiverHardware?
     @State private var loading = false
     @State private var error: String?
@@ -24,7 +25,7 @@ struct ReceiverInfoView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Receiver-Info").font(.title2.weight(.semibold))
-                    Text(settings.selectedReceiver?.name ?? "Kein Receiver ausgewählt")
+                    Text(settings.selectedReceiver?.name ?? settings.language.localized("Kein Receiver ausgewählt"))
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
@@ -43,7 +44,8 @@ struct ReceiverInfoView: View {
                 ContentUnavailableView {
                     Label("Receiver-Daten nicht verfügbar", systemImage: "exclamationmark.triangle")
                 } description: {
-                    Text(error ?? "Der Receiver hat keine Hardwaredaten geliefert.")
+                    if let error { Text("Receiver-Daten konnten nicht geladen werden: \(settings.language.localized(error))") }
+                    else { Text("Der Receiver hat keine Hardwaredaten geliefert.") }
                 } actions: {
                     Button("Erneut versuchen") { refresh += 1 }
                 }
@@ -86,10 +88,13 @@ struct ReceiverInfoView: View {
                         Text("Tuner").font(.headline)
                         Spacer()
                         if info.tunerListAvailable {
-                            Text(info.allTunerStatusesAvailable
-                                 ? "\(info.tuners.count) gemeldet · \(info.activeTunerCount) Nutzung bestätigt"
-                                 : "\(info.tuners.count) gemeldet · mindestens \(info.activeTunerCount) genutzt")
-                                .font(.callout).foregroundStyle(.secondary)
+                            if info.allTunerStatusesAvailable {
+                                Text("\(info.tuners.count) gemeldet · \(info.activeTunerCount) Nutzung bestätigt")
+                                    .font(.callout).foregroundStyle(.secondary)
+                            } else {
+                                Text("\(info.tuners.count) gemeldet · mindestens \(info.activeTunerCount) genutzt")
+                                    .font(.callout).foregroundStyle(.secondary)
+                            }
                         }
                     }
                     if info.unassignedStreamCount > 0 {
@@ -114,15 +119,30 @@ struct ReceiverInfoView: View {
                             HStack {
                                 Text(tuner.name).font(.headline)
                                 Spacer()
-                                Label(tuner.isActive ? "In Nutzung" : tuner.statusAvailable ? "Keine Nutzung gemeldet" : "Status nicht verfügbar",
-                                      systemImage: tuner.isActive ? "antenna.radiowaves.left.and.right" : "circle")
-                                    .font(.caption).foregroundStyle(tuner.isActive ? Color.accentColor : .secondary)
+                                if tuner.isActive {
+                                    Label("In Nutzung", systemImage: "antenna.radiowaves.left.and.right")
+                                        .font(.caption).foregroundStyle(Color.accentColor)
+                                } else if tuner.statusAvailable {
+                                    Label("Keine Nutzung gemeldet", systemImage: "circle")
+                                        .font(.caption).foregroundStyle(.secondary)
+                                } else {
+                                    Label("Status nicht verfügbar", systemImage: "circle")
+                                        .font(.caption).foregroundStyle(.secondary)
+                                }
                             }
                             if let type = tuner.type { Text(type).font(.callout).foregroundStyle(.secondary) }
                             if tuner.isActive {
-                                Text([tuner.live ? "Live-TV" : nil, tuner.recording ? "Aufnahme" : nil,
-                                      tuner.streaming ? "Streaming" : nil].compactMap { $0 }.joined(separator: " · "))
-                                    .font(.caption)
+                                HStack(spacing: 4) {
+                                    if tuner.live { Text("Live-TV") }
+                                    if tuner.recording {
+                                        if tuner.live { Text("·").accessibilityHidden(true) }
+                                        Text("Aufnahme")
+                                    }
+                                    if tuner.streaming {
+                                        if tuner.live || tuner.recording { Text("·").accessibilityHidden(true) }
+                                        Text("Streaming")
+                                    }
+                                }.font(.caption)
                             }
                             if tuner.isActive && !tuner.statusAvailable {
                                 Text("Weitere Statusangaben sind nicht verfügbar.").font(.caption).foregroundStyle(.secondary)
@@ -132,19 +152,23 @@ struct ReceiverInfoView: View {
                     Text("OpenWebif meldet Empfangseinheiten. Bei FBC-Tunern können mehrere Einträge zu einem physischen Modul gehören. Mehrere Sender auf demselben Transponder können eine Empfangseinheit gemeinsam nutzen. Fehlende Angaben bedeuten nicht, dass ein Tuner deaktiviert ist.")
                         .font(.caption).foregroundStyle(.secondary)
                 }
-                if let error { ErrorNotice(message: "Aktualisierung fehlgeschlagen: \(error)") }
+                if let error {
+                    Label("Aktualisierung fehlgeschlagen: \(settings.language.localized(error))", systemImage: "exclamationmark.triangle")
+                        .foregroundStyle(.red)
+                }
                 if let updatedAt {
-                    Text("Zuletzt aktualisiert: \(updatedAt.formatted(date: .omitted, time: .standard)) · automatisch alle 5 Sekunden")
+                    Text("Zuletzt aktualisiert: \(updatedAt.formatted(Date.FormatStyle(date: .omitted, time: .standard, locale: locale))) · automatisch alle 5 Sekunden")
                         .font(.caption).foregroundStyle(.secondary)
                 }
             }.padding(24).textSelection(.enabled)
         }
     }
 
-    private func row(_ label: String, _ value: String?) -> some View {
+    private func row(_ label: LocalizedStringKey, _ value: String?) -> some View {
         GridRow(alignment: .top) {
             Text(label).foregroundStyle(.secondary)
-            Text(value ?? "Nicht verfügbar").frame(maxWidth: .infinity, alignment: .leading)
+            if let value { Text(value).frame(maxWidth: .infinity, alignment: .leading) }
+            else { Text("Nicht verfügbar").frame(maxWidth: .infinity, alignment: .leading) }
         }
     }
 

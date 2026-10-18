@@ -1,6 +1,7 @@
 import AVFoundation
 import AtlasCore
 import Observation
+import os
 import SwiftUI
 
 #if canImport(VLCKit)
@@ -47,6 +48,15 @@ public final class PlaybackSlot: Identifiable {
     private var avPlayerItemObservation: NSKeyValueObservation?
     private var avTimeControlObservation: NSKeyValueObservation?
     private var playbackGeneration = UUID()
+    @ObservationIgnored private var lastVideoProgress: ContinuousClock.Instant?
+    @ObservationIgnored private var lastDisplayedPictures: Int32 = 0
+    private static let recoveryLogger = Logger(subsystem: "io.github.schrotty74.e2atlas.playback", category: "Recovery")
+    @ObservationIgnored private var recoveryTask: Task<Void, Never>?
+    @ObservationIgnored var recoveryPollInterval: Duration = .seconds(1)
+    @ObservationIgnored var reconnectBackoff: [Duration] = [.seconds(2), .seconds(4), .seconds(6)]
+    @ObservationIgnored var recoveryConnectionTimeout: TimeInterval = 25
+    public private(set) var reconnectAttempt = 0
+    public private(set) var isReconnecting = false
     #if canImport(VLCKit)
     private var vlcStateTask: Task<Void, Never>?
     #endif
@@ -63,16 +73,27 @@ public final class PlaybackSlot: Identifiable {
     }
 
     isolated deinit {
+        recoveryTask?.cancel()
         stopEngine()
     }
 
     /// Starts playback. Credentials are passed to the media engine separately and never added to the URL.
     public func play(url: URL, channel: Channel, username: String, password: String) {
+        recoveryTask?.cancel()
+        reconnectAttempt = 0
+        isReconnecting = false
+        startPlayback(url: url, channel: channel, username: username, password: password)
+        if !url.isFileURL { monitorRecovery(url: url, channel: channel, username: username, password: password) }
+    }
+
+    private func startPlayback(url: URL, channel: Channel, username: String, password: String) {
         stopEngine()
         let generation = UUID()
         playbackGeneration = generation
         self.channel = channel
         hasPresentedVideo = false
+        lastVideoProgress = nil
+        lastDisplayedPictures = 0
         status = .connecting
 
         if url.isFileURL && !FileManager.default.fileExists(atPath: url.path) {
@@ -120,7 +141,8 @@ public final class PlaybackSlot: Identifiable {
             }
             vlcPlayer.media = media
             vlcPlayer.audio?.isMuted = isMuted
-            applyVolume()
+            // Avoid changing engine volume during failed-output teardown.
+            // The stored volume is applied once playback or video output is ready.
             monitorVLCState(generation: generation)
             vlcPlayer.play()
             #else
@@ -133,12 +155,71 @@ public final class PlaybackSlot: Identifiable {
     }
 
     public func stop() {
+        cancelReconnect()
         playbackGeneration = UUID()
         stopEngine()
         isMuted = true
         channel = nil
         hasPresentedVideo = false
         status = .idle
+    }
+
+    /// Cancels pending retries while leaving a currently working stream alone.
+    public func cancelReconnect() {
+        recoveryTask?.cancel()
+        recoveryTask = nil
+        isReconnecting = false
+    }
+
+    private func monitorRecovery(url: URL, channel: Channel, username: String, password: String) {
+        recoveryTask = Task { @MainActor [weak self] in
+            var connectingSince = ContinuousClock.now
+            var stableSince: ContinuousClock.Instant?
+            while !Task.isCancelled {
+                do { try await Task.sleep(for: self?.recoveryPollInterval ?? .seconds(1)) } catch { return }
+                guard let self, self.channel == channel else { return }
+                let failed: Bool
+                let reason: String
+                switch self.status {
+                case .failed: failed = true; reason = "engine-error"
+                case .idle: failed = true; reason = "engine-ended"
+                case .connecting:
+                    failed = self.recoveryConnectionHasTimedOut(since: connectingSince)
+                    reason = "no-video-progress"
+                case .playing, .paused:
+                    connectingSince = ContinuousClock.now
+                    if stableSince == nil { stableSince = ContinuousClock.now }
+                    if let stableSince, stableSince.duration(to: .now) >= .seconds(30) { self.reconnectAttempt = 0 }
+                    self.isReconnecting = false
+                    continue
+                }
+                stableSince = nil
+                guard failed else { continue }
+                guard self.reconnectAttempt < self.reconnectBackoff.count else {
+                    self.playbackGeneration = UUID()
+                    self.stopEngine()
+                    self.hasPresentedVideo = false
+                    self.isReconnecting = false
+                    self.status = .failed("Keine Verbindung nach drei Versuchen. Bitte den Sender erneut wählen.")
+                    return
+                }
+                self.reconnectAttempt += 1
+                Self.recoveryLogger.notice("Retry reason: \(reason, privacy: .public); attempt: \(self.reconnectAttempt, privacy: .public); video presented: \(self.hasPresentedVideo, privacy: .public)")
+                self.isReconnecting = true
+                do { try await Task.sleep(for: self.reconnectBackoff[self.reconnectAttempt - 1]) } catch { return }
+                guard !Task.isCancelled, self.channel == channel else { return }
+                self.startPlayback(url: url, channel: channel, username: username, password: password)
+                connectingSince = ContinuousClock.now
+            }
+        }
+    }
+
+    // VLC can remain in buffering while decoding and displaying live TV.
+    // Only a lack of new pictures may expire this connection deadline.
+    func recoveryConnectionHasTimedOut(since start: ContinuousClock.Instant,
+                                       now: ContinuousClock.Instant = .now) -> Bool {
+        let activity = max(start, lastVideoProgress ?? start)
+        return activity.duration(to: now) >= .seconds(recoveryConnectionTimeout)
     }
 
     private func stopEngine() {
@@ -158,8 +239,15 @@ public final class PlaybackSlot: Identifiable {
     #if canImport(VLCKit)
     // VLC may report buffering after it has already displayed video. Keep this
     // per-media evidence separate from transport state so it cannot obscure TV.
-    func updateVLCPlayback(state: VLCMediaPlayerState, displayedPictures: Int32) {
-        if displayedPictures > 0 { hasPresentedVideo = true }
+    func updateVLCPlayback(state: VLCMediaPlayerState, displayedPictures: Int32,
+                           at now: ContinuousClock.Instant = .now) {
+        if displayedPictures > 0 {
+            hasPresentedVideo = true
+            if displayedPictures != lastDisplayedPictures {
+                lastVideoProgress = now
+                lastDisplayedPictures = displayedPictures
+            }
+        }
         switch state {
         case .playing:
             if status != .playing { status = .playing; applyMuteState(); applyVolume() }
@@ -211,16 +299,22 @@ public final class PlaybackSlot: Identifiable {
     #endif
 
     private func applyMuteState() {
-        avPlayer?.isMuted = isMuted
+        if let avPlayer, avPlayer.isMuted != isMuted { avPlayer.isMuted = isMuted }
         #if canImport(VLCKit)
-        vlcPlayer.audio?.isMuted = isMuted
+        // Rebuffering may repeatedly report playing without replacing the output.
+        // Leave an already correct audio output alone.
+        if let audio = vlcPlayer.audio, audio.isMuted != isMuted { audio.isMuted = isMuted }
         #endif
     }
 
     private func applyVolume() {
-        avPlayer?.volume = Float(volume)
+        let nativeVolume = Float(volume)
+        if let avPlayer, avPlayer.volume != nativeVolume { avPlayer.volume = nativeVolume }
         #if canImport(VLCKit)
-        vlcPlayer.audio?.volume = Int32((volume * 100).rounded())
+        if status == .playing || status == .paused || hasPresentedVideo {
+            let desiredVolume = Int32((volume * 100).rounded())
+            if let audio = vlcPlayer.audio, audio.volume != desiredVolume { audio.volume = desiredVolume }
+        }
         #endif
     }
 
@@ -253,7 +347,7 @@ public struct PlaybackSurface: View {
             }
             #endif
             if case let .failed(message) = slot.status {
-                Text(message)
+                Text(LocalizedStringKey(message))
                     .font(.callout)
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)

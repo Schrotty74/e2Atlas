@@ -342,3 +342,71 @@ private final class MemoryCredentialBackend: CredentialBackend {
         values.removeValue(forKey: id)
     }
 }
+
+
+@Suite("Saved layouts and programme search")
+struct LayoutAndGuideTests {
+    @Test func legacyPreferencesStillLoadWithoutLayouts() throws {
+        let bytes = try JSONEncoder().encode(AppPreferences())
+        var object = try #require(JSONSerialization.jsonObject(with: bytes) as? [String: Any])
+        object.removeValue(forKey: "multiviewPresets")
+        let restored = try JSONDecoder().decode(AppPreferences.self, from: JSONSerialization.data(withJSONObject: object))
+        #expect(restored.multiviewPresets == nil)
+        #expect(restored.shortcuts.map(\.id) == ["20:15"])
+    }
+
+    @Test func layoutsRoundTripAndRemovingReceiverRemovesOnlyItsLayouts() throws {
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let storage = PreferencesStore(fileURL: folder.appendingPathComponent("settings.json"))
+        var preferences = AppPreferences()
+        let first = ReceiverProfile(name: "First", address: "first.example")
+        let second = ReceiverProfile(name: "Second", address: "second.example")
+        try preferences.upsert(first); try preferences.upsert(second)
+        let channels: [Channel?] = [Channel(id: "synthetic-1", name: "News"), nil, Channel(id: "synthetic-2", name: "Sport")]
+        let layout = MultiviewPreset(name: "Evening", receiverID: first.id, channels: channels, audibleIndex: 2, volume: 0.4, isMuted: true)
+        let other = MultiviewPreset(name: "Other", receiverID: second.id, channels: channels, audibleIndex: 0, volume: 1, isMuted: false)
+        preferences.multiviewPresets = [layout, other]
+        try storage.save(preferences)
+        #expect(try storage.load().multiviewPresets == [layout, other])
+        preferences.removeReceiver(id: first.id)
+        #expect(preferences.multiviewPresets == [other])
+        var invalid = preferences
+        invalid.multiviewPresets?[0].audibleIndex = 9
+        let before = try Data(contentsOf: storage.fileURL)
+        #expect(throws: AtlasFailure.self) { try storage.save(invalid) }
+        #expect(try Data(contentsOf: storage.fileURL) == before)
+    }
+
+    @Test func searchMatchesDescriptionsAndProgressClampsToEventBounds() {
+        let begin = Date(timeIntervalSince1970: 1_800_000_000)
+        let event = Programme(id: "first", channelID: "one", title: "Alpen", summary: "Wanderung durch Österreich", start: begin, end: begin.addingTimeInterval(3600))
+        let second = Programme(id: "second", channelID: "two", title: "Sport", summary: "", start: begin.addingTimeInterval(4000), end: begin.addingTimeInterval(5000))
+        #expect(Programme.search("österreich", in: [second, event]) == [event])
+        #expect(Programme.search("  SPORT ", in: [event, second]) == [second])
+        #expect(event.progress(at: begin.addingTimeInterval(-1)) == 0)
+        #expect(event.progress(at: begin.addingTimeInterval(1800)) == 0.5)
+        #expect(event.progress(at: begin.addingTimeInterval(7200)) == 1)
+    }
+}
+
+
+@Suite("Startup connection preference")
+struct StartupConnectionPreferenceTests {
+    @Test func legacySettingsDefaultToAutomaticConnection() throws {
+        let encoded = try JSONEncoder().encode(AppPreferences())
+        var object = try #require(JSONSerialization.jsonObject(with: encoded) as? [String: Any])
+        object.removeValue(forKey: "autoConnectOnLaunch")
+        let restored = try JSONDecoder().decode(AppPreferences.self, from: JSONSerialization.data(withJSONObject: object))
+        #expect(restored.connectsOnLaunch)
+    }
+
+    @Test func explicitStartupChoicesRoundTrip() throws {
+        for enabled in [false, true] {
+            var original = AppPreferences()
+            original.autoConnectOnLaunch = enabled
+            let restored = try JSONDecoder().decode(AppPreferences.self, from: JSONEncoder().encode(original))
+            #expect(restored.connectsOnLaunch == enabled)
+        }
+    }
+}

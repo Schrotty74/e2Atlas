@@ -9,6 +9,8 @@
 <key>CFBundleShortVersionString</key><string>$(MARKETING_VERSION)</string>
 <key>CFBundleVersion</key><string>$(CURRENT_PROJECT_VERSION)</string>
 <key>LSMinimumSystemVersion</key><string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+<key>CFBundleDevelopmentRegion</key><string>de</string>
+<key>CFBundleLocalizations</key><array><string>de</string><string>en</string></array>
 <key>NSHighResolutionCapable</key><true/>
 <key>NSPrincipalClass</key><string>NSApplication</string>
 <key>NSLocalNetworkUsageDescription</key><string>e2Atlas verbindet sich mit deinen Enigma2-Receivern, um Sender, Programm, Senderlogos und TV-Streams zu laden.</string>

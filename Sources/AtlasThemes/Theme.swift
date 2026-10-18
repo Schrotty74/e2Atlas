@@ -90,12 +90,13 @@ public final class ThemeCatalog {
     }
 
     /// Creates a new editable theme without overwriting existing user files.
-    public func createTemplate(in directory: URL) throws -> (url: URL, theme: AtlasTheme) {
+    public func createTemplate(in directory: URL, language: String = "de") throws -> (url: URL, theme: AtlasTheme) {
         let bundle = Self.resourceBundle
+        let guideName = language == "en" ? "Theme-README.en" : "Theme-README"
         guard let template = bundle.url(forResource: "theme-template", withExtension: "json", subdirectory: "ThemeTemplates")
                 ?? bundle.url(forResource: "theme-template", withExtension: "json"),
-              let guide = bundle.url(forResource: "Theme-README", withExtension: "md", subdirectory: "ThemeTemplates")
-                ?? bundle.url(forResource: "Theme-README", withExtension: "md") else { throw CocoaError(.fileNoSuchFile) }
+              let guide = bundle.url(forResource: guideName, withExtension: "md", subdirectory: "ThemeTemplates")
+                ?? bundle.url(forResource: guideName, withExtension: "md") else { throw CocoaError(.fileNoSuchFile) }
         var theme = try AtlasTheme.decode(Self.readTheme(template))
         let manager = FileManager.default
         try manager.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -107,11 +108,12 @@ public final class ThemeCatalog {
             destination = directory.appendingPathComponent("mein-theme-\(index).json")
         }
         theme.id = index == 1 ? "mein-theme" : "mein-theme-\(index)"
-        theme.name = index == 1 ? "Mein Theme" : "Mein Theme \(index)"
+        if language == "en" { theme.name = index == 1 ? "My theme" : "My theme \(index)" }
+        else { theme.name = index == 1 ? "Mein Theme" : "Mein Theme \(index)" }
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         try encoder.encode(theme).write(to: destination, options: .withoutOverwriting)
-        let instructions = directory.appendingPathComponent("Theme-README.md")
+        let instructions = directory.appendingPathComponent(guideName + ".md")
         if !manager.fileExists(atPath: instructions.path) { try manager.copyItem(at: guide, to: instructions) }
         return (destination, theme)
     }

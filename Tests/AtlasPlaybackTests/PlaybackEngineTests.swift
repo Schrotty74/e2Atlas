@@ -3,6 +3,7 @@ import AppKit
 import AtlasCore
 import Foundation
 import Testing
+import os
 import VLCKit
 @testable import AtlasPlayback
 
@@ -56,6 +57,34 @@ struct PlaybackEngineTests {
         try await Task.sleep(for: .milliseconds(500))
         #expect(first.status == .idle, "A late event from the stopped engine must not revive its slot.")
         #expect(Self.hasDecodedVideo(second), "Stopping one slot must leave the other engine running.")
+    }
+
+    @Test("Buffering does not rewrite unchanged VLC audio settings")
+    func bufferingLeavesConfiguredAudioOutputAlone() async throws {
+        let fixture = try await makeVideoFixture()
+        defer { try? FileManager.default.removeItem(at: fixture.directory) }
+        let slot = PlaybackSlot()
+        defer { slot.stop() }
+        slot.play(url: fixture.video, channel: testChannel("audio-buffering"), username: "", password: "")
+        #expect(await waitUntil { Self.hasDecodedVideo(slot) && slot.hasPresentedVideo })
+        let audio = try #require(slot.vlcPlayer.audio)
+        let writes = OSAllocatedUnfairLock(initialState: 0)
+        let volumeObservation = audio.observe(\.volume, options: [.new]) { _, _ in writes.withLock { $0 += 1 } }
+        let muteObservation = audio.observe(\.isMuted, options: [.new]) { _, _ in writes.withLock { $0 += 1 } }
+        defer { volumeObservation.invalidate(); muteObservation.invalidate() }
+        slot.volume = 0.37
+        slot.isMuted = false
+        #expect(audio.volume == 37)
+        #expect(!audio.isMuted)
+        #expect(writes.withLock { $0 } > 0, "The observers must detect real audio-setting writes.")
+        writes.withLock { $0 = 0 }
+        for count in 1...8 {
+            slot.updateVLCPlayback(state: .buffering, displayedPictures: Int32(count))
+            slot.updateVLCPlayback(state: .playing, displayedPictures: Int32(count + 1))
+        }
+        #expect(writes.withLock { $0 } == 0, "Buffering must not rewrite unchanged audio settings.")
+        #expect(audio.volume == 37)
+        #expect(!audio.isMuted)
     }
 
     @Test("Reports an unreadable local stream without affecting another slot")
@@ -137,6 +166,7 @@ struct PlaybackEngineTests {
         first.play(url: fixture.video, channel: testChannel("main"), username: "", password: "")
         second.play(url: fixture.video, channel: testChannel("small"), username: "", password: "")
         #expect(await waitUntil { Self.hasDecodedVideo(first) && Self.hasDecodedVideo(second) })
+        #expect(await waitUntil { first.hasPresentedVideo && second.hasPresentedVideo })
         let firstMedia = first.vlcPlayer.media
         let secondMedia = second.vlcPlayer.media
         let firstTime = first.vlcPlayer.time.intValue
@@ -345,5 +375,67 @@ struct PlaybackLoadingTests {
         #expect(waiting.isLoading)
         visible.stop()
         #expect(waiting.isLoading)
+    }
+}
+
+
+@Suite("Stream recovery")
+@MainActor
+struct PlaybackRecoveryTests {
+    @Test func advancingVideoDoesNotReconnectWhileVLCReportsBuffering() {
+        let slot = PlaybackSlot()
+        defer { slot.stop() }
+        let start = ContinuousClock.now
+        slot.updateVLCPlayback(state: .buffering, displayedPictures: 10, at: start + .seconds(20))
+        #expect(slot.status == .connecting)
+        #expect(!slot.recoveryConnectionHasTimedOut(since: start, now: start + .seconds(30)))
+        slot.updateVLCPlayback(state: .buffering, displayedPictures: 30, at: start + .seconds(35))
+        #expect(!slot.recoveryConnectionHasTimedOut(since: start, now: start + .seconds(50)))
+        // Repeated or missing statistics do not count as newly displayed frames.
+        slot.updateVLCPlayback(state: .buffering, displayedPictures: 30, at: start + .seconds(55))
+        slot.updateVLCPlayback(state: .buffering, displayedPictures: 0, at: start + .seconds(59))
+        #expect(slot.recoveryConnectionHasTimedOut(since: start, now: start + .seconds(61)))
+    }
+
+    @Test func connectionWithoutVideoStillTimesOut() {
+        let slot = PlaybackSlot()
+        defer { slot.stop() }
+        let start = ContinuousClock.now
+        slot.updateVLCPlayback(state: .opening, displayedPictures: 0, at: start)
+        #expect(!slot.recoveryConnectionHasTimedOut(since: start, now: start + .seconds(24)))
+        #expect(slot.recoveryConnectionHasTimedOut(since: start, now: start + .seconds(25)))
+    }
+
+    @Test func retriesAreBoundedAndStopCancelsRecovery() async throws {
+        let slot = PlaybackSlot()
+        defer { slot.stop() }
+        slot.recoveryPollInterval = .milliseconds(20)
+        slot.recoveryConnectionTimeout = 0.1
+        slot.reconnectBackoff = [.milliseconds(20), .milliseconds(20), .milliseconds(20)]
+        let url = try #require(URL(string: "http://127.0.0.1:1/unavailable.ts"))
+        slot.play(url: url, channel: Channel(id: "offline", name: "Synthetic offline"), username: "", password: "")
+        #expect(await waitUntil { slot.reconnectAttempt == 3 && !slot.isReconnecting })
+        #expect(slot.status == .failed("Keine Verbindung nach drei Versuchen. Bitte den Sender erneut wählen."))
+        slot.stop()
+        try await Task.sleep(for: .milliseconds(150))
+        #expect(slot.channel == nil)
+        #expect(slot.status == .idle)
+        #expect(!slot.isReconnecting)
+    }
+
+    @Test func cancellingDuringBackoffDoesNotReviveTheStoppedChannel() async throws {
+        let slot = PlaybackSlot()
+        defer { slot.stop() }
+        slot.recoveryPollInterval = .milliseconds(20)
+        slot.recoveryConnectionTimeout = 0.1
+        slot.reconnectBackoff = [.seconds(2), .seconds(2), .seconds(2)]
+        let url = try #require(URL(string: "http://127.0.0.1:1/unavailable.ts"))
+        slot.play(url: url, channel: Channel(id: "offline", name: "Synthetic offline"), username: "", password: "")
+        #expect(await waitUntil { slot.isReconnecting })
+        slot.stop()
+        try await Task.sleep(for: .milliseconds(200))
+        #expect(slot.status == .idle)
+        #expect(slot.channel == nil)
+        #expect(!slot.isReconnecting)
     }
 }

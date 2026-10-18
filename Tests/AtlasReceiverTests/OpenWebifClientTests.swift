@@ -64,6 +64,20 @@ struct OpenWebifClientTests {
         return OpenWebifClient(profile: profile, password: "runtime-only", session: session)
     }
 
+    private static func standardTimerRow(_ overrides: [String: Any] = [:]) -> [String: Any] {
+        var row: [String: Any] = [
+            "serviceref": "1:0:1:ABC", "servicename": "News", "eit": 42, "name": "Evening News",
+            "description": "Daily", "begin": 1_800_000_000, "end": 1_800_003_600,
+            "disabled": 0, "justplay": 0, "afterevent": 3, "dirname": "/movie/", "tags": "news",
+            "repeated": 0, "state": 0, "dontsave": 0, "cancelled": false,
+            "vpsplugin_enabled": false, "vpsplugin_overwrite": false, "vpsplugin_time": -1,
+            "always_zap": -1, "pipzap": -1, "isAutoTimer": 0, "allow_duplicate": 1,
+            "autoadjust": -1, "recordingtype": "normal", "ice_timer_id": -1
+        ]
+        overrides.forEach { row[$0.key] = $0.value }
+        return row
+    }
+
     @Test func decodesBouquetsAndChannels() async throws {
         let client = makeClient { request in
             if request.url?.path == "/api/bouquets" {
@@ -244,6 +258,127 @@ struct OpenWebifClientTests {
         #expect(info.activeTunerCount == 0)
         #expect(info.unassignedStreamCount == 5)
         #expect(!info.allTunerStatusesAvailable)
+    }
+
+    @Test func decodesTimerListAndSkipsMalformedRows() async throws {
+        let normalWithBooleanFlags = Self.standardTimerRow([
+            "disabled": false, "justplay": false, "cancelled": false, "dontsave": false,
+            "vpsplugin_enabled": false, "vpsplugin_overwrite": false, "isAutoTimer": false
+        ])
+        let data = try JSONSerialization.data(withJSONObject: ["result": true, "timers": [
+            normalWithBooleanFlags, normalWithBooleanFlags,
+            ["serviceref": "bad-fraction", "begin": 1_800_000_000.5, "end": 1_800_003_600],
+            ["name": "bad"]
+        ]])
+        let client = makeClient { request in
+            #expect(request.url?.path == "/api/timerlist")
+            return .response(200, data)
+        }
+        let timers = try await client.timers()
+        // Identical composite identities must not generate duplicate SwiftUI rows or ambiguous mutations.
+        #expect(timers.count == 1)
+        #expect(timers[0].name == "Evening News")
+        #expect(timers[0].eventID == 42)
+        #expect(timers[0].begin.timeIntervalSince1970 == 1_800_000_000)
+        #expect(timers[0].isEditable)
+    }
+
+    @Test func keepsVendorFieldsAndMalformedNumericRowsOutOfEditableModel() throws {
+        let ordinary = ReceiverTimer.decode(Self.standardTimerRow([
+            "end": 1_800_000_600, "allow_duplicate": 0, "autoadjust": 1
+        ]))!
+        #expect(ordinary.isEditable)
+        let defaultDirectory = ReceiverTimer.decode(Self.standardTimerRow(["dirname": "None"]))!
+        let defaultDraft = ReceiverTimerDraft(editing: defaultDirectory)
+        #expect(defaultDraft.directory.isEmpty)
+        #expect(!defaultDraft.queryItems.contains { $0.name == "dirname" })
+        #expect(ReceiverTimerDraft(editing: ordinary).queryItems.contains { $0.name == "dirname" && $0.value == ordinary.directory })
+        let vendor = ReceiverTimer.decode(Self.standardTimerRow([
+            "end": 1_800_000_600, "vendor_feature": "enabled"
+        ]))!
+        #expect(!vendor.isEditable)
+        #expect(ReceiverTimer.decode(Self.standardTimerRow([
+            "begin": 1_800_000_000.5, "end": 1_800_000_600
+        ])) == nil)
+        #expect(ReceiverTimer.decode(Self.standardTimerRow([
+            "begin": 1e300, "end": 1_800_000_600
+        ])) == nil)
+        #expect(ReceiverTimer.decode(Self.standardTimerRow(["isAutoTimer": -1]))!.isEditable)
+        #expect(!ReceiverTimer.decode(Self.standardTimerRow(["isAutoTimer": -1, "tags": "news AutoTimer"]))!.isEditable)
+        var missingAutoTimerStatus = Self.standardTimerRow()
+        missingAutoTimerStatus.removeValue(forKey: "isAutoTimer")
+        #expect(!ReceiverTimer.decode(missingAutoTimerStatus)!.isEditable)
+        #expect(!ReceiverTimer.decode(Self.standardTimerRow(["dontsave": true]))!.isEditable)
+        #expect(!ReceiverTimer.decode(Self.standardTimerRow(["disabled": 2]))!.isEditable)
+        #expect(!ReceiverTimer.decode(Self.standardTimerRow(["vpsplugin_enabled": 2]))!.isEditable)
+        #expect(!ReceiverTimer.decode(Self.standardTimerRow(["isAutoTimer": true]))!.isEditable)
+    }
+
+    @Test func addTimerEncodesServiceReferenceAndTextAndChecksResult() async throws {
+        let client = makeClient { request in
+            #expect(request.httpMethod == "GET")
+            #expect(request.url?.path == "/api/timeradd")
+            let items = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)!.queryItems!
+            #expect(items.first(where: { $0.name == "sRef" })?.value == "4097:0:1:IPTV%3a//station.test/live")
+            #expect(items.first(where: { $0.name == "name" })?.value == "News & Culture")
+            #expect(items.first(where: { $0.name == "begin" })?.value == "1800000000")
+            return .response(200, Data(#"{"result":true,"message":"ok"}"#.utf8))
+        }
+        let draft = ReceiverTimerDraft(serviceReference: "4097:0:1:IPTV%3a//station.test/live",
+                                       begin: Date(timeIntervalSince1970: 1_800_000_000),
+                                       end: Date(timeIntervalSince1970: 1_800_000_600), name: "News & Culture")
+        try await client.addTimer(draft)
+    }
+
+    @Test func editAndDeleteUseOriginalCompositeIdentityAndSurfaceGenericConflicts() async throws {
+        let timer = ReceiverTimer.decode(Self.standardTimerRow([
+            "name": "Old", "end": 1_800_000_600, "allow_duplicate": 0, "autoadjust": 1
+        ]))!
+        let client = makeClient { request in
+            let items = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)!.queryItems!
+            let values = Dictionary(uniqueKeysWithValues: items.map { ($0.name, $0.value ?? "") })
+            if request.url?.path == "/api/timerchange" {
+                #expect(values["channelOld"] == "1:0:1:ABC")
+                #expect(values["beginOld"] == "1800000000")
+                #expect(values["endOld"] == "1800000600")
+                #expect(values["allow_duplicate"] == "0")
+                #expect(values["autoadjust"] == "1")
+                return .response(200, Data(#"{"result":true}"#.utf8))
+            }
+            #expect(request.url?.path == "/api/timerdelete")
+            #expect(values["sRef"] == "1:0:1:ABC")
+            #expect(values["begin"] == "1800000000")
+            #expect(values["end"] == "1800000600")
+            return .response(200, Data(#"{"result":false,"message":"sensitive raw server details","conflicts":[]}"#.utf8))
+        }
+        try await client.editTimer(timer, with: ReceiverTimerDraft(editing: timer))
+        do {
+            try await client.deleteTimer(timer)
+            Issue.record("Expected conflict error")
+        } catch let error as ReceiverTimerMutationError {
+            #expect(error == .conflict)
+            #expect(error.localizedDescription.localizedCaseInsensitiveContains("sensitive") == false)
+        }
+    }
+
+    @Test func timerMutationRequiresBooleanResultAndFutureEnd() async throws {
+        let client = makeClient { request in
+            #expect(request.url?.path == "/api/timeradd")
+            return .response(200, Data(#"{"result":"true"}"#.utf8))
+        }
+        let now = Date()
+        let draft = ReceiverTimerDraft(serviceReference: "1:0:1:ABC", begin: now,
+                                       end: now.addingTimeInterval(600), name: "Future")
+        do {
+            try await client.addTimer(draft)
+            Issue.record("Expected malformed-result failure")
+        } catch let error as AtlasFailure {
+            #expect(error == .invalidResponse)
+        }
+        let expired = ReceiverTimerDraft(serviceReference: "1:0:1:ABC",
+                                         begin: now.addingTimeInterval(-600),
+                                         end: now.addingTimeInterval(-1), name: "Expired")
+        await #expect(throws: AtlasFailure.invalidResponse) { try await client.addTimer(expired) }
     }
 
 }

@@ -13,34 +13,69 @@ final class ChannelStore {
     private(set) var error: String?
     private(set) var receiverInfo: ReceiverInfo?
     @ObservationIgnored private(set) var client: OpenWebifClient?
+    private(set) var metadataRevision = 0
+    @ObservationIgnored private let makeClient: (ReceiverProfile, String) -> OpenWebifClient
     @ObservationIgnored private var generation = UUID()
     @ObservationIgnored private var bouquetGeneration = UUID()
+    @ObservationIgnored private var lastFailure: AtlasFailure?
+    @ObservationIgnored var startupRetryDelays: [Duration] = [.seconds(1), .seconds(3)]
 
-    func connect(_ profile: ReceiverProfile, password: String) async {
+    init(makeClient: @escaping (ReceiverProfile, String) -> OpenWebifClient = {
+        OpenWebifClient(profile: $0, password: $1)
+    }) { self.makeClient = makeClient }
+
+    func connect(_ profile: ReceiverProfile, password: String, loadMetadata: Bool = true) async {
+        generation = UUID()
+        bouquets = []; channels = []; picons = [:]; receiverInfo = nil; error = nil
+        selectedBouquetID = nil
+        client = makeClient(profile, password)
+        isLoading = false
+        if loadMetadata { await refresh(retryDelays: startupRetryDelays) }
+    }
+
+    /// Retry metadata independently of the running stream players.
+    func refresh(retryDelays: [Duration] = []) async {
+        guard let service = client, !isLoading else { return }
         let token = UUID(); generation = token
-        bouquets = []; channels = []; picons = [:]; receiverInfo = nil; error = nil; isLoading = true
-        let service = OpenWebifClient(profile: profile, password: password); client = service
-        do {
-            let info = try await service.verify()
-            let list = try await service.bouquets()
+        defer { if token == generation { isLoading = false } }
+        for attempt in 0...retryDelays.count {
             guard token == generation, !Task.isCancelled else { return }
-            receiverInfo = info; bouquets = list; selectedBouquetID = list.first?.id
-            if let first = list.first { await loadChannels(in: first) }
-        } catch is CancellationError { }
-        catch { if token == generation { self.error = error.localizedDescription } }
-        if token == generation { isLoading = false }
+            error = nil; lastFailure = nil; isLoading = true
+            do {
+                let info = try await service.verify()
+                let list = try await service.bouquets()
+                guard token == generation, !Task.isCancelled else { return }
+                receiverInfo = info; bouquets = list
+                selectedBouquetID = list.first(where: { $0.id == selectedBouquetID })?.id ?? list.first?.id
+                if let selected = list.first(where: { $0.id == selectedBouquetID }) {
+                    await loadChannels(in: selected)
+                } else {
+                    channels = []; selectedBouquetID = nil
+                    metadataRevision += 1
+                }
+            } catch is CancellationError { return }
+            catch {
+                guard token == generation else { return }
+                self.error = error.localizedDescription
+                lastFailure = error as? AtlasFailure
+            }
+            guard token == generation, !Task.isCancelled,
+                  lastFailure == .unreachable, attempt < retryDelays.count else { return }
+            isLoading = true
+            do { try await Task.sleep(for: retryDelays[attempt]) } catch { return }
+        }
     }
     func loadChannels(in bouquet: Bouquet) async {
         guard let client else { return }
         let token = generation
         let request = UUID(); bouquetGeneration = request
-        isLoading = true; error = nil
+        isLoading = true; error = nil; lastFailure = nil
         do {
             let values = try await client.channels(in: bouquet)
             guard token == generation, request == bouquetGeneration, !Task.isCancelled else { return }
-            channels = values; selectedBouquetID = bouquet.id
+            channels = values; selectedBouquetID = bouquet.id; metadataRevision += 1
         } catch is CancellationError { }
-        catch { if token == generation, request == bouquetGeneration { self.error = error.localizedDescription } }
+        catch { if token == generation, request == bouquetGeneration { self.error = error.localizedDescription; lastFailure = error as? AtlasFailure } }
         if token == generation, request == bouquetGeneration { isLoading = false }
     }
     func loadPicon(_ channel: Channel) async {

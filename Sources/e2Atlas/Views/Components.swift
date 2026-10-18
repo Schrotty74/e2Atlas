@@ -28,7 +28,7 @@ struct GlassPanel: ViewModifier {
 struct ErrorNotice: View {
     let message: String
     var body: some View {
-        Label(message, systemImage: "exclamationmark.triangle")
+        Label(LocalizedStringKey(message), systemImage: "exclamationmark.triangle")
             .font(.callout).foregroundStyle(.secondary)
             .padding(12).frame(maxWidth: .infinity, alignment: .leading)
             .background(.quaternary, in: .rect(cornerRadius: 10))

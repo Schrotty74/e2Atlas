@@ -12,10 +12,12 @@ struct GuideView: View {
     let demo: Bool
     let onPlay: (Channel) -> Void
     let onPicon: (Channel) async -> Void
+    let onSchedule: (Programme, Channel) -> Void
     @State private var addTime = false
     @State private var customTime = Date()
     @Environment(\.atlasTheme) private var theme
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.locale) private var locale
     private var visibleChannels: [Channel] { channels }
 
     var body: some View {
@@ -27,7 +29,7 @@ struct GuideView: View {
                         DatePicker("Tag", selection: $store.window.start, displayedComponents: .date).labelsHidden().font(.title2)
                     }
                     Spacer()
-                    Text("\(store.window.start.formatted(date: .omitted, time: .shortened)) – \(store.window.end.formatted(date: .omitted, time: .shortened))").font(.callout).monospacedDigit()
+                    Text("\(store.window.start.formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(locale))) – \(store.window.end.formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(locale)))").font(.callout).monospacedDigit()
                     if store.isLoading { ProgressView().controlSize(.small) }
                 }
                 HStack {
@@ -49,6 +51,20 @@ struct GuideView: View {
                     }
                     Button("Uhrzeit hinzufügen", systemImage: "plus") { addTime = true }.labelStyle(.iconOnly)
                 }.buttonStyle(.glass)
+                TextField("Sendung oder Beschreibung suchen", text: $store.searchText).textFieldStyle(.roundedBorder)
+                if !store.searchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    Text("Suche in den geladenen Programmdaten aller Sender dieses Bouquets für das gewählte Zeitfenster.")
+                        .font(.caption).foregroundStyle(.secondary)
+                    List(store.searchResults) { event in
+                        Button { store.selection = event } label: {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(demo ? settings.language.localized(event.title) : event.title).font(.headline)
+                                Text("\(channels.first { $0.id == event.channelID }?.name ?? settings.language.localized("Sender")) · \(event.start.formatted(Date.FormatStyle(date: .abbreviated, time: .shortened).locale(locale)))")
+                                    .font(.caption).foregroundStyle(.secondary)
+                            }.frame(maxWidth: .infinity, alignment: .leading)
+                        }.buttonStyle(.plain)
+                    }.overlay { if store.searchResults.isEmpty { ContentUnavailableView.search(text: store.searchText) } }
+                } else {
                 GeometryReader { geometry in
                     ScrollView {
                         LazyVStack(spacing: 7, pinnedViews: .sectionHeaders) {
@@ -65,6 +81,7 @@ struct GuideView: View {
                             } header: { timeHeader(width: max(100, geometry.size.width - 80)) }
                         }
                     }
+                }
                 }
             }
             .padding(22).frame(minWidth: 530, maxWidth: .infinity)
@@ -91,7 +108,7 @@ struct GuideView: View {
             Text("Sender").font(.caption).foregroundStyle(theme.id == "system" ? Color.secondary : Color(atlasHex: theme.palette(for: scheme).secondary)).frame(width: 70)
             HStack {
                 ForEach(0..<4) { index in
-                    Text(store.window.start.addingTimeInterval(store.window.duration.seconds * Double(index) / 4).formatted(date: .omitted, time: .shortened))
+                    Text(store.window.start.addingTimeInterval(store.window.duration.seconds * Double(index) / 4).formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(locale)))
                         .font(.caption).monospacedDigit().frame(maxWidth: .infinity, alignment: .leading)
                 }
             }.frame(width: width)
@@ -103,22 +120,22 @@ struct GuideView: View {
             RoundedRectangle(cornerRadius: 7).fill(.quaternary.opacity(0.5))
             let values = store.events[channel.id] ?? []
             if values.isEmpty {
-                Text(store.errors[channel.id] ?? "Keine Programmdaten").font(.caption).foregroundStyle(theme.id == "system" ? Color.secondary : Color(atlasHex: theme.palette(for: scheme).secondary)).padding(10)
+                AppLocalizedText(store.errors[channel.id] ?? "Keine Programmdaten").font(.caption).foregroundStyle(theme.id == "system" ? Color.secondary : Color(atlasHex: theme.palette(for: scheme).secondary)).padding(10)
             }
             ForEach(values) { event in
                 if let part = store.window.visibleFraction(of: event) {
                     Button { store.selection = event } label: {
                         VStack(alignment: .leading, spacing: 5) {
-                            Text(event.title).font(.callout.weight(.medium)).lineLimit(1)
-                            Text("\(event.start.formatted(date: .omitted, time: .shortened)) – \(event.end.formatted(date: .omitted, time: .shortened))")
+                            Text(demo ? settings.language.localized(event.title) : event.title).font(.callout.weight(.medium)).lineLimit(1)
+                            Text("\(event.start.formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(locale))) – \(event.end.formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(locale)))")
                                 .font(.caption).foregroundStyle(theme.id == "system" ? Color.secondary : Color(atlasHex: theme.palette(for: scheme).secondary)).lineLimit(1)
                         }
                         .padding(10).frame(width: max(1, width * part.width - 4), height: 73, alignment: .leading).clipped()
                         .background(Color(atlasHex: store.selection?.id == event.id ? theme.palette(for: scheme).selection : theme.palette(for: scheme).surface), in: .rect(cornerRadius: 6))
                     }
                     .buttonStyle(.plain).offset(x: width * part.offset)
-                    .help("\(event.title) · \(event.start.formatted(date: .omitted, time: .shortened)) – \(event.end.formatted(date: .omitted, time: .shortened))")
-                    .accessibilityLabel("\(channel.name): \(event.title)")
+                    .help("\(demo ? settings.language.localized(event.title) : event.title) · \(event.start.formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(locale))) – \(event.end.formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(locale)))")
+                    .accessibilityLabel("\(channel.name): \(demo ? settings.language.localized(event.title) : event.title)")
                 }
             }
         }.frame(width: width, height: 75).clipped()
@@ -131,12 +148,30 @@ struct GuideView: View {
                 else { AtlasPlayback.PlaybackSurface(slot: playback.slots[0]).aspectRatio(16 / 9, contentMode: .fit).clipShape(.rect(cornerRadius: 10)) }
                 if let event = store.selection {
                     Text(channels.first { $0.id == event.channelID }?.name ?? "").font(.caption).foregroundStyle(theme.id == "system" ? Color.secondary : Color(atlasHex: theme.palette(for: scheme).secondary))
-                    Text(event.title).font(.title2.weight(.semibold))
-                    Text("\(event.start.formatted(date: .omitted, time: .shortened)) – \(event.end.formatted(date: .omitted, time: .shortened))").font(.callout).monospacedDigit()
-                    Text(event.summary.isEmpty ? "Keine weitere Beschreibung vorhanden." : event.summary).font(.callout).foregroundStyle(theme.id == "system" ? Color.secondary : Color(atlasHex: theme.palette(for: scheme).secondary))
+                    Text(demo ? settings.language.localized(event.title) : event.title).font(.title2.weight(.semibold))
+                    Text("\(event.start.formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(locale))) – \(event.end.formatted(Date.FormatStyle(date: .omitted, time: .shortened).locale(locale)))").font(.callout).monospacedDigit()
+                    TimelineView(.periodic(from: .now, by: 30)) { context in
+                        if event.start <= context.date && event.end > context.date {
+                            ProgressView(value: event.progress(at: context.date)) { Text("Sendung läuft") }
+                                .accessibilityValue("\(Int(event.progress(at: context.date) * 100)) Prozent")
+                        }
+                    }
+                    Text(event.summary.isEmpty ? settings.language.localized("Keine weitere Beschreibung vorhanden.") : demo ? settings.language.localized(event.summary) : event.summary).font(.callout).foregroundStyle(theme.id == "system" ? Color.secondary : Color(atlasHex: theme.palette(for: scheme).secondary))
                     Button("Sender ansehen", systemImage: "play.fill") {
                         if let channel = channels.first(where: { $0.id == event.channelID }) { onPlay(channel) }
                     }.buttonStyle(.glassProminent).disabled(demo)
+                    Button("Auf Receiver aufnehmen", systemImage: "calendar.badge.plus") {
+                        if let channel = channels.first(where: { $0.id == event.channelID }) { onSchedule(event, channel) }
+                    }.disabled(demo || event.end <= Date())
+                    let airings = store.otherAirings(of: event)
+                    if !airings.isEmpty {
+                        Text("Weitere geladene Ausstrahlungen").font(.headline)
+                        ForEach(airings.prefix(10)) { airing in
+                            Button { store.selection = airing } label: {
+                                Text("\(channels.first { $0.id == airing.channelID }?.name ?? settings.language.localized("Sender")) · \(airing.start.formatted(Date.FormatStyle(date: .abbreviated, time: .shortened).locale(locale)))")
+                            }
+                        }
+                    }
                 } else {
                     Text("Sendung auswählen").font(.title3.weight(.semibold))
                     Text("Wähle eine Sendung für Uhrzeit und Beschreibung.").font(.callout).foregroundStyle(theme.id == "system" ? Color.secondary : Color(atlasHex: theme.palette(for: scheme).secondary))

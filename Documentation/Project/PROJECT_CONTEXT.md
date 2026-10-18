@@ -1,6 +1,6 @@
 # Projektkontext – e2Atlas
 
-Stand: 16. Oktober 2026. Dieser Quellstand gehört zur Beta `0.2.0-beta`, Build 2. ZIP, DMG und Prüfsummen sind für die Veröffentlichung erstellt und geprüft.
+Stand: 18. Oktober 2026. Dieser Quellstand gehört zur Beta `0.3.0-beta`, Build 3. App und Tests sind geprüft; Commit, Downloadpakete und GitHub-Veröffentlichung werden im ausdrücklich beauftragten Release-Ablauf erstellt.
 
 ## Produkt und Plattform
 
@@ -25,7 +25,7 @@ Receiver-Info liest `/api/boxinfo` und bei geeigneten älteren Antworten `/api/a
 
 ## Lokale Aufnahme
 
-Der Aufnahme-Button liegt in der Player-Leiste und in kleinen Multiview-Bildern. Ein NSSavePanel wählt eine neue `.ts`-Datei. Eine Aufnahme kann gleichzeitig laufen, unabhängig von der sichtbaren Wiedergabe. Die App zeigt Laufzeit und Datenmenge, bietet Stoppen und anschließend die Anzeige im Finder. Vorhandene Dateien werden nicht überschrieben; ein exklusives Erstellen schützt auch gegen zwischenzeitliche Namenskollisionen. Bei Abbruch bleiben bereits gültig gespeicherte Streamdaten erhalten, leere Ausgabedateien werden entfernt. Receiver-Timer und Transcoding sind nicht implementiert.
+Der Aufnahme-Button liegt in der Player-Leiste und in kleinen Multiview-Bildern. Ein NSSavePanel wählt eine neue `.ts`-Datei. Eine Aufnahme kann gleichzeitig laufen, unabhängig von der sichtbaren Wiedergabe. Die App zeigt Laufzeit und Datenmenge, bietet Stoppen und anschließend die Anzeige im Finder. Vorhandene Dateien werden nicht überschrieben; ein exklusives Erstellen schützt auch gegen zwischenzeitliche Namenskollisionen. Bei Abbruch bleiben bereits gültig gespeicherte Streamdaten erhalten, leere Ausgabedateien werden entfernt. Receiver-Timer werden getrennt verwaltet; Transcoding ist nicht implementiert.
 
 Die Aufnahme verwendet eine flüchtige URLSession ohne Cookie-, Credential- oder Disk-Cache. HTTP-Basic-Zugangsdaten werden nur für den konfigurierten Ursprung verwendet; Weiterleitungen werden abgelehnt. Dateizugriffe und Session-Callbacks sind seriell, Abbruchzustand ist gesperrt. Fortschrittsmeldungen sind auf vier pro Sekunde begrenzt.
 
@@ -57,7 +57,7 @@ Alle Einstiegsskripte liegen unter `Scripts/` und ermitteln Pfade aus ihrer Posi
 
 Zusätzliche lokale Quell-Checkouts liegen unter `Local/Channels/`. Der Beta-Aufruf im Hauptprojekt verwendet den Beta-Checkout und dessen eigenen Xcode-Build-Cache. `E2ATLAS_OUTPUT_DIRECTORY` ändert ausschließlich die fertige App-Ausgabe; relative Werte gelten ab dem bauenden Checkout. Eigenständige Checkouts benötigen keine lokale Gesamtstruktur. Beta verlangt Branch `beta`, Final `main`. Final-Paketierung und Final-Tags fehlen weiterhin.
 
-Versionsschema: drei Zahlen für Final-Generation, Beta-Schritt und Bugfix mit `-final`, `-beta` oder `-bugfix`. App-Metadaten trennen numerische Version und vollständigen Release-Namen. Beta `0.2.0-beta` verwendet Build 2. Dev bleibt lokal. Quellstände werden gezielt übernommen, keine Dev-Historie veröffentlicht. Positivliste und Pre-Push-Hook prüfen Zielrepository, Branches und alle ausgehenden Commits. Der Hook muss über `git config core.hooksPath Scripts/git-hooks` repository-lokal aktiviert sein.
+Versionsschema: drei Zahlen für Final-Generation, Beta-Schritt und Bugfix mit `-final`, `-beta` oder `-bugfix`. App-Metadaten trennen numerische Version und vollständigen Release-Namen. Beta `0.3.0-beta` verwendet Build 3; die veröffentlichte `0.2.0-beta` verwendet Build 2. Dev bleibt lokal. Quellstände werden gezielt übernommen, keine Dev-Historie veröffentlicht. Positivliste und Pre-Push-Hook prüfen Zielrepository, Branches und alle ausgehenden Commits. Der Hook muss über `git config core.hooksPath Scripts/git-hooks` repository-lokal aktiviert sein.
 
 `package-beta.sh` verlangt einen sauberen, geprüften Beta-Commit und erstellt ZIP, DMG und SHA256SUMS. Es prüft Metadaten, arm64 und private Entwicklungspfade im eigenen Release-Programm. Ausgaben werden nicht überschrieben. Apps sind ad-hoc signiert und nicht notarisiert. Gatekeeper kann eine einmalige Freigabe erfordern. Build und Paketierung veröffentlichen nichts automatisch.
 
@@ -81,3 +81,31 @@ Versionsschema: drei Zahlen für Final-Generation, Beta-Schritt und Bugfix mit `
 - 16. Oktober 2026, Veröffentlichung: `0.2.0-beta`, Build 2, als GitHub-Vorabrelease mit ZIP, DMG und SHA256SUMS veröffentlicht. Release-Tag `v0.2.0-beta` liegt auf `2369b7a`; spätere Begleittextänderungen ersetzen keine App-Pakete. Beide Startseiten enthalten die neuen Funktionen. Changelog und Release-Notes verwenden das Beta-1-Muster Added, Fixed, Known limitations und Validation. Alle vier Kontextdateien aktualisiert. Künftige Abschlussprüfungen werden gebündelt; Wiederholungen nur bei konkretem Anlass.
 
 - 16. Oktober 2026, Beta-1-Downloads: nach ausdrücklicher Nutzerfreigabe ZIP, DMG und SHA256SUMS des historischen Releases `v0.1.0-beta.1` durch lokal bereinigte Dateien ersetzt. Lokale Entwicklungspfade aus eigenen Mach-O-Dateien entfernt und Signaturen erneuert; App-Version, Build 1, Funktionen, Framework-Inhalte, Tag und Download-Dateinamen unverändert. Die vorbereiteten Dateien bestanden Signatur-, Paket- und Home-Pfad-Prüfung. Nach Upload alle drei veröffentlichten SHA-256-Digests mit den vorbereiteten Dateien abgeglichen. Keine neuen App-Builds oder wiederholten Funktionsprüfungen.
+
+
+## Stand für die Fortsetzung
+
+Stand: 16. Oktober 2026 nach Veröffentlichung und Bereinigung der Downloads.
+
+- Der lokale Hauptordner enthält den Dev-Quellstand und ist kein eigenes Git-Repository. `dev` bezeichnet hier den lokalen Build-Kanal, keinen tatsächlich vorhandenen Branch. Dev bleibt ausschließlich lokal.
+- Der getrennte Git-Checkout liegt unter `Local/Channels/Beta`, Branch `beta`, zuletzt veröffentlichter Commit `af58a07` (bereinigte Beta-1-Downloads dokumentiert). Release `0.2.0-beta`, Build 2, gehört zum Tag `v0.2.0-beta` auf `2369b7a`; danach wurden nur Begleittexte angepasst. Das historische Beta-1-Release behält seinen Tag `v0.1.0-beta.1` und enthält jetzt bereinigte ZIP-/DMG-Dateien mit neuen Prüfsummen.
+- Der vorhandene Remote-Branch `origin/main` steht auf `48d096a` und enthält nur `README.md` und `LICENSE`. App-Quellen, Xcode-Projekt, Sicherheits- und Kontextdateien fehlen dort bewusst bis zur ersten beauftragten Final-Vorbereitung. Es gibt keinen lokalen Final-Checkout und keinen lokalen `main`-Branch im Beta-Checkout.
+- Im Dev-Ordner und Beta-Checkout sind Root-`AGENTS.md`, die vier Dateien unter `Documentation/Project/`, englische/deutsche README und SECURITY, CHANGELOG sowie Theme-Anleitungen vorhanden. Die vollständigen Kontextdateien stehen nicht zusätzlich im Root. Globale Agentenregeln bleiben außerhalb des Projekts und werden nicht kopiert.
+- Die Übergabe ändert ausschließlich lokale Kontextdateien. Dafür wurden keine Builds, Tests, Branch-Wechsel, Commits, Pushes oder Releases ausgeführt. Lokale Übergabeänderungen im Beta-Checkout sind nicht veröffentlicht.
+
+
+## Beta 0.3.0-beta
+
+- 18. Oktober 2026: Auf Nutzerauftrag den aktuellen Dev-Funktionsstand gezielt in den vorhandenen Beta-Checkout übernommen: deutsche/englische Oberfläche, Receiver-Timer, EPG-Suche und Fortschritt, gespeicherte Multiview-Belegungen, unabhängige begrenzte Wiederverbindung, Aufnahmeoptionen, Speicherplatzprüfung, Sleep-Timer, einstellbare Startverbindung sowie vollständiges Beenden beim Schließen des Hauptfensters. Quellen, Tests und Ressourcen stimmen bytegenau mit dem übernommenen Dev-Stand überein. Versionsvorgabe 0.3.0-beta und Build 3 bleiben im Beta-Build getrennt.
+- Bestätigungen aus Dev: Anlegen eines echten Receiver-Timers; ungefähr zehn Minuten stabile Einzelwiedergabe; schrittweises Laden beseitigt die gemeldeten Multiview-Tonaussetzer; Sender und EPG laden nach Wiederherstellen; automatische Startverbindung, Einstellung im Receiver-Bereich und vollständiges Beenden über den roten Knopf funktionieren laut Nutzer. Diese Aussagen sind keine erneute Hardwareprüfung des Beta-Pakets.
+- App-Build erfolgreich. Beta-Kennung und -Kanal, Version 0.3.0, Build 3, Apple Silicon, macOS-26-Mindestversion und beide Sprachressourcen geprüft. Eigenes Hauptprogramm gestript, absolute Suchpfade entfernt und auf private Entwicklungspfade geprüft; Ad-hoc-Signatur erneuert und streng geprüft. Keine Debug-Dylib im Paket. Getrennte Beta-Daten, Schlüsselbund-Services und Build-Caches erhalten; keine Dev-Nutzerdaten übernommen.
+- Die drei vorbestehenden lokalen Kontextänderungen sind vor Übernahme getrennt unter Local/Backups gesichert. Neue Build-/Test-Logs werden über den übernommenen Logger begrenzt aufbewahrt. Keine zusätzliche Prüf-App oder Projektkopie erstellt, kein Branchwechsel, Commit, Push, Tag oder Release ausgeführt. Das Paketierungsskript verlangt weiterhin einen ausdrücklich beauftragten sauberen Commit für ZIP/DMG.
+
+- Automatische Prüfung: 96 Testfunktionen im übernommenen Quellstand über Gesamtlauf und gezielte Nachprüfungen erfolgreich abgedeckt. Der erste gemeinsame Lauf wurde wegen einer VLC-Sperre beim Abbau eines synthetischen Players beendet. Fünf dadurch offene Funktionen anschließend in getrennten Aufrufen erfolgreich geprüft; bestandene Funktionen nicht erneut ausgeführt. Eine vorherige Methodenauswahl fand keine Tests und zählt nicht als Prüfnachweis. Nach dem abgebrochenen Lauf verbliebene eigene synthetische Mediendatei samt Ordner entfernt; Logs bleiben geordnet als Nachweise erhalten. Keine Änderung der App-Logik für diesen Prüfkonflikt.
+- Englische/deutsche README, englischer Changelog und vier Kontextdateien auf den lokalen Kandidaten abgeglichen. Sprachlich passende Humanizer verwendet. Neue Funktionen und Ressourcen nur im vorhandenen Beta-Checkout übernommen; ein Sub-Agent mit GPT-6 Luna Medium unterstützte Dateiabgleich und Auswertung der noch offenen Tests. Beta wurde nicht gegen einen echten Receiver gestartet. ZIP/DMG und Veröffentlichung bleiben ohne Commit-/Veröffentlichungsauftrag ausstehend.
+
+
+## Auftrag zur GitHub-Veröffentlichung
+
+- 18. Oktober 2026: Nutzer stellt klar, dass „neue Beta erstellen“ auch das Hochladen und Veröffentlichen auf GitHub umfasst. Diese Auslegung gilt künftig als ausdrücklicher Release-Auftrag und ist in den Projektregeln ergänzt. Für 0.3.0-beta sind Quell-Commit und Push auf beta, Tag v0.3.0-beta sowie GitHub-Vorabrelease mit ZIP, DMG und SHA256SUMS beauftragt. Ältere Angaben zur rein lokalen Vorbereitung dokumentieren den Zustand vor dieser Klarstellung.
+- Die 96 erfolgreich abgedeckten Testfunktionen bleiben maßgeblich; reine Release-Texte und Paketierung erfordern keine erneuten Funktionstests. Neue Prüfungen beschränken sich auf veröffentlichbaren Quellstand, Pakete, Signaturen und tatsächliche Upload-Dateien. Fortschritt und Ergebnis werden nach Paketierung und Veröffentlichung ergänzt.

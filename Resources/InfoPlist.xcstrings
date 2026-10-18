@@ -1,0 +1,23 @@
+{
+  "sourceLanguage": "de",
+  "strings": {
+    "NSLocalNetworkUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e2Atlas verbindet sich mit deinen Enigma2-Receivern, um Sender, Programm, Senderlogos und TV-Streams zu laden."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e2Atlas connects to your Enigma2 receivers to load channels, program listings, channel logos and TV streams."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
