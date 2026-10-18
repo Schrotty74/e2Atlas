@@ -8,7 +8,7 @@ Stand: 18. Oktober 2026. Beta `0.3.0-beta`, Build 3, ist gebaut und geprüft; di
 - Lokale Aufnahme mit realen Streams, Beenden während Aufnahme, Speicherplatzmangel, externen Laufwerken und Verbindungsabbruch prüfen. Hardwaredekodierung und CPU-Last sind nicht gemessen.
 - Wiederverbindung nach echtem Netzwerkausfall oder Receiver-Neustart, weitere Multiview-Kombinationen und Sleep-Timer während lokaler Aufnahme prüfen.
 - Neustart mit ausgeschalteter Verbindungsautomatik und Webfehler-Anzeige bei echter Nichterreichbarkeit bestätigen.
-- Beauftragte Veröffentlichung abschließen: bereinigten Beta-Quellstand committen, ZIP/DMG und SHA256SUMS mit dem vorgesehenen Skript erstellen, Push-Hook und ausgehenden Quellstand prüfen und als GitHub-Vorabrelease veröffentlichen. Danach Kontext mit tatsächlichen Ergebnissen aktualisieren.
+- Beauftragte Veröffentlichung abschließen: Quellstand und geprüfte ZIP/DMG samt SHA256SUMS sind vorbereitet. Nachweis-Commit und Tag pushen, GitHub-Vorabrelease erstellen, tatsächliche Upload-Digests prüfen und danach Kontext aktualisieren.
 - Final bleibt separat: main enthält bewusst nur README und Lizenz; erst auf Final-Auftrag Quellen übernehmen und Final-Paketierung vorbereiten.
 
 Notwendige Prüfungen bündeln; bestandene Teile nur nach konkreter Änderung wiederholen. Keine zusätzlichen Prüf-Apps oder Projektkopien ohne ausdrücklichen Auftrag.
