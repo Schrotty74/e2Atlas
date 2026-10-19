@@ -57,7 +57,7 @@ private final class ReceiverSessionDelegate: NSObject, URLSessionTaskDelegate, @
 
 public actor OpenWebifClient {
     public nonisolated let profile: ReceiverProfile
-    private let baseURL: URL?
+    let baseURL: URL?
     private let session: URLSession
 
     public init(profile: ReceiverProfile, password: String) {
@@ -163,6 +163,57 @@ public actor OpenWebifClient {
         return rows.compactMap(ReceiverTimer.decode).filter { seen.insert($0.id).inserted }
     }
 
+    /// Lists recordings and their immediate subdirectories from OpenWebif's movielist API.
+    public func recordings(directory: String? = nil) async throws -> ReceiverRecordingPage {
+        var query: [URLQueryItem] = []
+        if let directory {
+            guard ReceiverRecording.validReceiverPath(directory) else { throw AtlasFailure.invalidResponse }
+            query.append(URLQueryItem(name: "dirname", value: directory))
+        }
+        let json = try await object(path: "/api/movielist", query: query)
+        guard let rows = json["movies"] as? [[String: Any]] else { throw AtlasFailure.invalidResponse }
+        let currentDirectory = (json["directory"] as? String).flatMap {
+            ReceiverRecording.validReceiverPath($0) ? $0 : nil
+        }
+        var directories = (json["bookmarks"] as? [String] ?? []).compactMap { name -> ReceiverRecordingDirectory? in
+            guard !name.isEmpty, name != ".", name != "..", !name.contains("/"), !name.contains("\\"),
+                  let currentDirectory else { return nil }
+            let parent = currentDirectory.hasSuffix("/") ? currentDirectory : currentDirectory + "/"
+            let path = parent + name + "/"
+            guard ReceiverRecording.validReceiverPath(path) else { return nil }
+            return ReceiverRecordingDirectory(path: path, name: name)
+        }
+        for path in json["locations"] as? [String] ?? [] where ReceiverRecording.validReceiverPath(path) {
+            guard path.trimmingCharacters(in: CharacterSet(charactersIn: "/")) != currentDirectory?.trimmingCharacters(in: CharacterSet(charactersIn: "/")) else { continue }
+            directories.append(ReceiverRecordingDirectory(path: path, name: path.split(separator: "/").last.map(String.init) ?? path))
+        }
+        var seenDirectories = Set<String>()
+        directories = directories.filter { seenDirectories.insert($0.path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))).inserted }
+        return ReceiverRecordingPage(
+            recordings: rows.compactMap(ReceiverRecording.decode),
+            directories: directories,
+            currentDirectory: currentDirectory
+        )
+    }
+
+    /// Builds the same-origin OpenWebif file endpoint for receiver-side playback.
+    /// Playback clients must supply configured credentials separately; this URL contains none.
+    public func recordingURL(for recording: ReceiverRecording) throws -> URL {
+        guard ReceiverRecording.validReceiverPath(recording.filePath),
+              let baseURL, var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
+            throw AtlasFailure.invalidAddress
+        }
+        components.path = "/file"
+        components.queryItems = [
+            URLQueryItem(name: "action", value: "download"),
+            URLQueryItem(name: "file", value: recording.filePath)
+        ]
+        components.user = nil
+        components.password = nil
+        guard let url = components.url, Self.sameOrigin(baseURL, url) else { throw AtlasFailure.invalidAddress }
+        return url
+    }
+
     public func addTimer(_ draft: ReceiverTimerDraft) async throws {
         guard draft.end > draft.begin, draft.end > Date(), !draft.serviceReference.isEmpty else { throw AtlasFailure.invalidResponse }
         guard Self.validTimerDate(draft.begin), Self.validTimerDate(draft.end) else { throw AtlasFailure.invalidResponse }
@@ -196,6 +247,8 @@ public actor OpenWebifClient {
         guard let result = Self.jsonBoolean(json["result"]) else { throw AtlasFailure.invalidResponse }
         guard result else {
             if json["conflicts"] != nil {
+                let timers = (json["conflicts"] as? [[String: Any]] ?? []).compactMap(ReceiverTimer.decode)
+                if !timers.isEmpty { throw ReceiverTimerConflict(timers: timers) }
                 throw ReceiverTimerMutationError.conflict
             }
             throw ReceiverTimerMutationError.rejected
@@ -239,7 +292,79 @@ public actor OpenWebifClient {
         return url
     }
 
-    private func object(path: String, query: [URLQueryItem] = [], checkResult: Bool = true) async throws -> [String: Any] {
+    public func epgRefreshConfiguration() async throws -> EPGRefreshConfiguration {
+        let settings = try await epgRefreshData("get")
+        let services = try await epgRefreshData("")
+        let before = Date()
+        let time = try await object(path: "/api/currenttime")
+        let midpoint = before.addingTimeInterval(Date().timeIntervalSince(before) / 2)
+        guard let clock = time["time"] as? String else { throw EPGRefreshFailure.clockUnavailable }
+        return try EPGRefreshConfiguration.decode(settings: settings, services: services, clock: clock, now: midpoint)
+    }
+
+    /// Stores a receiver-side schedule, never forces an immediate channel switch.
+    public func saveEPGRefresh(_ draft: EPGRefreshConfiguration, bouquets: [Bouquet], replacing original: EPGRefreshConfiguration) async throws -> EPGRefreshConfiguration {
+        let references = Array(Set(bouquets.map(\.id))).sorted()
+        guard !references.isEmpty, references.allSatisfy({ !$0.isEmpty }),
+              (1...86400).contains(draft.durationSeconds),
+              (-62_135_596_800...253_402_300_799).contains(draft.begin.timeIntervalSince1970),
+              (-62_135_596_800...253_402_300_799).contains(draft.end.timeIntervalSince1970),
+              draft.minute(draft.begin) != draft.minute(draft.end) else { throw EPGRefreshFailure.invalidPlan }
+        let current = try await epgRefreshConfiguration()
+        guard current.matches(original) else { throw EPGRefreshFailure.changed }
+        let available = Set(try await self.bouquets().map(\.id))
+        guard references.allSatisfy(available.contains) else { throw EPGRefreshFailure.invalidPlan }
+        var finalSettingsAttempted = false
+        do {
+            // Disable scheduled runs while replacing a non-transactional plugin list.
+            try await epgRefreshMutation("set", query: [URLQueryItem(name: "enabled", value: "false")])
+            var expectedPaused = current
+            expectedPaused.enabled = false
+            let paused = try await epgRefreshConfiguration()
+            guard paused.matches(expectedPaused) else { throw EPGRefreshFailure.incomplete }
+            for reference in current.references {
+                try await epgRefreshMutation("del", query: [URLQueryItem(name: "sref", value: reference)])
+            }
+            // Omitting duration removes old per-entry overrides; the global seconds value applies.
+            for reference in references {
+                try await epgRefreshMutation("add", query: [URLQueryItem(name: "sref", value: reference)])
+            }
+            finalSettingsAttempted = true
+            try await epgRefreshMutation("set", query: [
+                URLQueryItem(name: "enabled", value: draft.enabled ? "true" : "false"),
+                URLQueryItem(name: "begin", value: String(Int64(draft.begin.timeIntervalSince1970))),
+                URLQueryItem(name: "end", value: String(Int64(draft.end.timeIntervalSince1970))),
+                URLQueryItem(name: "interval_seconds", value: String(draft.durationSeconds)),
+                URLQueryItem(name: "force", value: "false"),
+                URLQueryItem(name: "inherit_autotimer", value: "false")
+            ])
+            let saved = try await epgRefreshConfiguration()
+            guard saved.enabled == draft.enabled, saved.minute(saved.begin) == draft.minute(draft.begin),
+                  saved.minute(saved.end) == draft.minute(draft.end), saved.durationSeconds == draft.durationSeconds,
+                  saved.references == references, !saved.force, !saved.inheritsAutoTimer else { throw EPGRefreshFailure.incomplete }
+            return saved
+        } catch {
+            if finalSettingsAttempted {
+                try? await epgRefreshMutation("set", query: [URLQueryItem(name: "enabled", value: "false")])
+            }
+            throw EPGRefreshFailure.incomplete
+        }
+    }
+
+    private func epgRefreshMutation(_ action: String, query: [URLQueryItem]) async throws {
+        let result = try EPGRefreshXML.read(await epgRefreshData(action, query: query), root: "e2simplexmlresult")
+        guard result.success == true else { throw EPGRefreshFailure.incomplete }
+    }
+
+    private func epgRefreshData(_ action: String, query: [URLQueryItem] = []) async throws -> Data {
+        guard let baseURL, var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else { throw AtlasFailure.invalidAddress }
+        components.path = action.isEmpty ? "/epgrefresh" : "/epgrefresh/" + action
+        components.queryItems = query.isEmpty ? nil : query
+        guard let url = components.url else { throw AtlasFailure.invalidAddress }
+        return try await data(url: url, accept: "application/xml, text/xml, application/xhtml+xml", missingPlugin: true)
+    }
+
+    func object(path: String, query: [URLQueryItem] = [], checkResult: Bool = true) async throws -> [String: Any] {
         guard let baseURL else { throw AtlasFailure.invalidAddress }
         var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)
         components?.path = path
@@ -253,12 +378,14 @@ public actor OpenWebifClient {
         return object
     }
 
-    private func data(url: URL) async throws -> Data {
+    func data(url: URL, accept: String = "application/json, image/*;q=0.8", missingPlugin: Bool = false, method: String = "GET", body: Data? = nil) async throws -> Data {
         guard let baseURL, Self.sameOrigin(baseURL, url) else { throw AtlasFailure.invalidAddress }
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = method
+        request.httpBody = body
+        if body != nil { request.setValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type") }
         request.timeoutInterval = 15
-        request.setValue("application/json, image/*;q=0.8", forHTTPHeaderField: "Accept")
+        request.setValue(accept, forHTTPHeaderField: "Accept")
         do {
             try Task.checkCancellation()
             let (data, response) = try await session.data(for: request)
@@ -267,10 +394,14 @@ public actor OpenWebifClient {
             switch response.statusCode {
             case 200..<300: return data
             case 401, 403: throw AtlasFailure.unauthorized
+            case 404, 501:
+                if missingPlugin { throw EPGRefreshFailure.unavailable }
+                throw AtlasFailure.invalidResponse
             default: throw AtlasFailure.invalidResponse
             }
         } catch is CancellationError { throw CancellationError() }
         catch let error as AtlasFailure { throw error }
+        catch let error as EPGRefreshFailure { throw error }
         catch let error as URLError where error.code == .cancelled { throw CancellationError() }
         catch let error as URLError where error.code == .userAuthenticationRequired { throw AtlasFailure.unauthorized }
         catch let error as URLError where error.code == .timedOut { throw AtlasFailure.unreachable }

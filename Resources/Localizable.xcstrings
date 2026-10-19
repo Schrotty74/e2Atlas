@@ -188,6 +188,23 @@
         }
       }
     },
+    "%lld Minuten vorher": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Minuten vorher"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld minutes before"
+          }
+        }
+      }
+    },
     "%lld Prozent": {
       "extractionState": "manual",
       "localizations": {
@@ -307,6 +324,23 @@
         }
       }
     },
+    "1 bis 86400 Sekunden. Für eine neue Auswahl sind 50 Sekunden voreingestellt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 bis 86400 Sekunden. Für eine neue Auswahl sind 50 Sekunden voreingestellt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 to 86400 seconds. New selections default to 50 seconds."
+          }
+        }
+      }
+    },
     "2 Bilder": {
       "extractionState": "manual",
       "localizations": {
@@ -409,6 +443,23 @@
         }
       }
     },
+    "Abspielen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abspielen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play"
+          }
+        }
+      }
+    },
     "Adresse deines Receivers": {
       "extractionState": "manual",
       "localizations": {
@@ -426,6 +477,23 @@
         }
       }
     },
+    "Aktiv": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktiv"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enabled"
+          }
+        }
+      }
+    },
     "Aktualisieren": {
       "extractionState": "manual",
       "localizations": {
@@ -439,6 +507,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Refresh"
+          }
+        }
+      }
+    },
+    "Aktualisiert die Programmanzeige in e2Atlas, solange die App geöffnet ist.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktualisiert die Programmanzeige in e2Atlas, solange die App geöffnet ist."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refreshes programme listings in e2Atlas while the app is open."
           }
         }
       }
@@ -473,6 +558,193 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save current layout"
+          }
+        }
+      }
+    },
+    "Aktueller Ordner liegt auf diesem Laufwerk": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktueller Ordner liegt auf diesem Laufwerk"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The current folder is on this drive"
+          }
+        }
+      }
+    },
+    "Alle": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All"
+          }
+        }
+      }
+    },
+    "Alle %lld Minuten": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle %lld Minuten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every %lld minutes"
+          }
+        }
+      }
+    },
+    "Alle %lld Stunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle %lld Stunden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every %lld hours"
+          }
+        }
+      }
+    },
+    "Alle 10 Minuten": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle 10 Minuten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every 10 minutes"
+          }
+        }
+      }
+    },
+    "Alle 20 Minuten": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle 20 Minuten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every 20 minutes"
+          }
+        }
+      }
+    },
+    "Alle 30 Minuten": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle 30 Minuten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every 30 minutes"
+          }
+        }
+      }
+    },
+    "Alle 5 Minuten": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle 5 Minuten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every 5 minutes"
+          }
+        }
+      }
+    },
+    "Alle 6 Stunden …": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle 6 Stunden …"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every 6 hours…"
+          }
+        }
+      }
+    },
+    "Alle vorhandenen Bouquets": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle vorhandenen Bouquets"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All existing bouquets"
+          }
+        }
+      }
+    },
+    "Andere geladene Ausstrahlungen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Andere geladene Ausstrahlungen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other loaded broadcasts"
           }
         }
       }
@@ -528,6 +800,23 @@
         }
       }
     },
+    "Auf Receiver speichern": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auf Receiver speichern"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save on receiver"
+          }
+        }
+      }
+    },
     "Auf dem gewählten Laufwerk ist weniger als 1 GB verfügbar. Es wurde keine Aufnahme gestartet.": {
       "extractionState": "manual",
       "localizations": {
@@ -562,6 +851,23 @@
         }
       }
     },
+    "Aufnahme auswählen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aufnahme auswählen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select a recording"
+          }
+        }
+      }
+    },
     "Aufnahme dieses Senders stoppen": {
       "extractionState": "manual",
       "localizations": {
@@ -579,6 +885,23 @@
         }
       }
     },
+    "Aufnahme geplant": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aufnahme geplant"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording scheduled"
+          }
+        }
+      }
+    },
     "Aufnahme gespeichert: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -592,6 +915,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Recording saved: %@"
+          }
+        }
+      }
+    },
+    "Aufnahme läuft": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aufnahme läuft"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording in progress"
           }
         }
       }
@@ -626,6 +966,74 @@
           "stringUnit": {
             "state": "translated",
             "value": "Recording time limit reached. Saving the file."
+          }
+        }
+      }
+    },
+    "Aufnahmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aufnahmen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recordings"
+          }
+        }
+      }
+    },
+    "Aufnahmen suchen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aufnahmen suchen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search recordings"
+          }
+        }
+      }
+    },
+    "Aufnahmen und Timer werden geladen …": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aufnahmen und Timer werden geladen …"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading recordings and timers…"
+          }
+        }
+      }
+    },
+    "Aufnahmen werden geladen …": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aufnahmen werden geladen …"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading recordings…"
           }
         }
       }
@@ -681,6 +1089,40 @@
         }
       }
     },
+    "Aus": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        }
+      }
+    },
+    "Aus Favoriten entfernen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus Favoriten entfernen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove from favourites"
+          }
+        }
+      }
+    },
     "Ausschalten": {
       "extractionState": "manual",
       "localizations": {
@@ -715,6 +1157,91 @@
         }
       }
     },
+    "AutoTimer sucht auf dem Receiver nach passenden EPG-Sendungen und erstellt Aufnahme-Timer. Das Plugin muss installiert und dessen regelmäßige Suche aktiviert sein. Wiederholungen lassen sich nur anhand der vorhandenen EPG-Angaben unterscheiden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AutoTimer sucht auf dem Receiver nach passenden EPG-Sendungen und erstellt Aufnahme-Timer. Das Plugin muss installiert und dessen regelmäßige Suche aktiviert sein. Wiederholungen lassen sich nur anhand der vorhandenen EPG-Angaben unterscheiden."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AutoTimer searches the receiver’s EPG and creates recording timers. The plugin must be installed and its periodic search enabled. Repeat detection depends on the available EPG information."
+          }
+        }
+      }
+    },
+    "AutoTimer-Regel bearbeiten": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AutoTimer-Regel bearbeiten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit AutoTimer rule"
+          }
+        }
+      }
+    },
+    "AutoTimer-Regel löschen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AutoTimer-Regel löschen?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete AutoTimer rule?"
+          }
+        }
+      }
+    },
+    "AutoTimer-Regeln": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AutoTimer-Regeln"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AutoTimer rules"
+          }
+        }
+      }
+    },
+    "AutoTimer-Regeln …": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AutoTimer-Regeln …"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AutoTimer rules…"
+          }
+        }
+      }
+    },
     "Automatisch": {
       "extractionState": "manual",
       "localizations": {
@@ -745,6 +1272,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Automatic follows the macOS light or dark appearance."
+          }
+        }
+      }
+    },
+    "Automatische EPG-Aktualisierung": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatische EPG-Aktualisierung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic EPG update"
           }
         }
       }
@@ -868,6 +1412,57 @@
         }
       }
     },
+    "Bereits angelegte Aufnahme-Timer bleiben erhalten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bereits angelegte Aufnahme-Timer bleiben erhalten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Existing recording timers will be kept."
+          }
+        }
+      }
+    },
+    "Bibliothek": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bibliothek"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Library"
+          }
+        }
+      }
+    },
+    "Bibliothekseinträge sind gelistete Dateien. OpenWebif bestätigt hier nicht, dass eine Aufnahme abgeschlossen ist.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bibliothekseinträge sind gelistete Dateien. OpenWebif bestätigt hier nicht, dass eine Aufnahme abgeschlossen ist."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Library entries are listed files. OpenWebif does not confirm here that a recording is complete."
+          }
+        }
+      }
+    },
     "Bilder": {
       "extractionState": "manual",
       "localizations": {
@@ -881,6 +1476,91 @@
           "stringUnit": {
             "state": "translated",
             "value": "Screens"
+          }
+        }
+      }
+    },
+    "Bis": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bis"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Until"
+          }
+        }
+      }
+    },
+    "Bis (Receiver-Ortszeit)": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bis (Receiver-Ortszeit)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To (receiver local time)"
+          }
+        }
+      }
+    },
+    "Bitte auswählen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bitte auswählen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please choose"
+          }
+        }
+      }
+    },
+    "Bitte ein Intervall zwischen einer Minute und sieben Tagen eingeben.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bitte ein Intervall zwischen einer Minute und sieben Tagen eingeben."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter an interval between one minute and seven days."
+          }
+        }
+      }
+    },
+    "Bitte ein gültiges Zeitfenster, eine Verweildauer und mindestens ein Bouquet wählen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bitte ein gültiges Zeitfenster, eine Verweildauer und mindestens ein Bouquet wählen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a valid time window, dwell time and at least one bouquet."
           }
         }
       }
@@ -970,6 +1650,23 @@
         }
       }
     },
+    "Bouquets": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bouquets"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bouquets"
+          }
+        }
+      }
+    },
     "Bronze": {
       "extractionState": "manual",
       "localizations": {
@@ -1051,6 +1748,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Appearance"
+          }
+        }
+      }
+    },
+    "Das AutoTimer-Plugin ist auf diesem Receiver nicht verfügbar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das AutoTimer-Plugin ist auf diesem Receiver nicht verfügbar."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The AutoTimer plugin is not available on this receiver."
           }
         }
       }
@@ -1293,6 +2007,74 @@
         }
       }
     },
+    "Der EPG-Zeitplan konnte nicht vollständig gespeichert werden. Bitte die Einstellungen am Receiver neu laden und prüfen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der EPG-Zeitplan konnte nicht vollständig gespeichert werden. Bitte die Einstellungen am Receiver neu laden und prüfen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The EPG schedule could not be fully saved. Reload and check the receiver settings."
+          }
+        }
+      }
+    },
+    "Der Erinnerungszeitpunkt liegt bereits in der Vergangenheit.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Erinnerungszeitpunkt liegt bereits in der Vergangenheit."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The reminder time has already passed."
+          }
+        }
+      }
+    },
+    "Der Receiver dieser Erinnerung ist nicht mehr eingerichtet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Receiver dieser Erinnerung ist nicht mehr eingerichtet."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The receiver for this reminder is no longer configured."
+          }
+        }
+      }
+    },
+    "Der Receiver hat die AutoTimer-Änderung abgelehnt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Receiver hat die AutoTimer-Änderung abgelehnt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The receiver rejected the AutoTimer change."
+          }
+        }
+      }
+    },
     "Der Receiver hat die Timeränderung abgelehnt.": {
       "extractionState": "manual",
       "localizations": {
@@ -1361,6 +2143,23 @@
         }
       }
     },
+    "Der Receiver meldet einen Timerkonflikt. Die betroffenen Timer sind unten aufgeführt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Receiver meldet einen Timerkonflikt. Die betroffenen Timer sind unten aufgeführt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The receiver reported a timer conflict. The affected timers are listed below."
+          }
+        }
+      }
+    },
     "Der Receiver meldet einen möglichen Timerkonflikt. Prüfe die Timerliste am Receiver.": {
       "extractionState": "manual",
       "localizations": {
@@ -1374,6 +2173,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "The receiver reports a possible timer conflict. Check the timer list on the receiver."
+          }
+        }
+      }
+    },
+    "Der Receiver prüft den gewählten Ersatztermin erneut beim Speichern.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Receiver prüft den gewählten Ersatztermin erneut beim Speichern."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The receiver checks the selected alternative again when you save it."
+          }
+        }
+      }
+    },
+    "Der Receiver verwendet zusätzliche AutoTimer-Standardwerte. Neue Regeln können diese Werte hier nicht sicher übernehmen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Receiver verwendet zusätzliche AutoTimer-Standardwerte. Neue Regeln können diese Werte hier nicht sicher übernehmen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The receiver uses additional AutoTimer defaults. New rules cannot safely inherit those settings here."
           }
         }
       }
@@ -1425,6 +2258,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Could not open the video stream."
+          }
+        }
+      }
+    },
+    "Der Wiedergabefortschritt konnte nicht gelesen werden. Die Datei bleibt erhalten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Wiedergabefortschritt konnte nicht gelesen werden. Die Datei bleibt erhalten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Playback progress could not be read. The file has been preserved."
+          }
+        }
+      }
+    },
+    "Der Wiedergabefortschritt konnte nicht gespeichert werden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Wiedergabefortschritt konnte nicht gespeichert werden."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Playback progress could not be saved."
+          }
+        }
+      }
+    },
+    "Der Zeitplan wird auf dem Receiver gespeichert. Die App muss dafür nicht geöffnet bleiben. EPGRefresh muss am Receiver installiert und über OpenWebif erreichbar sein.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Zeitplan wird auf dem Receiver gespeichert. Die App muss dafür nicht geöffnet bleiben. EPGRefresh muss am Receiver installiert und über OpenWebif erreichbar sein."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The schedule is saved on the receiver. The app can be closed. EPGRefresh must be installed on the receiver and accessible through OpenWebif."
           }
         }
       }
@@ -1514,6 +2398,57 @@
         }
       }
     },
+    "Die Auswahl ersetzt die bisherige Senderliste von EPGRefresh. Sender desselben Transponders kann der Receiver zusammenfassen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Auswahl ersetzt die bisherige Senderliste von EPGRefresh. Sender desselben Transponders kann der Receiver zusammenfassen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This selection replaces the existing EPGRefresh channel list. The receiver may group channels from the same transponder."
+          }
+        }
+      }
+    },
+    "Die AutoTimer-Regel ist unvollständig oder ungültig.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die AutoTimer-Regel ist unvollständig oder ungültig."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The AutoTimer rule is incomplete or invalid."
+          }
+        }
+      }
+    },
+    "Die AutoTimer-Regel wurde seit dem Laden geändert. Bitte neu laden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die AutoTimer-Regel wurde seit dem Laden geändert. Bitte neu laden."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The AutoTimer rule has changed since it was loaded. Please refresh."
+          }
+        }
+      }
+    },
     "Die Datei existiert bereits. Wähle einen anderen Dateinamen.": {
       "extractionState": "manual",
       "localizations": {
@@ -1527,6 +2462,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "The file already exists. Choose a different file name."
+          }
+        }
+      }
+    },
+    "Die EPGRefresh-Einstellungen wurden zwischenzeitlich geändert. Bitte neu laden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die EPGRefresh-Einstellungen wurden zwischenzeitlich geändert. Bitte neu laden."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPGRefresh settings changed in the meantime. Please reload."
+          }
+        }
+      }
+    },
+    "Die EPGRefresh-Schnittstelle dieses Receivers wird nicht unterstützt. Es wurde nichts geändert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die EPGRefresh-Schnittstelle dieses Receivers wird nicht unterstützt. Es wurde nichts geändert."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This receiver’s EPGRefresh interface is unsupported. Nothing was changed."
           }
         }
       }
@@ -1616,6 +2585,40 @@
         }
       }
     },
+    "Die Erinnerung konnte nicht entfernt werden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Erinnerung konnte nicht entfernt werden."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The reminder could not be removed."
+          }
+        }
+      }
+    },
+    "Die Erinnerung konnte nicht gespeichert werden. Bitte Mitteilungsfreigabe und Speicher prüfen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Erinnerung konnte nicht gespeichert werden. Bitte Mitteilungsfreigabe und Speicher prüfen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The reminder could not be saved. Please check notification permission and storage."
+          }
+        }
+      }
+    },
     "Die Farben der Erde": {
       "extractionState": "manual",
       "localizations": {
@@ -1667,6 +2670,23 @@
         }
       }
     },
+    "Die Receiver-Uhrzeit konnte nicht zuverlässig zugeordnet werden. Bitte Uhrzeit und Zeitzone prüfen. Es wurde nichts geändert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Receiver-Uhrzeit konnte nicht zuverlässig zugeordnet werden. Bitte Uhrzeit und Zeitzone prüfen. Es wurde nichts geändert."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The receiver clock could not be reliably matched. Check its time and time zone. Nothing was changed."
+          }
+        }
+      }
+    },
     "Die Receiver-Weboberfläche ist nicht erreichbar. Bild und Ton können trotzdem weiterlaufen.": {
       "extractionState": "manual",
       "localizations": {
@@ -1680,6 +2700,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The receiver web interface is unreachable. Video and audio may still continue."
+          }
+        }
+      }
+    },
+    "Die Startzeit bleibt bei einem App-Neustart erhalten. Danach gilt der nächste zukünftige Termin.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Startzeit bleibt bei einem App-Neustart erhalten. Danach gilt der nächste zukünftige Termin."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The start time is retained when the app restarts. The next future update is then scheduled."
           }
         }
       }
@@ -1752,6 +2789,40 @@
         }
       }
     },
+    "Die gespeicherten Erinnerungen konnten nicht gelesen werden. Die Datei bleibt erhalten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die gespeicherten Erinnerungen konnten nicht gelesen werden. Die Datei bleibt erhalten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved reminders could not be read. The file has been preserved."
+          }
+        }
+      }
+    },
+    "Die letzte Position liegt bei %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die letzte Position liegt bei %@."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The last position is %@."
+          }
+        }
+      }
+    },
     "Die macOS-Datenverzeichnisse sind nicht verfügbar.": {
       "extractionState": "manual",
       "localizations": {
@@ -1765,6 +2836,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "The macOS data directories are unavailable."
+          }
+        }
+      }
+    },
+    "Diese AutoTimer-Regel enthält nicht unterstützte Einstellungen und ist schreibgeschützt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese AutoTimer-Regel enthält nicht unterstützte Einstellungen und ist schreibgeschützt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This AutoTimer rule contains unsupported settings and is read-only."
           }
         }
       }
@@ -1820,6 +2908,23 @@
         }
       }
     },
+    "Doppelte Aufnahmen vermeiden": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doppelte Aufnahmen vermeiden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avoid duplicate recordings"
+          }
+        }
+      }
+    },
     "Du kannst bis zu drei Receiver einrichten. Weitere Geräte fügst du später in den Einstellungen hinzu.": {
       "extractionState": "manual",
       "localizations": {
@@ -1850,6 +2955,176 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dark"
+          }
+        }
+      }
+    },
+    "EPG": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPG"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPG"
+          }
+        }
+      }
+    },
+    "EPG automatisch aktualisieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPG automatisch aktualisieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Update EPG automatically"
+          }
+        }
+      }
+    },
+    "EPG automatisch aktualisieren …": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPG automatisch aktualisieren …"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Update EPG automatically…"
+          }
+        }
+      }
+    },
+    "EPG-Aktualisierung": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPG-Aktualisierung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPG updates"
+          }
+        }
+      }
+    },
+    "EPG-Anzeige": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPG-Anzeige"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Programme listings"
+          }
+        }
+      }
+    },
+    "EPG-Anzeige aktualisieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPG-Anzeige aktualisieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh programme listings"
+          }
+        }
+      }
+    },
+    "EPG-Zeitplan wurde auf dem Receiver gespeichert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPG-Zeitplan wurde auf dem Receiver gespeichert."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPG schedule saved on the receiver."
+          }
+        }
+      }
+    },
+    "EPGRefresh auf dem Receiver": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPGRefresh auf dem Receiver"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPGRefresh on the receiver"
+          }
+        }
+      }
+    },
+    "EPGRefresh ist auf diesem Receiver nicht über OpenWebif verfügbar. Installiere oder aktiviere das Plugin am Receiver.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPGRefresh ist auf diesem Receiver nicht über OpenWebif verfügbar. Installiere oder aktiviere das Plugin am Receiver."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPGRefresh is unavailable through OpenWebif on this receiver. Install or enable the plugin on the receiver."
+          }
+        }
+      }
+    },
+    "EPGRefresh-Einstellungen werden geladen …": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EPGRefresh-Einstellungen werden geladen …"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading EPGRefresh settings…"
           }
         }
       }
@@ -1888,6 +3163,57 @@
         }
       }
     },
+    "Eigenes Intervall …": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eigenes Intervall …"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom interval…"
+          }
+        }
+      }
+    },
+    "Ein Timer bestätigt keine fertige Aufnahme in der Bibliothek.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein Timer bestätigt keine fertige Aufnahme in der Bibliothek."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A timer does not confirm a completed recording in the library."
+          }
+        }
+      }
+    },
+    "Einheit": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einheit"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unit"
+          }
+        }
+      }
+    },
     "Einstellungen": {
       "extractionState": "manual",
       "localizations": {
@@ -1901,6 +3227,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Settings"
+          }
+        }
+      }
+    },
+    "Eintrag auswählen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eintrag auswählen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select an entry"
           }
         }
       }
@@ -1990,6 +3333,142 @@
         }
       }
     },
+    "Erinnern": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnern"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remind me"
+          }
+        }
+      }
+    },
+    "Erinnerung entfernen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung entfernen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove reminder"
+          }
+        }
+      }
+    },
+    "Erinnerung gesetzt": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerung gesetzt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder set"
+          }
+        }
+      }
+    },
+    "Erinnerungen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerungen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders"
+          }
+        }
+      }
+    },
+    "Erinnerungen erscheinen als macOS-Mitteilung. Der Mac muss eingeschaltet sein; Fokus und Mitteilungseinstellungen können die Anzeige unterdrücken. Geänderte Sendezeiten werden nicht automatisch übernommen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerungen erscheinen als macOS-Mitteilung. Der Mac muss eingeschaltet sein; Fokus und Mitteilungseinstellungen können die Anzeige unterdrücken. Geänderte Sendezeiten werden nicht automatisch übernommen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders appear as macOS notifications. Your Mac must be on; Focus and notification settings may suppress them. Schedule changes are not applied automatically."
+          }
+        }
+      }
+    },
+    "Erinnerungen erscheinen als macOS-Mitteilung. Der Mac muss eingeschaltet sein; Fokus und Mitteilungseinstellungen können die Anzeige unterdrücken. Sendezeitänderungen werden beim Laden neuer EPG-Daten nach Möglichkeit berücksichtigt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerungen erscheinen als macOS-Mitteilung. Der Mac muss eingeschaltet sein; Fokus und Mitteilungseinstellungen können die Anzeige unterdrücken. Sendezeitänderungen werden beim Laden neuer EPG-Daten nach Möglichkeit berücksichtigt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders appear as macOS notifications. Your Mac must be on; Focus and notification settings may suppress them. Schedule changes are taken into account where possible when fresh EPG data is loaded."
+          }
+        }
+      }
+    },
+    "Erinnerungen können derzeit nicht gespeichert werden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerungen können derzeit nicht gespeichert werden."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders cannot be saved right now."
+          }
+        }
+      }
+    },
+    "Erinnerungen …": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erinnerungen …"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders…"
+          }
+        }
+      }
+    },
     "Erneut versuchen": {
       "extractionState": "manual",
       "localizations": {
@@ -2003,6 +3482,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Try Again"
+          }
+        }
+      }
+    },
+    "Erweiterte Regel: nur Anzeige möglich.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erweiterte Regel: nur Anzeige möglich."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Advanced rule: viewing only."
           }
         }
       }
@@ -2037,6 +3533,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "You can set up to three receivers."
+          }
+        }
+      }
+    },
+    "Es sind höchstens 50 Erinnerungen möglich.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es sind höchstens 50 Erinnerungen möglich."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can save up to 50 reminders."
+          }
+        }
+      }
+    },
+    "Favoriten": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favoriten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favourites"
           }
         }
       }
@@ -2109,6 +3639,57 @@
         }
       }
     },
+    "Fortsetzen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fortsetzen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume"
+          }
+        }
+      }
+    },
+    "Fortsetzen bei %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fortsetzen bei %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume at %@"
+          }
+        }
+      }
+    },
+    "Frei: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frei: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free: %@"
+          }
+        }
+      }
+    },
     "Freies Bild": {
       "extractionState": "manual",
       "localizations": {
@@ -2156,6 +3737,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "VLC is required to play HLS streams that require a login."
+          }
+        }
+      }
+    },
+    "Für diesen Filter sind keine Timer oder Aufnahmen verfügbar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Für diesen Filter sind keine Timer oder Aufnahmen verfügbar."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No timers or recordings are available for this filter."
           }
         }
       }
@@ -2228,6 +3826,40 @@
         }
       }
     },
+    "Geplant": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geplant"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planned"
+          }
+        }
+      }
+    },
+    "Geplante Läufe berücksichtigen Standby und laufende Aufnahmen. Eine Aktualisierung wird nicht erzwungen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geplante Läufe berücksichtigen Standby und laufende Aufnahmen. Eine Aktualisierung wird nicht erzwungen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scheduled runs respect standby and ongoing recordings. An update is not forced."
+          }
+        }
+      }
+    },
     "Geplante Timer": {
       "extractionState": "manual",
       "localizations": {
@@ -2241,6 +3873,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Scheduled timers"
+          }
+        }
+      }
+    },
+    "Gesamt: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesamt: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Total: %@"
+          }
+        }
+      }
+    },
+    "Geänderte Erinnerungen konnten nicht neu geplant werden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geänderte Erinnerungen konnten nicht neu geplant werden."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changed reminders could not be rescheduled."
           }
         }
       }
@@ -2353,7 +4019,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Startseite"
+            "value": "Homepage"
           }
         },
         "en": {
@@ -2500,6 +4166,40 @@
         }
       }
     },
+    "Intervall": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intervall"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interval"
+          }
+        }
+      }
+    },
+    "Jede Minute": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jede Minute"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every minute"
+          }
+        }
+      }
+    },
     "Jetzt": {
       "extractionState": "manual",
       "localizations": {
@@ -2585,6 +4285,74 @@
         }
       }
     },
+    "Keine Aufnahmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Aufnahmen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No recordings"
+          }
+        }
+      }
+    },
+    "Keine AutoTimer-Regeln": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine AutoTimer-Regeln"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No AutoTimer rules"
+          }
+        }
+      }
+    },
+    "Keine Einträge": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Einträge"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No entries"
+          }
+        }
+      }
+    },
+    "Keine Erinnerungen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Erinnerungen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No reminders"
+          }
+        }
+      }
+    },
     "Keine Nutzung gemeldet": {
       "extractionState": "manual",
       "localizations": {
@@ -2632,6 +4400,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "No channels"
+          }
+        }
+      }
+    },
+    "Keine Speicherinformationen verfügbar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Speicherinformationen verfügbar."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No storage information available."
           }
         }
       }
@@ -2687,6 +4472,40 @@
         }
       }
     },
+    "Keine passende Wiederholung in den geladenen EPG-Daten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine passende Wiederholung in den geladenen EPG-Daten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No matching repeat in the loaded EPG data."
+          }
+        }
+      }
+    },
+    "Keine passenden Sendungen in den geladenen EPG-Daten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine passenden Sendungen in den geladenen EPG-Daten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No matching programmes in the loaded EPG data."
+          }
+        }
+      }
+    },
     "Keine weitere Beschreibung vorhanden.": {
       "extractionState": "manual",
       "localizations": {
@@ -2717,6 +4536,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Kernel"
+          }
+        }
+      }
+    },
+    "Laufend": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laufend"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording"
+          }
+        }
+      }
+    },
+    "Laufwerk": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laufwerk"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drive"
           }
         }
       }
@@ -2772,6 +4625,23 @@
         }
       }
     },
+    "Liest nur Programmdaten vom Receiver. Der EPGRefresh-Zeitplan zum Einsammeln der Daten wird separat unter Programm eingestellt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liest nur Programmdaten vom Receiver. Der EPGRefresh-Zeitplan zum Einsammeln der Daten wird separat unter Programm eingestellt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only reads programme data from the receiver. Configure the EPGRefresh schedule for collecting data separately under Guide."
+          }
+        }
+      }
+    },
     "Live": {
       "extractionState": "manual",
       "localizations": {
@@ -2806,6 +4676,23 @@
         }
       }
     },
+    "Lokale Aufnahme läuft": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokale Aufnahme läuft"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local recording in progress"
+          }
+        }
+      }
+    },
     "Lokale Aufnahmen laufen weiter.": {
       "extractionState": "manual",
       "localizations": {
@@ -2819,6 +4706,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Local recordings continue."
+          }
+        }
+      }
+    },
+    "Lokale Vorschau in der Zeitzone dieses Macs. Weitere Plugin-Filter und Duplikate können das Receiver-Ergebnis ändern.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokale Vorschau in der Zeitzone dieses Macs. Weitere Plugin-Filter und Duplikate können das Receiver-Ergebnis ändern."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Local preview using this Mac’s time zone. Other plugin filters and duplicates may change the receiver’s results."
           }
         }
       }
@@ -2887,6 +4791,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "My Theme %@"
+          }
+        }
+      }
+    },
+    "Minuten": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minuten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minutes"
+          }
+        }
+      }
+    },
+    "Mitteilungen sind nicht erlaubt. Bitte e2Atlas in den macOS-Mitteilungseinstellungen freigeben.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mitteilungen sind nicht erlaubt. Bitte e2Atlas in den macOS-Mitteilungseinstellungen freigeben."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications are not allowed. Please enable e2Atlas in macOS notification settings."
           }
         }
       }
@@ -2976,6 +4914,40 @@
         }
       }
     },
+    "Nachlauf: %lld Minuten": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nachlauf: %lld Minuten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Post-roll: %lld minutes"
+          }
+        }
+      }
+    },
+    "Name": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        }
+      }
+    },
     "Name der Belegung": {
       "extractionState": "manual",
       "localizations": {
@@ -3010,6 +4982,40 @@
         }
       }
     },
+    "Neue AutoTimer-Regel": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neue AutoTimer-Regel"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New AutoTimer rule"
+          }
+        }
+      }
+    },
+    "Neue Regel": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neue Regel"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New rule"
+          }
+        }
+      }
+    },
     "Nicht verfügbar": {
       "extractionState": "manual",
       "localizations": {
@@ -3022,7 +5028,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unavailable"
+            "value": "Not available"
           }
         }
       }
@@ -3163,6 +5169,23 @@
         }
       }
     },
+    "Ohne ausgewählte Wochentage gilt die Regel täglich.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ohne ausgewählte Wochentage gilt die Regel täglich."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With no weekdays selected, the rule applies every day."
+          }
+        }
+      }
+    },
     "OpenWebif": {
       "extractionState": "manual",
       "localizations": {
@@ -3248,6 +5271,40 @@
         }
       }
     },
+    "Ordner öffnen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ordner öffnen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open folder"
+          }
+        }
+      }
+    },
+    "Passende geladene Sendungen: %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passende geladene Sendungen: %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matching loaded programmes: %lld"
+          }
+        }
+      }
+    },
     "Passwort (optional)": {
       "extractionState": "manual",
       "localizations": {
@@ -3261,6 +5318,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Password (optional)"
+          }
+        }
+      }
+    },
+    "Pause": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause"
           }
         }
       }
@@ -3380,6 +5454,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add receiver"
+          }
+        }
+      }
+    },
+    "Receiver-Aufnahme läuft": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Receiver-Aufnahme läuft"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Receiver recording in progress"
+          }
+        }
+      }
+    },
+    "Receiver-Aufnahmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Receiver-Aufnahmen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Receiver recordings"
           }
         }
       }
@@ -3656,6 +5764,23 @@
         }
       }
     },
+    "Sender oder Bouquet": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sender oder Bouquet"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Channel or bouquet"
+          }
+        }
+      }
+    },
     "Sender suchen": {
       "extractionState": "manual",
       "localizations": {
@@ -3737,6 +5862,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Choose channel"
+          }
+        }
+      }
+    },
+    "Senderauswahl": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Senderauswahl"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Channel selection"
           }
         }
       }
@@ -3843,6 +5985,23 @@
         }
       }
     },
+    "Speicher aktualisieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speicher aktualisieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh storage"
+          }
+        }
+      }
+    },
     "Speichere eigene JSON-Themes im Theme-Ordner. Jede gültige Datei erscheint in der Auswahl. Die Vorlage enthält helle und dunkle Farben sowie einen optionalen Verlauf.": {
       "extractionState": "manual",
       "localizations": {
@@ -3860,6 +6019,40 @@
         }
       }
     },
+    "Speicherinformationen konnten nicht geladen werden: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speicherinformationen konnten nicht geladen werden: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storage information could not be loaded: %@"
+          }
+        }
+      }
+    },
+    "Speicherinformationen werden geladen …": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speicherinformationen werden geladen …"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading storage information…"
+          }
+        }
+      }
+    },
     "Speichern": {
       "extractionState": "manual",
       "localizations": {
@@ -3873,6 +6066,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save"
+          }
+        }
+      }
+    },
+    "Speicherplatz": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speicherplatz"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storage"
+          }
+        }
+      }
+    },
+    "Speicherplatz aktualisieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speicherplatz aktualisieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh storage information"
           }
         }
       }
@@ -4115,6 +6342,40 @@
         }
       }
     },
+    "Stunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stunden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hours"
+          }
+        }
+      }
+    },
+    "Stündlich": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stündlich"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hourly"
+          }
+        }
+      }
+    },
     "Suche in den geladenen Programmdaten aller Sender dieses Bouquets für das gewählte Zeitfenster.": {
       "extractionState": "manual",
       "localizations": {
@@ -4128,6 +6389,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Search loaded programme data for all channels in this bouquet within the selected time window."
+          }
+        }
+      }
+    },
+    "Suche in den geladenen Programmdaten aller Sender dieses Bouquets für sieben Tage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suche in den geladenen Programmdaten aller Sender dieses Bouquets für sieben Tage."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search the loaded seven-day programme data for all channels in this bouquet."
           }
         }
       }
@@ -4404,6 +6682,23 @@
         }
       }
     },
+    "Timer": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timer"
+          }
+        }
+      }
+    },
     "Timer bearbeiten": {
       "extractionState": "manual",
       "localizations": {
@@ -4451,6 +6746,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add timer"
+          }
+        }
+      }
+    },
+    "Timer konnten nicht geladen werden:": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timer konnten nicht geladen werden:"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timers could not be loaded:"
           }
         }
       }
@@ -4574,6 +6886,23 @@
         }
       }
     },
+    "Titel enthält": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Titel enthält"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Title contains"
+          }
+        }
+      }
+    },
     "Ton aktiv": {
       "extractionState": "manual",
       "localizations": {
@@ -4642,6 +6971,23 @@
         }
       }
     },
+    "Tägliches Zeitfenster": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tägliches Zeitfenster"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daily time window"
+          }
+        }
+      }
+    },
     "Uhrzeit": {
       "extractionState": "manual",
       "localizations": {
@@ -4672,6 +7018,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Add time"
+          }
+        }
+      }
+    },
+    "Uhrzeiten gelten für den Receiver.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uhrzeiten gelten für den Receiver."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Times use the receiver’s clock."
           }
         }
       }
@@ -4812,6 +7175,23 @@
         }
       }
     },
+    "Vergleicht Titel und Beschreibung auf demselben Sender. Eine sichere Erkennung neuer Folgen ist damit nicht garantiert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vergleicht Titel und Beschreibung auf demselben Sender. Eine sichere Erkennung neuer Folgen ist damit nicht garantiert."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compares titles and descriptions on the same channel. This does not guarantee detection of new episodes."
+          }
+        }
+      }
+    },
     "Version %@ · Build %@": {
       "extractionState": "manual",
       "localizations": {
@@ -4825,6 +7205,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Version %@ · build %@"
+          }
+        }
+      }
+    },
+    "Verweildauer in Sekunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verweildauer in Sekunden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dwell time in seconds"
           }
         }
       }
@@ -4880,6 +7277,74 @@
         }
       }
     },
+    "Vom Receiver gemeldeter Konflikt": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vom Receiver gemeldeter Konflikt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conflict reported by the receiver"
+          }
+        }
+      }
+    },
+    "Von": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Von"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From"
+          }
+        }
+      }
+    },
+    "Von (Receiver-Ortszeit)": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Von (Receiver-Ortszeit)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From (receiver local time)"
+          }
+        }
+      }
+    },
+    "Von Anfang an abspielen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Von Anfang an abspielen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play from the beginning"
+          }
+        }
+      }
+    },
     "Vorlage „%@“ erstellt. Eine Anleitung liegt im selben Ordner.": {
       "extractionState": "manual",
       "localizations": {
@@ -4893,6 +7358,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Template “%@” created. A guide is in the same folder."
+          }
+        }
+      }
+    },
+    "Vorlauf: %lld Minuten": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vorlauf: %lld Minuten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pre-roll: %lld minutes"
+          }
+        }
+      }
+    },
+    "Vorschau": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vorschau"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview"
           }
         }
       }
@@ -5016,6 +7515,57 @@
         }
       }
     },
+    "Wiedergabe fortsetzen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wiedergabe fortsetzen?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume playback?"
+          }
+        }
+      }
+    },
+    "Wiedergabe: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wiedergabe: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Playing: %@"
+          }
+        }
+      }
+    },
+    "Wiedergabeposition": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wiedergabeposition"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Playback position"
+          }
+        }
+      }
+    },
     "Wiedergabestopp in %@": {
       "extractionState": "manual",
       "localizations": {
@@ -5101,6 +7651,23 @@
         }
       }
     },
+    "Wochentage": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wochentage"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekdays"
+          }
+        }
+      }
+    },
     "Wähle ein Bouquet oder prüfe die Verbindung zum Receiver.": {
       "extractionState": "manual",
       "localizations": {
@@ -5135,6 +7702,57 @@
         }
       }
     },
+    "Wähle einen anderen Ordner oder aktualisiere die Liste.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle einen anderen Ordner oder aktualisiere die Liste."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose another folder or refresh the list."
+          }
+        }
+      }
+    },
+    "Wähle links eine Aufnahme zum Ansehen aus.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle links eine Aufnahme zum Ansehen aus."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select a recording on the left to watch it."
+          }
+        }
+      }
+    },
+    "Wähle links einen Timer oder eine Aufnahme aus.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle links einen Timer oder eine Aufnahme aus."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select a timer or recording on the left."
+          }
+        }
+      }
+    },
     "Wähle zuerst einen Receiver aus.": {
       "extractionState": "manual",
       "localizations": {
@@ -5148,6 +7766,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Select a receiver first."
+          }
+        }
+      }
+    },
+    "Zeitfenster begrenzen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeitfenster begrenzen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limit time window"
           }
         }
       }
@@ -5182,6 +7817,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Overlaps with %@. The receiver decides whether the timer can be created."
+          }
+        }
+      }
+    },
+    "Zu Favoriten hinzufügen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zu Favoriten hinzufügen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add to favourites"
           }
         }
       }
@@ -5352,6 +8004,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open"
+          }
+        }
+      }
+    },
+    "Übernehmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Übernehmen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apply"
           }
         }
       }

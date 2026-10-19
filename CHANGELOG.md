@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.4.0-beta
+
+### Added
+
+- Scroll through seven days of programme listings with a date indicator, per-receiver caching and search across the loaded range. Configure listing refresh with a six-hour default, custom intervals and a start time.
+- Configure receiver-side EPGRefresh schedules with a time window, bouquet selection and channel dwell time.
+- Browse and play receiver recordings, save playback positions, view receiver storage, and filter planned timers, running timers and library files in one view.
+- Manage supported AutoTimer rules with title, channel/bouquet, weekday, time-window, recording-margin and duplicate options. Preview matches against loaded EPG.
+- Set local programme reminders, open programme details from notifications, and adjust reminders when fresh EPG identifies a shifted broadcast unambiguously.
+- Mark reminders and planned/running recordings in the guide, save favourites per receiver, and offer alternative loaded broadcasts after timer conflicts.
+
+### Fixed
+
+- Keep guide scrolling responsive and reuse cached data without fetching again on each scroll or zoom change.
+- Detect EPGRefresh through its correct endpoint and retry transient manual-refresh failures within one refresh action.
+- Accept supported UTF-8 AutoTimer defaults and preserve OpenPLi description flags so supported rules remain editable and deletable.
+- Keep the German Homepage label and prevent a handled reminder from reopening on a later reconnection.
+
+### Known limitations
+
+- EPG data depends on the receiver. EPGRefresh and AutoTimer require compatible installed plugins; AutoTimer periodic search must be enabled separately. Advanced rules and unsupported defaults remain protected. Preview uses loaded EPG and the Mac's time zone; plugin filters and duplicate handling can change the results.
+- OpenWebif does not reliably mark recording files as completed, so files are labelled Library. Further hardware checks remain for resume positions, other storage paths, authenticated playback and real timer conflicts.
+- Reminder changes require fresh EPG and an unambiguous match. Expired revised reminder times are removed. Notification delivery depends on macOS permissions, Focus and the Mac being on; notification-click navigation still needs a cold-start user check.
+- macOS 26, additional receiver images, Keychain prompts after rebuilds, real network recovery and local recording during shutdown or low-space conditions remain open. CPU impact and hardware decoding are not measured; total tuner occupancy may remain unknown without receiver-provided assignments.
+- Ad-hoc signed and not notarized; macOS may require first-launch approval.
+
+### Validation
+
+- Dev builds 45/46 and signatures passed. The latest targeted run passed 63 tests in seven suites covering preferences/favourites, programme matching, reminders, playback checkpoint models, OpenWebif responses and guide cache/fresh-data behavior. Earlier affected feature tests passed as documented in the project context.
+- The user confirmed fast guide scrolling, EPGRefresh setup and subsequent EPG population, the supported AutoTimer workflow, reminder delivery with the app closed, and the new Dev feature set generally. Real conflicts and shifted EPG times remain unconfirmed; these are not separate Beta hardware tests.
+- Beta package build and artifact validation are pending.
+
 ## 0.3.0-beta
 
 ### Added

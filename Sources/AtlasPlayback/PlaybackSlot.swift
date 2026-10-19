@@ -57,6 +57,7 @@ public final class PlaybackSlot: Identifiable {
     @ObservationIgnored var recoveryConnectionTimeout: TimeInterval = 25
     public private(set) var reconnectAttempt = 0
     public private(set) var isReconnecting = false
+    public private(set) var isRecordingPlayback = false
     #if canImport(VLCKit)
     private var vlcStateTask: Task<Void, Never>?
     #endif
@@ -79,11 +80,77 @@ public final class PlaybackSlot: Identifiable {
 
     /// Starts playback. Credentials are passed to the media engine separately and never added to the URL.
     public func play(url: URL, channel: Channel, username: String, password: String) {
+        isRecordingPlayback = false
         recoveryTask?.cancel()
         reconnectAttempt = 0
         isReconnecting = false
         startPlayback(url: url, channel: channel, username: username, password: password)
         if !url.isFileURL { monitorRecovery(url: url, channel: channel, username: username, password: password) }
+    }
+
+    /// A finite recording must not be restarted by the live-stream recovery loop at its end.
+    public func playRecording(url: URL, channel: Channel, username: String, password: String) {
+        recoveryTask?.cancel(); recoveryTask = nil
+        reconnectAttempt = 0; isReconnecting = false; isRecordingPlayback = true
+        startPlayback(url: url, channel: channel, username: username, password: password)
+    }
+
+    public var recordingDuration: TimeInterval? {
+        if let player = avPlayer, let seconds = player.currentItem?.duration.seconds,
+           seconds.isFinite, seconds > 0 { return seconds }
+        #if canImport(VLCKit)
+        if let length = vlcPlayer.media?.length, length.intValue > 0 { return Double(length.intValue) / 1000 }
+        #endif
+        return nil
+    }
+
+    public var recordingProgress: Double {
+        guard isRecordingPlayback else { return 0 }
+        if let player = avPlayer, let duration = recordingDuration {
+            let value = player.currentTime().seconds / duration
+            return value.isFinite ? min(1, max(0, value)) : 0
+        }
+        #if canImport(VLCKit)
+        let value = Double(vlcPlayer.position)
+        return value.isFinite ? min(1, max(0, value)) : 0
+        #else
+        return 0
+        #endif
+    }
+
+    public var canSeekRecording: Bool {
+        guard isRecordingPlayback else { return false }
+        if avPlayer != nil { return recordingDuration != nil }
+        #if canImport(VLCKit)
+        return vlcPlayer.isSeekable
+        #else
+        return false
+        #endif
+    }
+
+    public func seekRecording(to progress: Double) {
+        guard canSeekRecording, progress.isFinite else { return }
+        let value = min(1, max(0, progress))
+        if let player = avPlayer, let duration = recordingDuration {
+            player.seek(to: CMTime(seconds: duration * value, preferredTimescale: 600))
+        } else {
+            #if canImport(VLCKit)
+            vlcPlayer.position = Float(value)
+            #endif
+        }
+    }
+
+    public func toggleRecordingPause() {
+        guard isRecordingPlayback, channel != nil else { return }
+        if let player = avPlayer {
+            if player.timeControlStatus == .paused { player.play(); status = .playing }
+            else { player.pause(); status = .paused }
+        } else {
+            #if canImport(VLCKit)
+            if vlcPlayer.state == .paused { vlcPlayer.play() }
+            else { vlcPlayer.pause() }
+            #endif
+        }
     }
 
     private func startPlayback(url: URL, channel: Channel, username: String, password: String) {
@@ -155,6 +222,7 @@ public final class PlaybackSlot: Identifiable {
     }
 
     public func stop() {
+        isRecordingPlayback = false
         cancelReconnect()
         playbackGeneration = UUID()
         stopEngine()

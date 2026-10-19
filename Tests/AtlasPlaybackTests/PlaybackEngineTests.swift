@@ -10,6 +10,25 @@ import VLCKit
 @Suite("Playback engine", .serialized)
 @MainActor
 struct PlaybackEngineTests {
+    @Test("Finite recordings do not enable live recovery and stop clears recording mode")
+    func recordingModeDoesNotReconnect() throws {
+        let slot = PlaybackSlot()
+        let missing = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".ts")
+        slot.playRecording(url: missing, channel: testChannel("recording"), username: "", password: "")
+        #expect(slot.isRecordingPlayback)
+        #expect(Self.isFailure(slot.status))
+        #expect(!slot.isReconnecting)
+        #expect(slot.reconnectAttempt == 0)
+        #expect(!slot.canSeekRecording)
+        slot.seekRecording(to: .nan)
+        slot.stop()
+        #expect(!slot.isRecordingPlayback)
+        #expect(slot.status == .idle)
+        slot.play(url: missing, channel: testChannel("live"), username: "", password: "")
+        #expect(!slot.isRecordingPlayback)
+        slot.stop()
+    }
+
     @Test("Plays a generated local video in two independent VLC slots")
     func localVideoAndIndependentSlots() async throws {
         let fixture = try await makeVideoFixture()

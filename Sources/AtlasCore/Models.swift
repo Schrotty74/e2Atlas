@@ -28,7 +28,7 @@ public struct Bouquet: Codable, Identifiable, Sendable, Equatable, Hashable {
     public init(id: String, name: String) { self.id = id; self.name = name }
 }
 
-public struct Programme: Identifiable, Sendable, Equatable {
+public struct Programme: Codable, Identifiable, Sendable, Equatable {
     public var id: String
     public var channelID: String
     public var title: String

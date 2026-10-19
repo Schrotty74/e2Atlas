@@ -23,14 +23,17 @@ struct ReceiverTimersView: View {
     let client: OpenWebifClient?
     let programme: Programme?
     let channel: Channel?
+    let loadedProgrammes: [Programme]
+    let guideChannels: [Channel]
     @Environment(\.dismiss) private var dismiss
     @Environment(\.locale) private var locale
-    @State private var store = ReceiverTimerStore()
+    @Bindable var store: ReceiverTimerStore
     @State private var editor: TimerEditorSession?
     @State private var deleteCandidate: ReceiverTimer?
 
-    init(client: OpenWebifClient?, programme: Programme? = nil, channel: Channel? = nil) {
-        self.client = client; self.programme = programme; self.channel = channel
+    init(client: OpenWebifClient?, store: ReceiverTimerStore, programme: Programme? = nil, channel: Channel? = nil, loadedProgrammes: [Programme] = [], guideChannels: [Channel] = []) {
+        self.client = client; self.store = store; self.programme = programme; self.channel = channel
+        self.loadedProgrammes = loadedProgrammes; self.guideChannels = guideChannels
     }
 
     var body: some View {
@@ -88,7 +91,7 @@ struct ReceiverTimersView: View {
             await store.load(using: client)
         }
         .sheet(item: $editor) { session in
-            TimerEditorView(session: session, timers: store.timers, store: store, client: client) {
+            TimerEditorView(session: session, timers: store.timers, store: store, client: client, loadedProgrammes: loadedProgrammes, guideChannels: guideChannels) {
                 editor = nil
             }
         }
@@ -148,16 +151,22 @@ struct ReceiverTimersView: View {
 }
 
 private struct TimerEditorView: View {
+    @Environment(\.locale) private var locale
     let session: TimerEditorSession
     let timers: [ReceiverTimer]
     let store: ReceiverTimerStore
     let client: OpenWebifClient?
     let close: () -> Void
+    let loadedProgrammes: [Programme]
+    let guideChannels: [Channel]
+    @State private var serviceName: String
     @State private var draft: ReceiverTimerDraft
 
     init(session: TimerEditorSession, timers: [ReceiverTimer], store: ReceiverTimerStore,
-         client: OpenWebifClient?, close: @escaping () -> Void) {
+         client: OpenWebifClient?, loadedProgrammes: [Programme], guideChannels: [Channel], close: @escaping () -> Void) {
         self.session = session; self.timers = timers; self.store = store; self.client = client; self.close = close
+        self.loadedProgrammes = loadedProgrammes; self.guideChannels = guideChannels
+        _serviceName = State(initialValue: session.serviceName)
         _draft = State(initialValue: session.draft)
     }
 
@@ -177,7 +186,7 @@ private struct TimerEditorView: View {
             }
             Form {
                 TextField("Titel", text: $draft.name)
-                LabeledContent("Sender", value: session.serviceName)
+                LabeledContent("Sender", value: serviceName)
                 DatePicker("Beginn", selection: $draft.begin, displayedComponents: [.date, .hourAndMinute])
                 DatePicker("Ende", selection: $draft.end, displayedComponents: [.date, .hourAndMinute])
                 Picker("Nach der Aufnahme", selection: $draft.afterEvent) {
@@ -192,7 +201,34 @@ private struct TimerEditorView: View {
                 Label("Zeitüberschneidung mit \(overlaps.map(\.name).filter { !$0.isEmpty }.joined(separator: ", ")). Der Receiver entscheidet, ob der Timer angelegt werden kann.", systemImage: "exclamationmark.triangle")
                     .font(.callout).foregroundStyle(.orange)
             }
-            if let error = store.error { ErrorNotice(message: error) }
+            if store.hasReceiverConflict {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Vom Receiver gemeldeter Konflikt").font(.headline)
+                    ForEach(store.conflictingTimers) { timer in
+                        Text("\(timer.name) · \(timer.serviceName) · \(timer.begin.formatted(Date.FormatStyle(date: .abbreviated, time: .shortened).locale(locale)))")
+                            .font(.caption)
+                    }
+                }
+            }
+            if store.hasReceiverConflict || !overlaps.isEmpty {
+                let alternatives = ProgrammeMatching.alternatives(to: draft, in: loadedProgrammes, after: Date())
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Andere geladene Ausstrahlungen").font(.headline)
+                    if alternatives.isEmpty { Text("Keine passende Wiederholung in den geladenen EPG-Daten.").font(.caption).foregroundStyle(.secondary) }
+                    ForEach(alternatives.prefix(8)) { event in
+                        Button {
+                            draft.serviceReference = event.channelID; draft.name = event.title; draft.description = event.summary
+                            draft.begin = event.start; draft.end = event.end
+                            serviceName = guideChannels.first(where: { $0.id == event.channelID })?.name ?? event.channelID
+                            store.clearFailure()
+                        } label: {
+                            Text("\(guideChannels.first(where: { $0.id == event.channelID })?.name ?? event.channelID) · \(event.start.formatted(Date.FormatStyle(date: .abbreviated, time: .shortened).locale(locale)))")
+                        }
+                    }
+                    Text("Der Receiver prüft den gewählten Ersatztermin erneut beim Speichern.").font(.caption).foregroundStyle(.secondary)
+                }
+            }
+            if let error = store.error { ErrorNotice(message: AppLanguage(locale: locale).localized(error)) }
             HStack {
                 Spacer()
                 Button("Speichern") {
@@ -206,6 +242,7 @@ private struct TimerEditorView: View {
             }
         }
         .padding(24).frame(width: 560).frame(minHeight: 440)
+        .onChange(of: draft) { _, _ in store.clearFailure() }
         .disabled(store.isSaving)
     }
 }

@@ -5,7 +5,7 @@ import AtlasReceiver
 import AtlasPlayback
 import AtlasThemes
 
-enum MainSection: String, CaseIterable { case television = "Fernsehen", multiview = "Multiview", guide = "Programm" }
+enum MainSection: String, CaseIterable { case television = "Fernsehen", multiview = "Multiview", guide = "Programm", recordings = "Aufnahmen" }
 
 private struct ReceiverSelection: Equatable {
     let profile: ReceiverProfile?
@@ -22,27 +22,54 @@ struct MainWindow: View {
     @Bindable var settings: SettingsStore
     let themes: ThemeCatalog
     let demo: Bool
+    @Bindable var reminders: ProgrammeReminderStore
     @State private var section: MainSection = .television
     @State private var channels = ChannelStore()
     @State private var guide = GuideStore()
     @State private var nowGuide = GuideStore()
+    @State private var receiverTimers = ReceiverTimerStore()
+    @State private var guideStatusDate = Date()
+    @State private var library = ReceiverRecordingsStore()
     @State private var playback = PlaybackStore()
     @State private var videoOnly = VideoOnlyController()
     @State private var recording = RecordingStore()
     @State private var search = ""
+    @State private var favoritesOnly = false
+    @State private var openedReminder: ProgrammeReminder?
+    @State private var needsReminderSelection = false
     @State private var showPresets = false
+    @State private var showEPGRefresh = false
+    @State private var showAutoTimer = false
+    @State private var showReminders = false
     @State private var showRecordingOptions = false
     @State private var timerRequest: TimerRequest?
     @State private var sleepDeadline: Date?
     @State private var restoreTask: Task<Void, Never>?
     @State private var presetGuideChannels: [Channel] = []
     @State private var hasInitializedReceiver = false
+    @State private var epgRefreshSessionStart = Date()
     @State private var localError: String?
     @Environment(\.atlasTheme) private var theme
     @Environment(\.openWindow) private var openWindow
     @Environment(\.colorScheme) private var scheme
     @Environment(\.locale) private var locale
-    private var filteredChannels: [Channel] { channels.channels.filter { search.isEmpty || $0.name.localizedCaseInsensitiveContains(search) } }
+    private var favoriteChannels: [Channel] {
+        (settings.preferences.favoriteChannels ?? []).filter { $0.receiverID == settings.selectedReceiver?.id }.map(\.channel)
+    }
+    private var guideChannels: [Channel] {
+        var values = channels.channels
+        if let target = openedReminder, target.receiverID == settings.selectedReceiver?.id, !values.contains(where: { $0.id == target.programme.channelID }) {
+            values.append(Channel(id: target.programme.channelID, name: target.channelName))
+        }
+        return values
+    }
+    private var loadedProgrammes: [Programme] {
+        var seen = Set<String>()
+        return (guide.events.values.flatMap { $0 } + nowGuide.events.values.flatMap { $0 }).filter { seen.insert($0.id).inserted }
+    }
+    private var filteredChannels: [Channel] {
+        (favoritesOnly ? favoriteChannels : channels.channels).filter { search.isEmpty || $0.name.localizedCaseInsensitiveContains(search) }
+    }
 
     var body: some View {
         Group {
@@ -77,18 +104,78 @@ struct MainWindow: View {
             await connect(loadMetadata: loadMetadata)
         }
         .task(id: guideQueryID) {
-            if !demo { await guide.load(channels: channels.channels, client: channels.client) }
+            if !demo, section == .guide {
+                await guide.loadTimeline(channels: guideChannels, client: channels.client, cacheDirectory: settings.paths?.cache.appendingPathComponent("EPG", isDirectory: true))
+                guard !Task.isCancelled else { return }
+                applyReminderSelection()
+            }
+        }
+        .task(id: "\(settings.selectedReceiver?.id.uuidString ?? "")|\(settings.connectionRevision)|\(channels.metadataRevision)|\(section == .guide)") {
+            if !demo, section == .guide, !channels.channels.isEmpty {
+                while !Task.isCancelled {
+                    if timerRequest == nil && !showAutoTimer { await receiverTimers.load(using: channels.client) }
+                    guard !Task.isCancelled else { return }
+                    guideStatusDate = Date()
+                    do { try await Task.sleep(for: .seconds(30)) } catch { return }
+                }
+            }
+        }
+        .onChange(of: reminders.pendingOpen?.id, initial: true) { _, _ in
+            guard let target = reminders.takePendingOpen() else { return }
+            guard settings.preferences.receivers.contains(where: { $0.id == target.receiverID }) else { localError = "Der Receiver dieser Erinnerung ist nicht mehr eingerichtet."; return }
+            openedReminder = target; needsReminderSelection = true
+            settings.preferences.selectedReceiverID = target.receiverID; settings.persist()
+            section = .guide; videoOnly.exit()
+            guide.timelineRange = GuideTimelineRange(containing: target.programme.start)
+            guide.window.start = target.programme.start
+            applyReminderSelection(finish: false)
+            openWindow(id: "main"); NSApplication.shared.activate()
+        }
+        .task(id: guide.freshRevision) {
+            if let id = guide.freshReceiverID { await reminders.reconcile(receiverID: id, channels: guideChannels, freshProgrammes: guide.freshProgrammes, language: settings.language) }
+        }
+        .task(id: nowGuide.freshRevision) {
+            if let id = nowGuide.freshReceiverID { await reminders.reconcile(receiverID: id, channels: currentGuideChannels, freshProgrammes: nowGuide.freshProgrammes, language: settings.language) }
         }
         .task(id: nowGuideQueryID) {
-            if !demo {
+            if !demo, section != .guide {
                 nowGuide.reset(); nowGuide.window = GuideWindow(start: Date(), duration: .six)
                 await nowGuide.load(channels: currentGuideChannels, client: channels.client)
             }
         }
+        .task(id: "\(guideQueryID)|\(nowGuideQueryID)|\(settings.preferences.epgRefreshMinutes)|\(settings.preferences.epgRefreshStartDate?.timeIntervalSince1970 ?? 0)") {
+            let minutes = settings.preferences.epgRefreshMinutes
+            guard !demo, minutes > 0, channels.client != nil else { return }
+            while !Task.isCancelled {
+                guard let next = settings.preferences.nextEPGRefresh(after: Date(), sessionStartedAt: epgRefreshSessionStart) else { return }
+                do { try await Task.sleep(for: .seconds(max(0, next.timeIntervalSinceNow))) } catch { return }
+                guard !Task.isCancelled else { return }
+                // EPG only: never reload receiver metadata or touch stream players.
+                guard channels.error == nil, !channels.isLoading else { continue }
+                if section == .guide {
+                    await guide.refresh(channels: channels.channels, client: channels.client)
+                    guard !Task.isCancelled else { return }
+                    await receiverTimers.load(using: channels.client)
+                } else {
+                    nowGuide.window = GuideWindow(start: Date(), duration: .six)
+                    await nowGuide.refresh(channels: currentGuideChannels, client: channels.client)
+                }
+            }
+        }
         .onChange(of: section) { _, value in
-            if value != .guide { playback.setMultiview(value == .multiview) }
+            if value == .television || value == .multiview { playback.setMultiview(value == .multiview) }
+            if value != .recordings { library.stopPlayback() }
         }
         .onChange(of: settings.preferences) { settings.persist() }
+        .sheet(isPresented: $showAutoTimer, onDismiss: {
+            Task { await receiverTimers.load(using: channels.client) }
+        }) {
+            ReceiverAutoTimersView(client: channels.client, channels: channels.channels, bouquets: channels.bouquets, loadedProgrammes: loadedProgrammes)
+        }
+        .sheet(isPresented: $showReminders) { ProgrammeRemindersView(store: reminders, settings: settings) }
+        .sheet(isPresented: $showEPGRefresh) {
+            EPGRefreshView(client: channels.client, preferredBouquetID: channels.selectedBouquetID)
+        }
         .sheet(isPresented: $showPresets) {
             MultiviewPresetsView(settings: settings, playback: playback, onRestore: restorePreset)
         }
@@ -99,15 +186,15 @@ struct MainWindow: View {
             }.padding().frame(width: 560, height: 340)
         }
         .sheet(item: $timerRequest) { request in
-            ReceiverTimersView(client: channels.client, programme: request.programme, channel: request.channel)
+            ReceiverTimersView(client: channels.client, store: receiverTimers, programme: request.programme, channel: request.channel, loadedProgrammes: loadedProgrammes, guideChannels: guideChannels)
         }
         .task(id: sleepDeadline) {
             guard let deadline = sleepDeadline else { return }
             do { try await Task.sleep(for: .seconds(max(0, deadline.timeIntervalSinceNow))) } catch { return }
             guard !Task.isCancelled, sleepDeadline == deadline else { return }
-            restoreTask?.cancel(); playback.stopAll(); videoOnly.exit(); sleepDeadline = nil
+            restoreTask?.cancel(); playback.stopAll(); library.stopPlayback(); videoOnly.exit(); sleepDeadline = nil
         }
-        .onDisappear { restoreTask?.cancel(); videoOnly.exit(); playback.stopAll(); recording.stop() }
+        .onDisappear { restoreTask?.cancel(); videoOnly.exit(); playback.stopAll(); library.reset(); recording.stop() }
     }
 
     private var appContent: some View {
@@ -121,8 +208,12 @@ struct MainWindow: View {
                     .padding([.horizontal, .top], 16)
             }
             if section == .guide {
-                GuideView(store: guide, channels: channels.channels, picons: channels.picons, settings: settings, playback: playback, demo: demo, onPlay: { channel in play(channel, index: 0) }, onPicon: { channel in await channels.loadPicon(channel) }, onSchedule: { event, channel in
+                GuideView(store: guide, channels: guideChannels, picons: channels.picons, settings: settings, playback: playback, demo: demo, reminders: reminders, recording: recording, statusDate: guideStatusDate, timers: receiverTimers.timers, timerError: receiverTimers.error.map { settings.language.localized($0) }, onPlay: { channel in play(channel, index: 0) }, onPicon: { channel in await channels.loadPicon(channel) }, onSchedule: { event, channel in
                     timerRequest = TimerRequest(programme: event, channel: channel)
+                }, onEPGRefresh: { showEPGRefresh = true }, onAutoTimer: { showAutoTimer = true })
+            } else if section == .recordings {
+                ReceiverRecordingsView(store: library, client: demo ? nil : channels.client, settings: settings, onPlay: {
+                    restoreTask?.cancel(); playback.stopAll(); videoOnly.exit()
                 })
             } else {
                 television
@@ -152,7 +243,7 @@ struct MainWindow: View {
     @ToolbarContentBuilder private var appToolbar: some ToolbarContent {
             ToolbarItem(placement: .principal) {
                 Picker("Ansicht", selection: $section) { ForEach(MainSection.allCases, id: \.self) { Text(LocalizedStringKey($0.rawValue)).tag($0) } }
-                    .pickerStyle(.segmented).frame(width: 340)
+                    .pickerStyle(.segmented).frame(width: 440)
             }
             ToolbarItem(placement: .automatic) {
                 if !demo {
@@ -168,6 +259,8 @@ struct MainWindow: View {
             }
             ToolbarItem(placement: .automatic) {
                 Menu {
+                    Button("AutoTimer-Regeln …") { showAutoTimer = true }.disabled(demo || channels.client == nil)
+                    Button("Erinnerungen …") { showReminders = true }.disabled(demo)
                     Button("Receiver-Timer …") { timerRequest = TimerRequest(programme: nil, channel: nil) }.disabled(demo || channels.client == nil)
                     Button("Multiview-Belegungen …") { showPresets = true }.disabled(demo || settings.selectedReceiver == nil)
                     Button("Aufnahmeoptionen …") { showRecordingOptions = true }
@@ -185,7 +278,7 @@ struct MainWindow: View {
                 Button("Nur Video", systemImage: "play.rectangle.fill") { enterVideoOnly(playback.targetIndex) }
                     .keyboardShortcut("f", modifiers: [.command, .shift])
                     .help("Nur das ausgewählte Video zeigen · Escape zum Zurückkehren")
-                    .disabled(!demo && playback.slots[playback.targetIndex].channel == nil)
+                    .disabled(section == .recordings || (!demo && playback.slots[playback.targetIndex].channel == nil))
             }
     }
 
@@ -232,15 +325,15 @@ struct MainWindow: View {
 
     private var currentGuideChannels: [Channel] {
         var seen = Set<String>()
-        return (channels.channels + presetGuideChannels).filter { seen.insert($0.id).inserted }
+        return (channels.channels + presetGuideChannels + (favoritesOnly ? favoriteChannels : [])).filter { seen.insert($0.id).inserted }
     }
 
     private var nowGuideQueryID: String {
-        "\(channels.metadataRevision)|\(currentGuideChannels.map(\.id).joined(separator: ";"))"
+        "\(channels.metadataRevision)|\(settings.selectedReceiver?.id.uuidString ?? "")|\(settings.connectionRevision)|\(section == .guide)|\(currentGuideChannels.map(\.id).joined(separator: ";"))"
     }
 
     private var guideQueryID: String {
-        "\(channels.metadataRevision)|\(settings.preferences.selectedReceiverID?.uuidString ?? "")|\(channels.selectedBouquetID ?? "")|\(channels.channels.map(\.id).joined(separator: ";"))|\(guide.window.start.timeIntervalSince1970)|\(guide.window.duration.rawValue)"
+        "\(channels.metadataRevision)|\(settings.selectedReceiver?.id.uuidString ?? "")|\(settings.connectionRevision)|\(section == .guide)|\(channels.selectedBouquetID ?? "")|\(guideChannels.map(\.id).joined(separator: ";"))|\(guide.timelineRange.start.timeIntervalSince1970)|\(guide.timelineRange.end.timeIntervalSince1970)"
     }
 
     private var volumeBinding: Binding<Double> {
@@ -253,6 +346,7 @@ struct MainWindow: View {
                 Picker("Bouquet", selection: $channels.selectedBouquetID) {
                     ForEach(channels.bouquets) { Text(demo ? settings.language.localized($0.name) : $0.name).tag(Optional($0.id)) }
                 }.frame(maxWidth: 280)
+                Toggle("Favoriten", systemImage: "star.fill", isOn: $favoritesOnly).toggleStyle(.button).disabled(demo)
                 Spacer()
                 if section == .multiview {
                     Picker("Bilder", selection: Binding(get: { playback.visibleCount }, set: { restoreTask?.cancel(); playback.setCount($0) })) {
@@ -260,7 +354,7 @@ struct MainWindow: View {
                     }.frame(width: 130)
                 }
                 TextField("Sender suchen", text: $search).textFieldStyle(.roundedBorder).frame(width: 190)
-                Button("Neu laden", systemImage: "arrow.clockwise") { Task { await channels.refresh() } }.labelStyle(.iconOnly).disabled(channels.isLoading)
+                Button("Neu laden", systemImage: "arrow.clockwise") { Task { guide.invalidateTimelineCache(); await channels.refresh() } }.labelStyle(.iconOnly).disabled(channels.isLoading)
             }.padding(.horizontal, 20).padding(.vertical, 12)
             GeometryReader { geometry in
                 HStack(spacing: 12) {
@@ -321,6 +415,15 @@ struct MainWindow: View {
                                 }.frame(width: 158, alignment: .leading)
                             }
                             .buttonStyle(.plain)
+                            .overlay(alignment: .topTrailing) {
+                                if let profile = settings.selectedReceiver {
+                                    let selected = settings.preferences.isFavorite(channel, receiverID: profile.id)
+                                    Button(LocalizedStringKey(selected ? "Aus Favoriten entfernen" : "Zu Favoriten hinzufügen"), systemImage: selected ? "star.fill" : "star") {
+                                        settings.preferences.toggleFavorite(channel, receiverID: profile.id); settings.persist()
+                                    }.labelStyle(.iconOnly).buttonStyle(.plain).padding(7)
+                                        .background(.black.opacity(0.6), in: Circle()).foregroundStyle(selected ? .yellow : .white).padding(4)
+                                }
+                            }
                             .task(id: "\(settings.connectionRevision)|\(settings.preferences.selectedReceiverID?.uuidString ?? "")|\(channel.id)") { if !demo { await channels.loadPicon(channel) } }
                         }
                     }.padding(.vertical, 3)
@@ -367,8 +470,13 @@ struct MainWindow: View {
             catch { localError = error.localizedDescription }
         }
     }
+    private func applyReminderSelection(finish: Bool = true) {
+        guard needsReminderSelection, let target = openedReminder, target.receiverID == settings.selectedReceiver?.id, channels.client?.profile.id == target.receiverID else { return }
+        if finish { needsReminderSelection = false }
+        guide.selection = guide.events[target.programme.channelID]?.first(where: { $0.id == target.programme.id }) ?? target.programme
+    }
     private func connect(loadMetadata: Bool) async {
-        restoreTask?.cancel(); timerRequest = nil; showPresets = false
+        restoreTask?.cancel(); timerRequest = nil; showPresets = false; showAutoTimer = false; receiverTimers.reset(); library.reset()
         playback.stopAll(); presetGuideChannels = []; guide.reset(); nowGuide.reset(); guide.window.duration = settings.preferences.guideDuration; localError = nil
         if demo {
             channels.loadDemo()
@@ -376,7 +484,17 @@ struct MainWindow: View {
             return
         }
         guard let profile = settings.selectedReceiver else { return }
-        do { await channels.connect(profile, password: try settings.credentials.availablePassword(for: profile.id), loadMetadata: loadMetadata) }
+        do {
+            await channels.connect(profile, password: try settings.credentials.availablePassword(for: profile.id), loadMetadata: loadMetadata)
+            if needsReminderSelection, let target = openedReminder, target.receiverID == profile.id, settings.selectedReceiver?.id == profile.id {
+                guide.timelineRange = GuideTimelineRange(containing: target.programme.start); guide.window.start = target.programme.start
+                applyReminderSelection(finish: false)
+                if channels.channels.isEmpty {
+                    await guide.loadTimeline(channels: guideChannels, client: channels.client, cacheDirectory: settings.paths?.cache.appendingPathComponent("EPG", isDirectory: true))
+                    if !Task.isCancelled { applyReminderSelection() }
+                }
+            }
+        }
         catch { localError = error.localizedDescription }
     }
 }

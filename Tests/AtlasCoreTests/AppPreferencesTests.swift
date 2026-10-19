@@ -4,6 +4,78 @@ import Testing
 
 @Suite("App preference behavior")
 struct AppPreferencesTests {
+    @Test(arguments: [0, 1, 5, 90, 360, 480, 10_080])
+    func epgUpdateIntervalAndStartDateRoundTrip(_ minutes: Int) throws {
+        var preferences = AppPreferences()
+        let startDate = Date(timeIntervalSince1970: 1_800_000_000)
+        preferences.epgUpdateIntervalMinutes = minutes
+        preferences.epgRefreshStartDate = startDate
+
+        let restored = try JSONDecoder().decode(AppPreferences.self, from: JSONEncoder().encode(preferences))
+
+        #expect(restored.epgUpdateIntervalMinutes == minutes)
+        #expect(restored.epgRefreshStartDate == startDate)
+        #expect(restored.epgRefreshMinutes == minutes)
+    }
+
+    @Test func legacyAndInvalidEPGRefreshIntervalsUseSixHourDefault() throws {
+        let encoded = try JSONEncoder().encode(AppPreferences())
+        var object = try #require(JSONSerialization.jsonObject(with: encoded) as? [String: Any])
+        object.removeValue(forKey: "epgDisplayRefreshMinutes")
+        object.removeValue(forKey: "epgUpdateIntervalMinutes")
+        let legacy = try JSONDecoder().decode(AppPreferences.self, from: JSONSerialization.data(withJSONObject: object))
+        #expect(legacy.epgDisplayRefreshMinutes == nil)
+        #expect(legacy.epgRefreshMinutes == 360)
+
+        for legacyValue in [1, 5, 10, 20, 30, 60] {
+            object["epgDisplayRefreshMinutes"] = legacyValue
+            let restored = try JSONDecoder().decode(AppPreferences.self, from: JSONSerialization.data(withJSONObject: object))
+            #expect(restored.epgDisplayRefreshMinutes == legacyValue)
+            #expect(restored.epgRefreshMinutes == 360)
+        }
+
+        object["epgDisplayRefreshMinutes"] = 0
+        let legacyOff = try JSONDecoder().decode(AppPreferences.self, from: JSONSerialization.data(withJSONObject: object))
+        #expect(legacyOff.epgDisplayRefreshMinutes == 0)
+        #expect(legacyOff.epgRefreshMinutes == 0)
+
+        for invalidValue in [-1, 10_081, Int.max] {
+            object.removeValue(forKey: "epgDisplayRefreshMinutes")
+            object["epgUpdateIntervalMinutes"] = invalidValue
+            let restored = try JSONDecoder().decode(AppPreferences.self, from: JSONSerialization.data(withJSONObject: object))
+            #expect(restored.epgUpdateIntervalMinutes == invalidValue)
+            #expect(restored.epgRefreshMinutes == 360)
+        }
+    }
+
+    @Test func refreshStartDateSchedulesFutureAndSkipsMissedIntervals() {
+        var preferences = AppPreferences()
+        preferences.epgUpdateIntervalMinutes = 60
+        preferences.epgRefreshStartDate = Date(timeIntervalSince1970: 2_000)
+        let sessionStart = Date(timeIntervalSince1970: 500)
+
+        #expect(preferences.nextEPGRefresh(after: Date(timeIntervalSince1970: 1_000), sessionStartedAt: sessionStart) == Date(timeIntervalSince1970: 2_000))
+        #expect(preferences.nextEPGRefresh(after: Date(timeIntervalSince1970: 2_000), sessionStartedAt: sessionStart) == Date(timeIntervalSince1970: 5_600))
+        #expect(preferences.nextEPGRefresh(after: Date(timeIntervalSince1970: 5_000), sessionStartedAt: sessionStart) == Date(timeIntervalSince1970: 5_600))
+        #expect(preferences.nextEPGRefresh(after: Date(timeIntervalSince1970: 5_600), sessionStartedAt: sessionStart) == Date(timeIntervalSince1970: 9_200))
+    }
+
+    @Test func sessionRefreshAnchorRemainsStableAcrossTaskRestarts() {
+        var preferences = AppPreferences()
+        preferences.epgUpdateIntervalMinutes = 60
+        let sessionStart = Date(timeIntervalSince1970: 1_000)
+
+        #expect(preferences.nextEPGRefresh(after: sessionStart, sessionStartedAt: sessionStart) == Date(timeIntervalSince1970: 4_600))
+        #expect(preferences.nextEPGRefresh(after: Date(timeIntervalSince1970: 10_000), sessionStartedAt: sessionStart) == Date(timeIntervalSince1970: 11_800))
+        #expect(preferences.nextEPGRefresh(after: Date(timeIntervalSince1970: 10_500), sessionStartedAt: sessionStart) == Date(timeIntervalSince1970: 11_800))
+    }
+
+    @Test func disabledRefreshHasNoNextDate() {
+        var preferences = AppPreferences()
+        preferences.epgUpdateIntervalMinutes = 0
+        #expect(preferences.nextEPGRefresh(after: Date(timeIntervalSince1970: 1_000), sessionStartedAt: Date(timeIntervalSince1970: 0)) == nil)
+    }
+
     @Test func developmentIdentityReusesOnlyItsLegacyStorageIdentifier() throws {
         #expect(AppIdentity.developmentBundleIdentifier == "io.github.schrotty74.e2atlas.development")
         #expect(AppIdentity.legacyDevelopmentIdentifier == "io.github.schrotty74.e2atlas.dev")
@@ -408,5 +480,49 @@ struct StartupConnectionPreferenceTests {
             let restored = try JSONDecoder().decode(AppPreferences.self, from: JSONEncoder().encode(original))
             #expect(restored.connectsOnLaunch == enabled)
         }
+    }
+}
+
+@Suite("Seven-day guide timeline")
+struct GuideTimelineRangeTests {
+    private var calendar: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Europe/Vienna")!
+        return calendar
+    }
+
+    @Test func calendarDaysIncludeTheAutumnClockChange() throws {
+        let date = try #require(calendar.date(from: DateComponents(year: 2026, month: 10, day: 23, hour: 12)))
+        let range = GuideTimelineRange(containing: date, calendar: calendar)
+        #expect(range.seconds == 169 * 3600)
+        #expect(calendar.component(.hour, from: range.start) == 0)
+        #expect(calendar.component(.day, from: range.end) == 30)
+    }
+
+    @Test func scrollOffsetsMatchVisibleWindowsAndStopAtDaySeven() {
+        let range = GuideTimelineRange(containing: Date(timeIntervalSince1970: 1_800_000_000), calendar: calendar)
+        for duration in GuideDuration.allCases {
+            let viewport = 600.0
+            let width = viewport * range.seconds / duration.seconds
+            let date = range.start.addingTimeInterval(3 * 86400 + 3600)
+            let offset = range.fraction(of: date) * width
+            #expect(abs(range.visibleStart(offset: offset, timelineWidth: width, duration: duration).timeIntervalSince(date)) < 0.001)
+            #expect(range.visibleStart(offset: -1, timelineWidth: width, duration: duration) == range.start)
+            #expect(range.visibleStart(offset: width, timelineWidth: width, duration: duration) == range.end.addingTimeInterval(-duration.seconds))
+            #expect(range.visibleStart(offset: width - viewport, timelineWidth: width, duration: duration) == range.end.addingTimeInterval(-duration.seconds))
+        }
+    }
+
+    @Test func programmeWidthsUseTheFullRangeAndClipAtItsEdges() throws {
+        let range = GuideTimelineRange(containing: Date(timeIntervalSince1970: 1_800_000_000), calendar: calendar)
+        let event = Programme(id: "fixture", channelID: "fixture", title: "Synthetic", summary: "", start: range.start.addingTimeInterval(3 * 3600), end: range.start.addingTimeInterval(4 * 3600))
+        let part = try #require(range.visibleFraction(of: event))
+        let timelineWidth = 600 * range.seconds / GuideDuration.two.seconds
+        #expect(abs(part.offset * timelineWidth - 900) < 0.001)
+        #expect(abs(part.width * timelineWidth - 300) < 0.001)
+        let clipped = Programme(id: "clipped", channelID: "fixture", title: "Synthetic", summary: "", start: range.end.addingTimeInterval(-1800), end: range.end.addingTimeInterval(1800))
+        let edge = try #require(range.visibleFraction(of: clipped))
+        #expect(abs(edge.width * range.seconds - 1800) < 0.001)
+        #expect(range.visibleFraction(of: Programme(id: "outside", channelID: "fixture", title: "Synthetic", summary: "", start: range.end, end: range.end.addingTimeInterval(1800))) == nil)
     }
 }

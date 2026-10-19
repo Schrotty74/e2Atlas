@@ -38,7 +38,7 @@ if [[ "${E2ATLAS_LOG_ACTIVE:-}" != 1 ]]; then
 fi
 require_channel_checkout "$project_root" "$channel"
 case "$channel" in
-  beta) release_version="${E2ATLAS_RELEASE_VERSION:-0.3.0-beta}" ;;
+  beta) release_version="${E2ATLAS_RELEASE_VERSION:-0.4.0-beta}" ;;
   final) release_version="${E2ATLAS_RELEASE_VERSION:-1.0.0-final}" ;;
   dev) release_version="${E2ATLAS_RELEASE_VERSION:-0.1.0-dev}" ;;
 esac

@@ -1,6 +1,7 @@
 import AppKit
 import SwiftUI
 import AtlasCore
+import AtlasReceiver
 import AtlasThemes
 
 struct AppSettingsView: View {
@@ -9,6 +10,7 @@ struct AppSettingsView: View {
     var body: some View {
         TabView {
             Tab("Receiver", systemImage: "tv") { ReceiverManagementView(settings: settings) }
+            Tab("EPG", systemImage: "calendar") { EPGSettingsView(settings: settings) }
             Tab("Darstellung", systemImage: "paintpalette") { ThemeSettingsView(settings: settings, themes: themes) }
             Tab("About", systemImage: "info.circle") { AboutSettingsView() }
         }
@@ -130,5 +132,135 @@ private struct AboutSettingsView: View {
         .background { AtlasThemeBackground() }
         .foregroundStyle(theme.id == "system" ? Color.primary : Color(atlasHex: theme.palette(for: scheme).text))
         .tint(theme.id == "system" ? .accentColor : Color(atlasHex: theme.palette(for: scheme).accent))
+    }
+}
+
+private struct EPGScheduleRequest: Identifiable {
+    let id = UUID()
+    let client: OpenWebifClient
+}
+
+private struct EPGSettingsView: View {
+    let settings: SettingsStore
+    @State private var scheduleRequest: EPGScheduleRequest?
+    @State private var error: String?
+    @Environment(\.atlasTheme) private var theme
+    @Environment(\.colorScheme) private var scheme
+
+    var body: some View {
+        Form {
+            Section("EPG-Anzeige") {
+                EPGDisplayRefreshPicker(settings: settings)
+                Text("Aktualisiert die Programmanzeige in e2Atlas, solange die App geöffnet ist.")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+            Section("EPGRefresh auf dem Receiver") {
+                if let receiver = settings.selectedReceiver {
+                    LabeledContent("Receiver", value: receiver.name)
+                } else {
+                    Text("Kein Receiver ausgewählt.").foregroundStyle(.secondary)
+                }
+                Text("Der Zeitplan wird auf dem Receiver gespeichert. Die App muss dafür nicht geöffnet bleiben. EPGRefresh muss am Receiver installiert und über OpenWebif erreichbar sein.")
+                    .font(.callout).foregroundStyle(.secondary)
+                Button("EPG automatisch aktualisieren …", systemImage: "calendar.badge.clock", action: openSchedule)
+                    .disabled(settings.selectedReceiver == nil)
+            }
+            if let error { ErrorNotice(message: error) }
+        }
+        .formStyle(.grouped)
+        .scrollContentBackground(.hidden)
+        .padding(16).frame(width: 650, height: 560)
+        .background { AtlasThemeBackground() }
+        .foregroundStyle(theme.id == "system" ? Color.primary : Color(atlasHex: theme.palette(for: scheme).text))
+        .tint(theme.id == "system" ? .accentColor : Color(atlasHex: theme.palette(for: scheme).accent))
+        .sheet(item: $scheduleRequest) { request in
+            EPGRefreshView(client: request.client, preferredBouquetID: nil)
+        }
+        .onChange(of: settings.selectedReceiver) { scheduleRequest = nil; error = nil }
+        .onChange(of: settings.connectionRevision) { scheduleRequest = nil; error = nil }
+    }
+
+    private func openSchedule() {
+        guard let receiver = settings.selectedReceiver else { return }
+        do {
+            let password = try settings.credentials.availablePassword(for: receiver.id)
+            error = nil
+            scheduleRequest = EPGScheduleRequest(client: OpenWebifClient(profile: receiver, password: password))
+        } catch { self.error = error.localizedDescription }
+    }
+}
+
+struct EPGDisplayRefreshPicker: View {
+    let settings: SettingsStore
+    @State private var showEditor = false
+    @State private var intervalValue = 6
+    @State private var intervalUnit = 60
+    @State private var startDate = Date()
+
+    private var editedMinutes: Int? {
+        guard intervalValue > 0, intervalValue <= 10080 / intervalUnit else { return nil }
+        return intervalValue * intervalUnit
+    }
+
+    var body: some View {
+        LabeledContent("EPG-Anzeige aktualisieren") {
+            Menu {
+                Button("Aus") {
+                    settings.preferences.epgUpdateIntervalMinutes = 0
+                    settings.persist()
+                }
+                Button("Alle 6 Stunden …") { edit(minutes: 360) }
+                Button("Eigenes Intervall …") { edit(minutes: settings.preferences.epgRefreshMinutes > 0 ? settings.preferences.epgRefreshMinutes : 360) }
+            } label: {
+                if settings.preferences.epgRefreshMinutes == 0 { Text("Aus") }
+                else if settings.preferences.epgRefreshMinutes == 1 { Text("Jede Minute") }
+                else if settings.preferences.epgRefreshMinutes == 60 { Text("Stündlich") }
+                else if settings.preferences.epgRefreshMinutes.isMultiple(of: 60) {
+                    Text("Alle \(settings.preferences.epgRefreshMinutes / 60) Stunden")
+                } else { Text("Alle \(settings.preferences.epgRefreshMinutes) Minuten") }
+            }
+            .accessibilityLabel("EPG-Anzeige aktualisieren")
+            .fixedSize()
+        }
+        .popover(isPresented: $showEditor) {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("EPG-Aktualisierung").font(.headline)
+                HStack {
+                    TextField("Intervall", value: $intervalValue, format: .number.grouping(.never))
+                        .frame(width: 120)
+                    Picker("Einheit", selection: $intervalUnit) {
+                        Text("Minuten").tag(1)
+                        Text("Stunden").tag(60)
+                    }.frame(width: 180)
+                }
+                DatePicker("Beginn", selection: $startDate, displayedComponents: [.date, .hourAndMinute])
+                Text("Die Startzeit bleibt bei einem App-Neustart erhalten. Danach gilt der nächste zukünftige Termin.")
+                    .font(.caption).foregroundStyle(.secondary)
+                if editedMinutes == nil {
+                    Text("Bitte ein Intervall zwischen einer Minute und sieben Tagen eingeben.")
+                        .font(.caption).foregroundStyle(.orange)
+                }
+                HStack {
+                    Button("Abbrechen") { showEditor = false }.keyboardShortcut(.cancelAction)
+                    Spacer()
+                    Button("Übernehmen") {
+                        guard let minutes = editedMinutes else { return }
+                        settings.preferences.epgUpdateIntervalMinutes = minutes
+                        settings.preferences.epgRefreshStartDate = Date(timeIntervalSince1970: floor(startDate.timeIntervalSince1970 / 60) * 60)
+                        settings.persist(); showEditor = false
+                    }
+                    .keyboardShortcut(.defaultAction)
+                    .disabled(editedMinutes == nil)
+                }
+            }.padding(22).frame(width: 440)
+        }
+    }
+
+    private func edit(minutes: Int) {
+        let minutes = minutes > 0 ? minutes : 360
+        intervalUnit = minutes.isMultiple(of: 60) ? 60 : 1
+        intervalValue = minutes / intervalUnit
+        startDate = settings.preferences.epgRefreshStartDate ?? Date().addingTimeInterval(Double(minutes) * 60)
+        showEditor = true
     }
 }

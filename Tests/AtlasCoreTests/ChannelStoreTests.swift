@@ -71,6 +71,20 @@ struct ChannelStoreTests {
         #expect(channels.channels.count == 1)
     }
 
+    @Test func manualRefreshRetriesTransientUnreachableFailureAutomatically() async {
+        MetadataProtocol.failVerification.withLock { $0 = false }
+        let channels = store()
+        await channels.connect(ReceiverProfile(name: "Fixture", address: "receiver.test"), password: "", loadMetadata: false)
+        MetadataProtocol.failuresRemaining.withLock { $0 = 1 }
+
+        await channels.refresh()
+
+        #expect(MetadataProtocol.verificationRequests.withLock { $0 } == 2)
+        #expect(channels.error == nil)
+        #expect(channels.channels.map(\.id) == ["fixture-1"])
+        #expect(!channels.isLoading)
+    }
+
     @Test func startupRetriesTransientFailureAutomatically() async {
         MetadataProtocol.failVerification.withLock { $0 = false }
         let channels = store()
@@ -119,7 +133,7 @@ struct ChannelStoreTests {
         #expect(channels.channels.isEmpty)
         let originalClient = channels.client
         MetadataProtocol.failVerification.withLock { $0 = false }
-        await channels.refresh()
+        await channels.refresh(retryDelays: [])
         #expect(channels.error == nil)
         #expect(channels.client === originalClient)
         #expect(channels.channels.map(\.id) == ["fixture-1"])

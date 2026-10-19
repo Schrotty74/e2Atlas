@@ -5,12 +5,16 @@
 
 e2Atlas brings live TV from your Enigma2 receiver to your Mac through OpenWebif. Watch a channel, follow up to four streams in multiview, or browse the electronic program guide while keeping the picture in view. The native SwiftUI interface uses Liquid Glass controls and follows your Mac's light or dark appearance.
 
-**Requires an Apple Silicon Mac (M1 or later), macOS 26 or later, and an Enigma2 receiver with accessible OpenWebif and streaming services.** The current release is **0.3.0-beta**. Intel Macs are not supported.
+**Requires an Apple Silicon Mac (M1 or later), macOS 26 or later, and an Enigma2 receiver with accessible OpenWebif and streaming services.** The current release is **0.4.0-beta**. Intel Macs are not supported.
 
-[Download the beta](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.3.0-beta) · [Changelog](CHANGELOG.md) · [Security policy](SECURITY.md)
+[Download the beta](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.4.0-beta) · [Changelog](CHANGELOG.md) · [Security policy](SECURITY.md)
 
 ## Features
 
+- Seven-day guide scrolling and search, cached listings, scheduled listing updates and receiver-side EPGRefresh controls.
+- Receiver recording library with resume positions, storage information and planned/running/library filters.
+- AutoTimer rules with a loaded-EPG preview, programme reminders and favourites per receiver.
+- Reminder and recording badges in the guide, plus alternative broadcasts for receiver-reported timer conflicts.
 - German and English interfaces, with language selection in the Language menu and Appearance settings. Native macOS menus follow the choice after reopening.
 - Receiver recording timers: schedule from the guide, list timers, edit supported single recordings and confirm deletion.
 - Saved multiview layouts per receiver, including audio settings. Streams start in stages when a layout is restored.
@@ -35,7 +39,7 @@ e2Atlas brings live TV from your Enigma2 receiver to your Mac through OpenWebif.
 
 ## Screenshots
 
-Click a preview to open the full-resolution image. The screenshots show the current German interface; the receiver address has been anonymized.
+Click a preview to open the full-resolution image. The screenshots show the German interface from an earlier beta; the receiver address has been anonymized.
 
 <table>
 <tr>
@@ -53,7 +57,7 @@ Click a preview to open the full-resolution image. The screenshots show the curr
 
 ## Install and open the beta
 
-Download the DMG or ZIP from the [official GitHub release](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.3.0-beta). Open the DMG and drag **e2Atlas Beta** to **Applications**, or extract the ZIP and move the app there.
+Download the DMG or ZIP from the [official GitHub release](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.4.0-beta). Open the DMG and drag **e2Atlas Beta** to **Applications**, or extract the ZIP and move the app there.
 
 ### First launch: Gatekeeper
 
@@ -91,7 +95,7 @@ The output is `Build/Beta/e2Atlas Beta.app`. Build scripts resolve the project d
 
 Open `e2Atlas.xcodeproj` for development. `Scripts/generate-project.py` regenerates the project, and `Scripts/test.sh` runs the tests through Xcode. The SwiftPM manifest describes the modules; Xcode is the supported test runner because of VLCKit runtime loading.
 
-All build entry points live in `Scripts/`. Beta builds require a checkout on `beta`; Final builds require `main`. Dev stays local. `Scripts/package-beta.sh 0.3.0-beta` packages a clean, committed Beta checkout as ZIP and DMG with checksums. Build and packaging scripts do not publish releases.
+All build entry points live in `Scripts/`. Beta builds require a checkout on `beta`; Final builds require `main`. Dev stays local. `Scripts/package-beta.sh 0.4.0-beta` packages a clean, committed Beta checkout as ZIP and DMG with checksums. Build and packaging scripts do not publish releases.
 
 </details>
 

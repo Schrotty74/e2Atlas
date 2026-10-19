@@ -34,8 +34,9 @@ final class ChannelStore {
     }
 
     /// Retry metadata independently of the running stream players.
-    func refresh(retryDelays: [Duration] = []) async {
+    func refresh(retryDelays: [Duration]? = nil) async {
         guard let service = client, !isLoading else { return }
+        let retryDelays = retryDelays ?? startupRetryDelays
         let token = UUID(); generation = token
         defer { if token == generation { isLoading = false } }
         for attempt in 0...retryDelays.count {

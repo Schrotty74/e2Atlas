@@ -1,5 +1,6 @@
 import Foundation
 import CoreFoundation
+import AtlasCore
 
 public struct ReceiverTimer: Identifiable, Sendable, Equatable {
     public let serviceReference: String
@@ -152,6 +153,52 @@ public struct ReceiverTimer: Identifiable, Sendable, Equatable {
             }
         }
         return nil
+    }
+}
+
+/// Conservatively identifies an active recording timer that covers a complete EPG event.
+public enum ReceiverProgrammeRecordingState: Sendable, Equatable {
+    case scheduled, recording
+}
+
+public enum ReceiverTimerMatcher {
+    /// Returns an eligible recording timer covering the programme.
+    /// Programme identifiers are bouquet service references in OpenWebif EPG responses.
+    public static func matchingTimer(for programme: Programme, in timers: [ReceiverTimer]) -> ReceiverTimer? {
+        return timers.first { timer in
+            !timer.disabled && !timer.justPlay && !timer.cancelled && timer.repeated == 0 && (0...2).contains(timer.state)
+                && timer.recordingType == "normal" && timer.pipZap != 1
+                && timer.endEpoch > timer.beginEpoch
+                && timer.begin <= programme.start && timer.end >= programme.end
+                && sameService(timer.serviceReference, programme.channelID)
+        }
+    }
+
+    /// A running badge requires the receiver's recording state, not just the scheduled time.
+    public static func recordingState(for programme: Programme, in timers: [ReceiverTimer], at date: Date) -> ReceiverProgrammeRecordingState? {
+        let remaining = timers.filter { $0.end > date }
+        let running = remaining.contains { timer in
+            !timer.disabled && !timer.justPlay && !timer.cancelled && timer.state == 2
+                && timer.recordingType == "normal" && timer.pipZap != 1
+                && timer.begin <= date && sameService(timer.serviceReference, programme.channelID)
+                && ((timer.begin <= programme.start && timer.end >= programme.end)
+                    || (programme.start <= date && programme.end > date))
+        }
+        if running { return .recording }
+        return matchingTimer(for: programme, in: remaining) == nil ? nil : .scheduled
+    }
+
+    private static func sameService(_ lhs: String, _ rhs: String) -> Bool {
+        guard lhs == rhs else {
+            // Enigma2 service references contain hexadecimal identifiers separated by colons.
+            // Normalize only that known-safe alphabet; URL-escaped or named refs remain exact.
+            let allowed = CharacterSet(charactersIn: "0123456789abcdefABCDEF:")
+            guard lhs.unicodeScalars.allSatisfy(allowed.contains), rhs.unicodeScalars.allSatisfy(allowed.contains) else {
+                return false
+            }
+            return lhs.lowercased() == rhs.lowercased()
+        }
+        return true
     }
 }
 

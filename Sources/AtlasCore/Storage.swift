@@ -52,6 +52,11 @@ public struct PreferencesStore: Sendable {
               (value.multiviewPresets ?? []).count <= 30,
               Set((value.multiviewPresets ?? []).map(\.id)).count == (value.multiviewPresets ?? []).count,
               (value.multiviewPresets ?? []).allSatisfy({ preset in preset.isValid && value.receivers.contains(where: { $0.id == preset.receiverID }) }),
+              (value.favoriteChannels ?? []).count <= 300,
+              Set((value.favoriteChannels ?? []).map(\.id)).count == (value.favoriteChannels ?? []).count,
+              (value.favoriteChannels ?? []).allSatisfy({ favorite in
+                  value.receivers.contains(where: { $0.id == favorite.receiverID }) && !favorite.channel.id.isEmpty && !favorite.channel.name.isEmpty
+              }),
               value.shortcuts.allSatisfy({ (0...23).contains($0.hour) && (0...59).contains($0.minute) }) else { throw AtlasFailure.invalidResponse }
     }
 }

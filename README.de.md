@@ -5,12 +5,16 @@
 
 Mit e2Atlas siehst du Live-TV von deinem Enigma2-Receiver auf dem Mac. Die Verbindung läuft über OpenWebif. Du kannst einen Sender ansehen, bis zu vier Programme im Multiview verfolgen oder im elektronischen Programmführer stöbern, während das Fernsehbild sichtbar bleibt. Die native SwiftUI-Oberfläche nutzt Liquid Glass für Bedienelemente und folgt der hellen oder dunklen Darstellung deines Mac.
 
-**Voraussetzungen: ein Mac mit Apple Silicon (M1 oder neuer), macOS 26 oder neuer und ein Enigma2-Receiver mit erreichbarem OpenWebif und Streaming-Dienst.** Die aktuelle Version ist **0.3.0-beta**. Intel-Macs werden nicht unterstützt.
+**Voraussetzungen: ein Mac mit Apple Silicon (M1 oder neuer), macOS 26 oder neuer und ein Enigma2-Receiver mit erreichbarem OpenWebif und Streaming-Dienst.** Die aktuelle Version ist **0.4.0-beta**. Intel-Macs werden nicht unterstützt.
 
-[Beta herunterladen](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.3.0-beta) · [Changelog auf Englisch](CHANGELOG.md) · [Sicherheitsrichtlinie](SECURITY.de.md)
+[Beta herunterladen](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.4.0-beta) · [Changelog auf Englisch](CHANGELOG.md) · [Sicherheitsrichtlinie](SECURITY.de.md)
 
 ## Funktionen
 
+- Sieben Tage im EPG scrollen und durchsuchen, zwischengespeicherte Daten, zeitgesteuerte Anzeigeaktualisierung und EPGRefresh-Steuerung am Receiver.
+- Receiver-Aufnahmenbibliothek mit Fortsetzen, Speicheranzeige und Filtern für geplante Timer, laufende Timer und Bibliotheksdateien.
+- AutoTimer-Regeln mit Vorschau im geladenen EPG, Sendungserinnerungen und Favoriten je Receiver.
+- Erinnerungs- und Aufnahmemarkierungen im EPG sowie alternative Ausstrahlungen bei gemeldeten Timerkonflikten.
 - Deutsche und englische Oberfläche mit Sprachwahl im Menü Sprache und in den Darstellungseinstellungen. Native macOS-Menüs übernehmen die Wahl nach erneutem Öffnen.
 - Receiver-Aufnahmetimer aus dem Programmführer anlegen, auflisten, unterstützte Einzelaufnahmen bearbeiten und nach Bestätigung löschen.
 - Multiview-Belegungen je Receiver samt Toneinstellungen speichern. Beim Laden starten die Streams schrittweise.
@@ -35,7 +39,7 @@ Mit e2Atlas siehst du Live-TV von deinem Enigma2-Receiver auf dem Mac. Die Verbi
 
 ## Screenshots
 
-Ein Klick auf eine Vorschau öffnet das Bild in voller Auflösung. Die Bilder zeigen die aktuelle deutsche Oberfläche; die Receiver-Adresse wurde anonymisiert.
+Ein Klick auf eine Vorschau öffnet das Bild in voller Auflösung. Die Bilder zeigen die deutsche Oberfläche einer früheren Beta; die Receiver-Adresse wurde anonymisiert.
 
 <table>
 <tr>
@@ -53,7 +57,7 @@ Ein Klick auf eine Vorschau öffnet das Bild in voller Auflösung. Die Bilder ze
 
 ## Beta installieren und öffnen
 
-Lade das DMG oder ZIP aus dem [offiziellen GitHub-Release](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.3.0-beta). Öffne das DMG und ziehe **e2Atlas Beta** nach **Programme**. Beim ZIP entpackst du zuerst die Datei und verschiebst die App anschließend dorthin.
+Lade das DMG oder ZIP aus dem [offiziellen GitHub-Release](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.4.0-beta). Öffne das DMG und ziehe **e2Atlas Beta** nach **Programme**. Beim ZIP entpackst du zuerst die Datei und verschiebst die App anschließend dorthin.
 
 ### Erster Start: Gatekeeper
 
@@ -91,7 +95,7 @@ Die App entsteht unter `Build/Beta/e2Atlas Beta.app`. Die Skripte ermitteln den 
 
 Zur Entwicklung öffnest du `e2Atlas.xcodeproj`. `Scripts/generate-project.py` erzeugt das Projekt neu; `Scripts/test.sh` führt die Tests über Xcode aus. Das SwiftPM-Manifest beschreibt die Module. Wegen des Ladens der VLCKit-Bibliothek ist Xcode der unterstützte Testweg.
 
-Alle Build-Einstiege liegen in `Scripts/`. Beta-Builds verlangen einen Checkout auf `beta`, Final-Builds auf `main`. Dev bleibt lokal. `Scripts/package-beta.sh 0.3.0-beta` erstellt aus einem sauberen, committed Beta-Checkout ZIP und DMG samt Prüfsummen. Die Build- und Paketierungsskripte veröffentlichen keine Releases.
+Alle Build-Einstiege liegen in `Scripts/`. Beta-Builds verlangen einen Checkout auf `beta`, Final-Builds auf `main`. Dev bleibt lokal. `Scripts/package-beta.sh 0.4.0-beta` erstellt aus einem sauberen, committed Beta-Checkout ZIP und DMG samt Prüfsummen. Die Build- und Paketierungsskripte veröffentlichen keine Releases.
 
 </details>
 

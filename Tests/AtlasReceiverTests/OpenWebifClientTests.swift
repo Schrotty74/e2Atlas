@@ -361,6 +361,20 @@ struct OpenWebifClientTests {
         }
     }
 
+    @Test func timerConflictIncludesDecodedReceiverTimers() async throws {
+        let begin = Int(Date().addingTimeInterval(3600).timeIntervalSince1970)
+        let payload: [String: Any] = ["result": false, "conflicts": [["serviceref": "1:0:1:ABC", "servicename": "Example", "name": "Synthetic conflict", "begin": begin, "end": begin + 1800]]]
+        let bytes = try JSONSerialization.data(withJSONObject: payload)
+        let client = makeClient { _ in .response(200, bytes) }
+        do {
+            try await client.addTimer(ReceiverTimerDraft(serviceReference: "1:0:1:DEF", begin: Date(timeIntervalSince1970: Double(begin)), end: Date(timeIntervalSince1970: Double(begin + 1800)), name: "Synthetic"))
+            Issue.record("Expected a structured receiver conflict")
+        } catch let conflict as ReceiverTimerConflict {
+            #expect(conflict.timers.map(\.name) == ["Synthetic conflict"])
+            #expect(conflict.timers.first?.serviceName == "Example")
+        }
+    }
+
     @Test func timerMutationRequiresBooleanResultAndFutureEnd() async throws {
         let client = makeClient { request in
             #expect(request.url?.path == "/api/timeradd")
