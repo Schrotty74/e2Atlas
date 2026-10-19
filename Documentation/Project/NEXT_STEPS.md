@@ -1,6 +1,6 @@
 # Nächste Schritte
 
-Stand: 19. Oktober 2026. Beta `0.4.0-beta`, Build 4, wird auf Nutzerauftrag vorbereitet. Build, Paketprüfung und GitHub-Veröffentlichung sind noch abzuschließen. Die folgenden Hardwareprüfungen sind keine automatisch abzuarbeitende Liste.
+Stand: 19. Oktober 2026. Beta `0.4.0-beta`, Build 4, ist gebaut und paketgeprüft. GitHub-Veröffentlichung ist noch abzuschließen. Die folgenden Hardwareprüfungen sind keine automatisch abzuarbeitende Liste.
 
 - Neue Beta mit bestehenden Beta-Einstellungen und echtem Receiver prüfen; Dev-Bestätigungen sind kein eigener Beta-Bedienungstest.
 - macOS 26, weitere Receiver-Images, Schlüsselbunddialoge nach Neubuilds und dunkles Dock-Icon im normalen Betrieb weiter prüfen.

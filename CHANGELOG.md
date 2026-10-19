@@ -30,7 +30,7 @@
 
 - Dev builds 45/46 and signatures passed. The latest targeted run passed 63 tests in seven suites covering preferences/favourites, programme matching, reminders, playback checkpoint models, OpenWebif responses and guide cache/fresh-data behavior. Earlier affected feature tests passed as documented in the project context.
 - The user confirmed fast guide scrolling, EPGRefresh setup and subsequent EPG population, the supported AutoTimer workflow, reminder delivery with the app closed, and the new Dev feature set generally. Real conflicts and shifted EPG times remain unconfirmed; these are not separate Beta hardware tests.
-- Beta package build and artifact validation are pending.
+- Beta 0.4.0-beta, build 4, built successfully. Signature, beta identity/channel, numeric version, arm64, macOS 26 minimum and both languages passed. The own executable was stripped, checked for private development paths and signed again. ZIP CRC/content, mounted DMG content/signature and SHA-256 checks passed. Runtime sources, tests and resources match the checked Dev source byte for byte.
 
 ## 0.3.0-beta
 
