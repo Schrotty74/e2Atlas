@@ -16,7 +16,7 @@ while IFS= read -r -d '' file; do
     e2Atlas.xcodeproj/project.pbxproj|e2Atlas.xcodeproj/xcshareddata/xcschemes/*.xcscheme|\
     e2Atlas.xcworkspace/contents.xcworkspacedata|\
     AGENTS.md|Documentation/Project/AGENTS.md|Documentation/Project/PROJECT_CONTEXT.md|Documentation/Project/NEXT_STEPS.md|Documentation/Project/CHAT_TEMPLATE.md|\
-    Package.swift|Package.resolved|.gitignore|README.md|README.de.md|SECURITY.md|SECURITY.de.md|CHANGELOG.md|LICENSE|LICENSE.*|NOTICE|THIRD-PARTY-NOTICES*|\
+    Package.swift|Package.resolved|.gitignore|README.md|README.de.md|FEATURES.md|FEATURES.de.md|SECURITY.md|SECURITY.de.md|CHANGELOG.md|LICENSE|LICENSE.*|NOTICE|THIRD-PARTY-NOTICES*|\
     build_app.sh|build_dev_app.sh|build_beta_app.sh|build_final_app.sh|\
     Documentation/Themes/README.md|Documentation/Themes/README.de.md|Documentation/Themes/theme-template.json|\
     Documentation/Images/*.png|Documentation/Screenshots/full/*.png|Documentation/Screenshots/previews/*.png)

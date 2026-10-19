@@ -11,27 +11,18 @@ Mit e2Atlas siehst du Live-TV von deinem Enigma2-Receiver auf dem Mac. Die Verbi
 
 ## Funktionen
 
-- Sieben Tage im EPG scrollen und durchsuchen, zwischengespeicherte Daten, zeitgesteuerte Anzeigeaktualisierung und EPGRefresh-Steuerung am Receiver.
-- Receiver-Aufnahmenbibliothek mit Fortsetzen, Speicheranzeige und Filtern für geplante Timer, laufende Timer und Bibliotheksdateien.
-- AutoTimer-Regeln mit Vorschau im geladenen EPG, Sendungserinnerungen und Favoriten je Receiver.
-- Erinnerungs- und Aufnahmemarkierungen im EPG sowie alternative Ausstrahlungen bei gemeldeten Timerkonflikten.
-- Deutsche und englische Oberfläche mit Sprachwahl im Menü Sprache und in den Darstellungseinstellungen. Native macOS-Menüs übernehmen die Wahl nach erneutem Öffnen.
-- Receiver-Aufnahmetimer aus dem Programmführer anlegen, auflisten, unterstützte Einzelaufnahmen bearbeiten und nach Bestätigung löschen.
-- Multiview-Belegungen je Receiver samt Toneinstellungen speichern. Beim Laden starten die Streams schrittweise.
-- Geladene Sendungstitel und Beschreibungen durchsuchen, den Sendungsfortschritt ansehen und weitere geladene Ausstrahlungen derselben Sendung finden.
-- Aufnahmeordner, Dauerbegrenzung und Stopp bei wenig Speicherplatz sowie ein Sleep-Timer, der die Wiedergabe beendet und lokale Aufnahmen weiterlaufen lässt.
-- Wahlweise beim Start automatisch verbinden, einstellbar unter Einstellungen → Receiver. Begrenzte Wiederholungen bei nicht erreichbaren Diensten und unabhängige Wiederverbindung der Wiedergabeplätze.
-- Schließen des Hauptfensters beendet die App vollständig.
-- Live-TV mit Bouquets, Sendersuche und Senderlogos direkt vom Receiver.
-- Multiview mit zwei, drei oder vier Bildern und einer ausgewählten Tonquelle. Ein kleines Bild lässt sich mit dem Hauptbild tauschen; Audio und Lautstärke bleiben beim jeweiligen Player.
-- Stummschaltung und Lautstärkeregler sowie reines Video-Vollbild mit Rückkehr per Escape oder Doppelklick.
-- Elektronischer Programmführer (EPG) mit 2-, 4- und 6-Stunden-Ansicht, Sprung zu 20:15 Uhr und eigenen Zeitkürzeln.
-- Receiver-Info mit gemeldeten Hardware- und Systemdaten. Die Ansicht zeigt bestätigte Tunernutzung und zählt Streams ohne verwendbare Tuner-Zuordnung separat. Die gesamte Belegung kann unbekannt bleiben, auch bei FBC-Receivern.
-- Den Originalstream des Receivers als lokale `.ts`-Datei aufnehmen. Die Aufnahme lässt sich im Player und in kleinen Multiview-Bildern starten, in der App stoppen und anschließend im Finder anzeigen.
-- Bis zu drei gespeicherte Receiver. Benutzername und Passwort sind optional, wenn der Receiver keinen Zugangsschutz verlangt. Passwörter liegen im macOS-Schlüsselbund.
-- Neben dem System-Theme gibt es Ocean, Elfenbein und Bronze mit jeweils heller und dunkler Palette. Du kannst automatisch der macOS-Darstellung folgen oder Hell und Dunkel manuell wählen. In den Darstellungseinstellungen lässt sich eine JSON-Vorlage erstellen.
-- Der About-Tab verlinkt auf die Homepage und das GitHub-Repository.
-- Die Wiedergabe fordert VideoToolbox an, wenn Codec und Mac dies unterstützen. Die Wiedergabebibliothek kann auf Software-Decodierung zurückfallen. Hardware-Nutzung und CPU-Auswirkung wurden nicht gemessen.
+- Live-TV vom Enigma2-Receiver ansehen, mit Bouquets, Sendersuche und Senderlogos vom Receiver.
+- Bis zu vier Sender im Multiview verfolgen und Belegungen samt Toneinstellungen speichern.
+- Sieben Tage im EPG scrollen und durchsuchen, mit Cache, Aufnahmemarkierungen und einstellbarer automatischer Aktualisierung.
+- EPGRefresh am Receiver planen, mit Zeitfenster, Bouquet-Auswahl und Verweildauer je Sender.
+- Receiver-Aufnahmen aus dem EPG planen und verwalten, mit Konfliktanzeige und alternativen Ausstrahlungen.
+- AutoTimer-Regeln für wiederkehrende Titeltreffer anlegen und passende Sendungen im geladenen EPG vorab ansehen.
+- Receiver-Aufnahmen durchsuchen, abspielen und an gespeicherter Position fortsetzen; freien Speicherplatz anzeigen.
+- Den Originalstream lokal als `.ts`-Datei aufnehmen, mit Ordnerwahl, Dauerbegrenzung und Stopp bei wenig Speicherplatz.
+- Sendungserinnerungen setzen, die macOS auch bei geschlossener App zustellen kann, und Sendungsdetails aus der Mitteilung öffnen.
+- Favoriten je Receiver speichern und unabhängig vom gewählten Bouquet aufrufen.
+
+Die vollständige [Funktionsübersicht](FEATURES.de.md) beschreibt auch Wiedergabesteuerung, Themes, Sprachen, Receiver-Einstellungen und weitere Details.
 
 ## Eigene Themes
 

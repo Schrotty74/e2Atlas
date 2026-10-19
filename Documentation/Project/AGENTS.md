@@ -69,7 +69,7 @@
 - Nur ausdrücklich beauftragte und für den Zielstand geeignete Änderungen in eine Veröffentlichungsstufe übernehmen.
 - Bestehende spezifische Projekt-, Datenschutz-, Build- und Release-Grenzen erhalten. Prüfergebnisse und offene Punkte wahrheitsgemäß dokumentieren.
 
-- Ausdrücklich für Beta freigegebene öffentliche Begleitdateien: englische und deutsche README, SECURITY-Dateien, App-Icon und bereinigte Screenshots unter `Documentation/Images/` und `Documentation/Screenshots/`. Originale mit privaten Daten bleiben lokal. README erst nach dem ersten ausdrücklich beauftragten Final-Build nach `main` übernehmen.
+- Ausdrücklich für Beta freigegebene öffentliche Begleitdateien: englische und deutsche README, SECURITY-Dateien, App-Icon und bereinigte Screenshots unter `Documentation/Images/` und `Documentation/Screenshots/`. Originale mit privaten Daten bleiben lokal. App-Quellen erst nach dem ersten ausdrücklich beauftragten Final-Build nach `main` übernehmen. Ausdrücklich beauftragte öffentliche README-/Feature-Seiten dürfen unabhängig davon auf `main` gepflegt werden.
 
 ## Kontextpflege nach Builds und Releases
 

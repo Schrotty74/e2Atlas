@@ -11,27 +11,18 @@ e2Atlas brings live TV from your Enigma2 receiver to your Mac through OpenWebif.
 
 ## Features
 
-- Seven-day guide scrolling and search, cached listings, scheduled listing updates and receiver-side EPGRefresh controls.
-- Receiver recording library with resume positions, storage information and planned/running/library filters.
-- AutoTimer rules with a loaded-EPG preview, programme reminders and favourites per receiver.
-- Reminder and recording badges in the guide, plus alternative broadcasts for receiver-reported timer conflicts.
-- German and English interfaces, with language selection in the Language menu and Appearance settings. Native macOS menus follow the choice after reopening.
-- Receiver recording timers: schedule from the guide, list timers, edit supported single recordings and confirm deletion.
-- Saved multiview layouts per receiver, including audio settings. Streams start in stages when a layout is restored.
-- Search loaded programme titles and descriptions, view current-programme progress and find other loaded broadcasts of the same title.
-- Recording folder and duration options, a low-space stop and a sleep timer that stops playback while local recording continues.
-- Optional automatic connection at launch under Settings → Receiver; bounded retries for unreachable services and independent playback recovery.
-- Closing the main window quits the application.
-- Live TV with bouquets, channel search and channel logos loaded from the receiver.
-- Multiview with two, three or four pictures and one selected audio source. Swap a small picture with the main picture while keeping each player's audio and volume settings.
-- Mute and volume controls, plus video-only fullscreen with Escape or double-click to return.
-- Electronic program guide (EPG) with 2-, 4- and 6-hour windows, a 20:15 shortcut and custom time shortcuts.
-- Receiver information for reported hardware and software details. Tuner use is shown when confirmed; streams without a usable tuner assignment are counted separately, so total tuner occupancy may remain unknown, including on FBC receivers.
-- Record the original receiver stream to a local `.ts` file from the player or a multiview tile. Stop the recording in the app and reveal the file in Finder.
-- Up to three saved receivers. Username and password are optional for receivers that allow unauthenticated access; passwords are stored in the macOS Keychain.
-- A System theme, plus Ocean, Ivory and Bronze themes with light and dark palettes. Choose automatic, light or dark appearance. Create a custom JSON theme from the template button in Appearance settings.
-- About tab links to the developer's homepage and the GitHub repository.
-- Playback requests Apple's VideoToolbox decoder when supported; the playback library can fall back to software decoding. Hardware use and CPU impact have not been measured.
+- Watch live TV from an Enigma2 receiver, with bouquets, channel search and receiver-provided logos.
+- Follow up to four channels in multiview and save layouts with their audio settings.
+- Scroll and search seven days of EPG, with cached listings, recording markers and configurable automatic updates.
+- Schedule receiver-side EPGRefresh with a time window, bouquet selection and channel dwell time.
+- Schedule and manage receiver recordings from the guide, with conflict details and alternative broadcasts.
+- Create AutoTimer rules for recurring title matches and preview matches in the loaded EPG.
+- Browse and play receiver recordings, resume saved positions and view receiver storage space.
+- Record the original TV stream locally as a `.ts` file, with folder and duration options and a low-space stop.
+- Set programme reminders that macOS can deliver with the app closed, and open programme details from the notification.
+- Save favourite channels per receiver and access them independently of the selected bouquet.
+
+See the complete [feature overview](FEATURES.md) for playback controls, themes, languages, receiver settings and further details.
 
 ## Custom themes
 

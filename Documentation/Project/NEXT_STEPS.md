@@ -10,6 +10,6 @@ Stand: 19. Oktober 2026. Beta `0.4.0-beta`, Build 4, ist mit Quellstand, Tag, ZI
 - AutoTimer-Vorschau mit tatsächlichen Plugin-Ergebnissen vergleichen; Zeitzone, Spezialfilter und Duplikatregeln beachten. EPGRefresh-Ablauf einschließlich Standby und laufender Aufnahme weiter beobachten.
 - Lokale Aufnahme mit realen Streams, Beenden während Aufnahme, Speicherplatzmangel, externen Laufwerken und Verbindungsabbruch prüfen. Hardwaredekodierung und CPU-Last sind nicht gemessen.
 - Wiederverbindung nach echtem Netzwerkausfall oder Receiver-Neustart, weitere Multiview-Kombinationen und Sleep-Timer während lokaler Aufnahme prüfen.
-- Final bleibt separat: main enthält bewusst nur README und Lizenz; erst auf Final-Auftrag Quellen übernehmen und Final-Paketierung vorbereiten.
+- Final bleibt separat: main enthält öffentliche README-/Feature-Seiten und Lizenz; erst auf Final-Auftrag App-Quellen übernehmen und Final-Paketierung vorbereiten.
 
 Notwendige Prüfungen bündeln; bestandene Teile nur nach konkreter Änderung wiederholen. Keine zusätzlichen Prüf-Apps oder Projektkopien ohne ausdrücklichen Auftrag.
