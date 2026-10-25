@@ -21,6 +21,8 @@
 
 ### Validation
 
+- Published as a GitHub prerelease under v0.5.0-beta. All three uploaded asset sizes and SHA-256 digests match the verified ZIP, DMG and SHA256SUMS.
+
 - 34 targeted tests in four suites passed in the Beta checkout on macOS 27 with Xcode 27. They cover settings archives, import merging and rollback, programme selection and boundaries, cache reuse, selective fetching and guide regressions. This was not a full test run.
 - The user confirmed settings export, readable navigation labels, retained Now and Next data after view changes, and channel-specific loading after a programme ends on the matching Dev source. Import with a real user configuration and separate Beta receiver checks remain open.
 - Beta 0.5.0-beta, build 5, built successfully. Beta identity/channel, numeric version, arm64, macOS 26 minimum, both languages and signatures passed. ZIP CRC/content, mounted DMG content/signature and SHA-256 checks passed. Runtime sources, tests and resources match Dev byte for byte.
