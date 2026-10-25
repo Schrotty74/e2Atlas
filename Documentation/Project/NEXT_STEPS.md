@@ -1,6 +1,6 @@
 # Nächste Schritte
 
-Stand: 25. Oktober 2026. Beta `0.5.0-beta`, Build 5, ist auf ausdrücklichen Nutzerauftrag in Vorbereitung. Dev-Build 53 bleibt der lokale App-Stand. 34 gezielte Tests im Beta-Checkout bestanden; Build, Paketprüfung und Veröffentlichung stehen noch aus. Kein Final-Auftrag und kein bestätigter neuer Funktionsfehler. Folgende Punkte sind offene Validierungen, keine automatisch abzuarbeitende Liste.
+Stand: 25. Oktober 2026. Beta `0.5.0-beta`, Build 5, ist auf ausdrücklichen Nutzerauftrag gebaut und paketiert; die GitHub-Veröffentlichung wird vorbereitet. Dev-Build 53 bleibt der lokale App-Stand. 34 gezielte Tests im Beta-Checkout bestanden; Build, Signatur-, ZIP-, DMG- und Prüfsummenprüfung bestanden. Veröffentlichung steht noch aus. Kein Final-Auftrag und kein bestätigter neuer Funktionsfehler. Folgende Punkte sind offene Validierungen, keine automatisch abzuarbeitende Liste.
 
 - Export/Import und Jetzt und danach im normalen Betrieb bestätigen: eigene Sicherung wieder einlesen, neue Receiver bei Bedarf mit Passwort ergänzen, eigene Themes sowie reale Bouquet-/Favoritenwechsel und Sendungsdetails prüfen. Übernahme des Dateiformats und Rücknahme bei Speicherfehlern sind gezielt automatisiert geprüft; eine echte Nutzerkonfiguration wurde nicht importiert. Die Funktionen werden mit Beta 0.5.0 übernommen.
 - Neue Beta mit vorhandenen Beta-Einstellungen und echtem Receiver im normalen Betrieb bestätigen; allgemeine Funktionsbestätigung gilt bisher für Dev.

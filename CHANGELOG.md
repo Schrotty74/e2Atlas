@@ -23,7 +23,8 @@
 
 - 34 targeted tests in four suites passed in the Beta checkout on macOS 27 with Xcode 27. They cover settings archives, import merging and rollback, programme selection and boundaries, cache reuse, selective fetching and guide regressions. This was not a full test run.
 - The user confirmed settings export, readable navigation labels, retained Now and Next data after view changes, and channel-specific loading after a programme ends on the matching Dev source. Import with a real user configuration and separate Beta receiver checks remain open.
-- Beta build and package validation are pending as part of this release preparation.
+- Beta 0.5.0-beta, build 5, built successfully. Beta identity/channel, numeric version, arm64, macOS 26 minimum, both languages and signatures passed. ZIP CRC/content, mounted DMG content/signature and SHA-256 checks passed. Runtime sources, tests and resources match Dev byte for byte.
+- The first package attempt carried build number 2 because the copied project generator retained an older value. Those unpublished packages were discarded; the generator was corrected to 5 and the Beta rebuilt. No application logic changed. No separate Beta launch or receiver check was performed.
 
 ## 0.4.0-beta
 
