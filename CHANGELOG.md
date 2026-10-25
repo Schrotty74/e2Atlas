@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.5.0-beta
+
+### Added
+
+- Export and import settings through a Backup tab: receiver profiles, favourites, multiview layouts, language, appearance, startup connection, guide refresh options, time shortcuts and valid custom themes. Preview imports before applying them; keep existing profiles and entries, and add imported items within the existing limits.
+- A compact Now and Next view with bouquet/favourites filters, channel search, current programme progress, upcoming programmes and links to guide details or live playback. It uses the existing EPG loading and refresh schedule.
+
+### Fixed
+
+- Retain Now and Next data across view and bouquet changes, and reuse valid weekly EPG from memory or disk. Advance listings at programme start/end times, fetching only channels without an upcoming programme. Keep existing data visible during refreshes and apply a bounded retry delay after empty responses or errors. Manual and scheduled refresh remain available.
+- Keep all five main navigation tabs visible with readable labels by using the segmented picker’s natural width. Remove the fixed width that clipped the outer labels.
+- Route bouquet changes through one explicit loading action shared by TV and the compact view, with cancellation when the receiver changes.
+
+### Known limitations
+
+- Backups contain receiver addresses and usernames. Passwords, reminders, playback positions, recordings, recording folder permissions and EPG caches are excluded. Newly imported profiles require passwords to be entered again when authentication is needed. Receiver schedules are unchanged.
+- General settings are replaced on import; existing receivers, favourites, layouts and themes are kept. The resulting configuration must fit the existing limits. Missing selected themes fall back to System.
+- Now and Next depends on loaded EPG data. Progress updates once per minute, with additional updates at programme boundaries. Missing successors can trigger a channel-specific request; empty results or failures retry after five minutes or at an earlier known boundary. The user confirmed view changes and channel-specific loading after programme ends; import on another Mac remains unconfirmed.
+
+### Validation
+
+- 34 targeted tests in four suites passed in the Beta checkout on macOS 27 with Xcode 27. They cover settings archives, import merging and rollback, programme selection and boundaries, cache reuse, selective fetching and guide regressions. This was not a full test run.
+- The user confirmed settings export, readable navigation labels, retained Now and Next data after view changes, and channel-specific loading after a programme ends on the matching Dev source. Import with a real user configuration and separate Beta receiver checks remain open.
+- Beta build and package validation are pending as part of this release preparation.
+
 ## 0.4.0-beta
 
 ### Added

@@ -67,12 +67,91 @@ final class GuideStore {
     @ObservationIgnored private var timelineCache: GuideCacheSnapshot?
     @ObservationIgnored private var cacheURL: URL?
     @ObservationIgnored private var timelineNeedsReload = false
+    @ObservationIgnored private var nowNextReceiverKey: String?
+    @ObservationIgnored private var nowNextUpdatedAt: [String: Date] = [:]
+    @ObservationIgnored private var nowNextRetryAfter: [String: Date] = [:]
+    @ObservationIgnored private var nowNextDiskReadKey: String?
+    @ObservationIgnored private var nowNextPreparing = false
+    @ObservationIgnored private var nowNextInvalidated = false
 
     init(fetchProgrammes: @escaping @Sendable (OpenWebifClient, Channel, DateInterval) async throws -> [Programme] = {
         try await $0.programmes(channel: $1, from: $2.start, to: $2.end)
     }) { self.fetchProgrammes = fetchProgrammes }
 
     func invalidateTimelineCache() { timelineNeedsReload = true }
+
+    func invalidateNowNext() { nowNextInvalidated = true }
+
+    /// View changes retain received data. Only missing successors (or an explicit refresh)
+    /// cause requests; the validated weekly cache is also a source for this projection.
+    func ensureNowNext(channels: [Channel], client: OpenWebifClient?, timeline: GuideStore? = nil,
+                       cacheDirectory: URL? = nil, at date: Date = Date(), force: Bool = false) async {
+        guard let client, !channels.isEmpty, !Task.isCancelled else { return }
+        let mustRefresh = force || nowNextInvalidated
+        let key = receiverKey(client.profile)
+        if nowNextReceiverKey != key { reset(); nowNextReceiverKey = key }
+        guard !isLoading, !nowNextPreparing else { return }
+        let token = UUID(); generation = token; nowNextPreparing = true
+        defer { if token == generation { nowNextPreparing = false; isLoading = false } }
+        if !mustRefresh {
+            if let snapshot = timeline?.timelineCache { adoptNowNext(snapshot, receiverKey: key, channels: channels, at: date) }
+            if let cacheDirectory, nowNextDiskReadKey != key {
+                let file = cacheDirectory.appendingPathComponent(client.profile.id.uuidString + ".json")
+                let snapshot = await cacheStorage.read(file)
+                guard token == generation, !Task.isCancelled else { return }
+                nowNextDiskReadKey = key
+                if let snapshot { adoptNowNext(snapshot, receiverKey: key, channels: channels, at: date) }
+            }
+        }
+        let missing = channels.filter { channel in
+            if mustRefresh { return true }
+            let values = events[channel.id] ?? []
+            if NowNextProgramme.selection(from: values, at: date).next != nil { return false }
+            return nowNextRetryAfter[channel.id].map { $0 <= date } ?? true
+        }
+        guard !missing.isEmpty else { return }
+        isLoading = true
+        let query = DateInterval(start: date, end: date.addingTimeInterval(GuideDuration.six.seconds))
+        await fetch(channels: missing, client: client, query: query, token: token, mergeWindow: true, updateCache: false)
+        guard token == generation, !Task.isCancelled else { return }
+        nowNextInvalidated = false
+        for channel in missing {
+            if errors[channel.id] == nil { nowNextUpdatedAt[channel.id] = date }
+            // Empty responses and failures do not create request loops on view changes.
+            // A known programme boundary may permit a retry earlier than five minutes.
+            let boundary = NowNextProgramme.nextTransition(in: events[channel.id] ?? [], after: date)
+            nowNextRetryAfter[channel.id] = min(boundary ?? date.addingTimeInterval(300), date.addingTimeInterval(300))
+        }
+    }
+
+    /// The next check is timed to programme boundaries; retries apply only to missing data.
+    func nextNowNextCheck(channels: [Channel], after date: Date) -> Date? {
+        guard !channels.isEmpty else { return nil }
+        if isLoading || nowNextPreparing { return date.addingTimeInterval(1) }
+        var deadlines: [Date] = []
+        for channel in channels {
+            let values = events[channel.id] ?? []
+            if let transition = NowNextProgramme.nextTransition(in: values, after: date) { deadlines.append(transition) }
+            if NowNextProgramme.selection(from: values, at: date).next == nil {
+                deadlines.append(max(nowNextRetryAfter[channel.id] ?? date, date.addingTimeInterval(1)))
+            }
+        }
+        return deadlines.min()
+    }
+
+    private func adoptNowNext(_ snapshot: GuideCacheSnapshot, receiverKey key: String, channels: [Channel], at date: Date) {
+        guard snapshot.start <= date, date < snapshot.end,
+              snapshot.matches(receiverKey: key, range: GuideTimelineRange(containing: snapshot.start)) else { return }
+        for channel in channels {
+            guard let values = snapshot.events[channel.id],
+                  nowNextUpdatedAt[channel.id].map({ $0 < snapshot.savedAt }) ?? true else { continue }
+            events[channel.id] = values
+            errors[channel.id] = nil
+            nowNextUpdatedAt[channel.id] = snapshot.savedAt
+            let boundary = NowNextProgramme.nextTransition(in: values, after: date)
+            nowNextRetryAfter[channel.id] = min(boundary ?? snapshot.savedAt.addingTimeInterval(300), snapshot.savedAt.addingTimeInterval(300))
+        }
+    }
 
     /// Load the seven-day range once; moving the viewport never calls this method.
     func loadTimeline(channels: [Channel], client: OpenWebifClient?, cacheDirectory: URL? = nil) async {
@@ -185,6 +264,8 @@ final class GuideStore {
         generation = UUID(); events = [:]; errors = [:]; selection = nil; isLoading = false
         timelineCache = nil; cacheURL = nil; timelineNeedsReload = false
         freshProgrammes = []; freshReceiverID = nil
+        nowNextReceiverKey = nil; nowNextUpdatedAt = [:]; nowNextRetryAfter = [:]
+        nowNextDiskReadKey = nil; nowNextPreparing = false; nowNextInvalidated = false
     }
     func setDemoEvents(channels: [Channel]) {
         let titles = ["Unterwegs in den Alpen", "Weite Welt", "Stadtgeschichten", "Die Farben der Erde", "Wissen am Abend", "Sport am Abend"]

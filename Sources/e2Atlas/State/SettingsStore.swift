@@ -1,6 +1,7 @@
 import Foundation
 import Observation
 import AtlasCore
+import AtlasThemes
 
 @MainActor @Observable
 final class SettingsStore {
@@ -34,6 +35,18 @@ final class SettingsStore {
     func persist() {
         guard canSave, let storage else { error = error ?? "Die Einstellungen können nicht gespeichert werden."; return }
         do { try storage.save(preferences); error = nil } catch { self.error = error.localizedDescription }
+    }
+    func importSettings(_ plan: SettingsImportPlan, themes: [AtlasTheme]) throws {
+        guard canSave, let storage, let paths else { throw AtlasFailure.storage("Die Einstellungen sind nicht verfügbar.") }
+        guard preferences == plan.originalPreferences, themes == plan.originalThemes else {
+            throw AtlasFailure.storage("Die Einstellungen oder Themes haben sich geändert. Öffne die Sicherung erneut.")
+        }
+        let previousReceiver = selectedReceiver
+        try plan.install(settingsURL: storage.fileURL, themeDirectory: paths.support.appendingPathComponent("Themes", isDirectory: true))
+        preferences = plan.preferences
+        error = nil
+        updateNativeLanguagePreference()
+        if previousReceiver != selectedReceiver { connectionRevision += 1 }
     }
     func saveReceiver(_ profile: ReceiverProfile, password: String) throws {
         guard canSave, let storage else { throw AtlasFailure.storage(error ?? "Die Einstellungen sind nicht verfügbar.") }

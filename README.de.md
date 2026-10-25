@@ -5,28 +5,28 @@
 
 Mit e2Atlas siehst du Live-TV von deinem Enigma2-Receiver auf dem Mac. Die Verbindung läuft über OpenWebif. Du kannst einen Sender ansehen, bis zu vier Programme im Multiview verfolgen oder im elektronischen Programmführer stöbern, während das Fernsehbild sichtbar bleibt. Die native SwiftUI-Oberfläche nutzt Liquid Glass für Bedienelemente und folgt der hellen oder dunklen Darstellung deines Mac.
 
-**Voraussetzungen: ein Mac mit Apple Silicon (M1 oder neuer), macOS 26 oder neuer und ein Enigma2-Receiver mit erreichbarem OpenWebif und Streaming-Dienst.** Die aktuelle Version ist **0.4.0-beta**. Intel-Macs werden nicht unterstützt.
+**Voraussetzungen: ein Mac mit Apple Silicon (M1 oder neuer), macOS 26 oder neuer und ein Enigma2-Receiver mit erreichbarem OpenWebif und Streaming-Dienst.** Die aktuelle Version ist **0.5.0-beta**. Intel-Macs werden nicht unterstützt.
 
-[Beta herunterladen](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.4.0-beta) · [Changelog auf Englisch](CHANGELOG.md) · [Sicherheitsrichtlinie](SECURITY.de.md)
+[Beta herunterladen](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.5.0-beta) · [Changelog auf Englisch](CHANGELOG.md) · [Sicherheitsrichtlinie](SECURITY.de.md)
 
 ## Funktionen
 
 - Live-TV vom Enigma2-Receiver ansehen, mit Bouquets, Sendersuche und Senderlogos vom Receiver.
 - Bis zu vier Sender im Multiview verfolgen und Belegungen samt Toneinstellungen speichern.
-- Sieben Tage im EPG scrollen und durchsuchen, mit Cache, Aufnahmemarkierungen und einstellbarer automatischer Aktualisierung.
+- Sieben Tage im EPG scrollen und durchsuchen oder die kompakte Ansicht „Jetzt und danach“ verwenden, mit Cache, Aufnahmemarkierungen und einstellbarer automatischer Aktualisierung.
 - EPGRefresh am Receiver planen, mit Zeitfenster, Bouquet-Auswahl und Verweildauer je Sender.
 - Receiver-Aufnahmen aus dem EPG planen und verwalten, mit Konfliktanzeige und alternativen Ausstrahlungen.
 - AutoTimer-Regeln für wiederkehrende Titeltreffer anlegen und passende Sendungen im geladenen EPG vorab ansehen.
 - Receiver-Aufnahmen durchsuchen, abspielen und an gespeicherter Position fortsetzen; freien Speicherplatz anzeigen.
 - Den Originalstream lokal als `.ts`-Datei aufnehmen, mit Ordnerwahl, Dauerbegrenzung und Stopp bei wenig Speicherplatz.
 - Sendungserinnerungen setzen, die macOS auch bei geschlossener App zustellen kann, und Sendungsdetails aus der Mitteilung öffnen.
-- Favoriten je Receiver speichern und unabhängig vom gewählten Bouquet aufrufen.
+- Favoriten je Receiver speichern und unabhängig vom gewählten Bouquet aufrufen. Einstellungen mit Vorschau exportieren und importieren.
 
 Die vollständige [Funktionsübersicht](FEATURES.de.md) beschreibt auch Wiedergabesteuerung, Themes, Sprachen, Receiver-Einstellungen und weitere Details.
 
 ## Eigene Themes
 
-[Erstelle dein eigenes Theme](Documentation/Themes/README.de.md) mit der [JSON-Vorlage](Documentation/Themes/theme-template.json?raw=true). Die Anleitung behandelt helle und dunkle Paletten, Verläufe, mehrere Theme-Dateien und den Button zum Erstellen einer Vorlage.
+[Erstelle dein eigenes Theme](Documentation/Themes/README.de.md) mit der [JSON-Vorlage](Documentation/Themes/theme-template.json?raw=true). Die Anleitung behandelt helle und dunkle Paletten, Verläufe, mehrere Theme-Dateien und den Button zum Erstellen einer Vorlage. Gültige eigene Themes lassen sich in Einstellungs-Backups aufnehmen.
 
 ## Screenshots
 
@@ -48,7 +48,7 @@ Ein Klick auf eine Vorschau öffnet das Bild in voller Auflösung. Die Bilder ze
 
 ## Beta installieren und öffnen
 
-Lade das DMG oder ZIP aus dem [offiziellen GitHub-Release](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.4.0-beta). Öffne das DMG und ziehe **e2Atlas Beta** nach **Programme**. Beim ZIP entpackst du zuerst die Datei und verschiebst die App anschließend dorthin.
+Lade das DMG oder ZIP aus dem [offiziellen GitHub-Release](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.5.0-beta). Öffne das DMG und ziehe **e2Atlas Beta** nach **Programme**. Beim ZIP entpackst du zuerst die Datei und verschiebst die App anschließend dorthin.
 
 ### Erster Start: Gatekeeper
 
@@ -63,7 +63,7 @@ Damit legst du eine Ausnahme für diese App an. [Apples Gatekeeper-Anleitung](ht
 
 ## Receiver verbinden
 
-Gib beim ersten Start einen Namen und die IP-Adresse oder den Hostnamen des Receivers ein. Benutzername und Passwort können leer bleiben, wenn der Receiver keinen Zugangsschutz verwendet. Ein geschützter Receiver kann gültige Zugangsdaten für Verbindung oder Stream verlangen. Nach dem Verbinden wählst du Bouquet und Sender. Weitere Receiver fügst du in den Einstellungen hinzu. Dev und Beta verwenden getrennte Einstellungen, Theme-Ordner und Caches. Ein Dev-Profil musst du daher in der Beta erneut eingeben.
+Gib beim ersten Start einen Namen und die IP-Adresse oder den Hostnamen des Receivers ein. Benutzername und Passwort können leer bleiben, wenn der Receiver keinen Zugangsschutz verwendet. Ein geschützter Receiver kann gültige Zugangsdaten für Verbindung oder Stream verlangen. Nach dem Verbinden wählst du Bouquet und Sender. Weitere Receiver fügst du in den Einstellungen hinzu. Dev und Beta verwenden getrennte Einstellungen, Theme-Ordner und Caches. Übertrage ein Dev-Profil über den Einstellungsexport und -import oder gib es in der Beta erneut ein. Passwörter sind nicht im Backup enthalten.
 
 Verwende den Receiver in einem vertrauenswürdigen lokalen Netzwerk. Bei einer einfachen HTTP-Verbindung werden Passwort und TV-Stream nicht verschlüsselt. Die Kompatibilität eines Receiver-Images hängt von dessen OpenWebif- und Streaming-Diensten ab.
 
@@ -86,7 +86,7 @@ Die App entsteht unter `Build/Beta/e2Atlas Beta.app`. Die Skripte ermitteln den 
 
 Zur Entwicklung öffnest du `e2Atlas.xcodeproj`. `Scripts/generate-project.py` erzeugt das Projekt neu; `Scripts/test.sh` führt die Tests über Xcode aus. Das SwiftPM-Manifest beschreibt die Module. Wegen des Ladens der VLCKit-Bibliothek ist Xcode der unterstützte Testweg.
 
-Alle Build-Einstiege liegen in `Scripts/`. Beta-Builds verlangen einen Checkout auf `beta`, Final-Builds auf `main`. Dev bleibt lokal. `Scripts/package-beta.sh 0.4.0-beta` erstellt aus einem sauberen, committed Beta-Checkout ZIP und DMG samt Prüfsummen. Die Build- und Paketierungsskripte veröffentlichen keine Releases.
+Alle Build-Einstiege liegen in `Scripts/`. Beta-Builds verlangen einen Checkout auf `beta`, Final-Builds auf `main`. Dev bleibt lokal. `Scripts/package-beta.sh 0.5.0-beta` erstellt aus einem sauberen, committed Beta-Checkout ZIP und DMG samt Prüfsummen. Die Build- und Paketierungsskripte veröffentlichen keine Releases.
 
 </details>
 

@@ -2,7 +2,7 @@
 
 **English** · [Deutsch](FEATURES.de.md) · [Back to the project page](README.md)
 
-These features are included in **0.4.0-beta**. Compatibility depends on the receiver's OpenWebif, streaming services and installed plugins. See the [changelog](https://github.com/Schrotty74/e2Atlas/blob/beta/CHANGELOG.md) for validation and known limitations.
+These features are included in **0.5.0-beta**. Compatibility depends on the receiver's OpenWebif, streaming services and installed plugins. See the [changelog](https://github.com/Schrotty74/e2Atlas/blob/beta/CHANGELOG.md) for validation and known limitations.
 
 ## Live TV and multiview
 
@@ -24,6 +24,12 @@ These features are included in **0.4.0-beta**. Compatibility depends on the rece
 - Show reminder bells and planned or running recording indicators in guide cells, search results and details. Planned timer markers cover supported single recordings; recurring and special timer types are excluded.
 - Reuse listings in memory and a local cache per receiver and app channel. Scrolling and zooming do not fetch EPG again.
 - Configure listing updates in the guide or Settings → EPG: Off, a six-hour default or a custom interval from one minute to seven days, with a saved start date and time. Updates retain existing listings while loading and do not restart playback or reload channels.
+
+## Now and Next
+
+- Open a compact programme view with bouquet, favourites and channel search, showing the current and next programme with details and playback controls.
+- Keep loaded programme data while switching views or bouquets, reusing the existing weekly EPG cache.
+- Advance programmes automatically at their scheduled boundaries. If no next programme is available, load EPG data for that channel; on errors, keep the displayed data and apply a cooldown before another request.
 
 ## EPGRefresh on the receiver
 
@@ -67,3 +73,4 @@ These features are included in **0.4.0-beta**. Compatibility depends on the rece
 - Create custom JSON themes from the template in Appearance settings. See the [theme guide](https://github.com/Schrotty74/e2Atlas/blob/beta/Documentation/Themes/README.md).
 - Open the homepage and repository from About. Closing the main window quits the app, including when auxiliary windows are open.
 - Keep Dev, Beta and Final settings, caches and Keychain services separate.
+- Export settings to a JSON backup and preview its contents before importing. Backups can include receiver profiles (addresses and usernames), favourites, multiview layouts, general options, custom guide times and valid custom themes. They exclude passwords, reminders, playback positions, local recording files, folder permissions and EPG caches. Import keeps existing profiles and entries, replaces general settings and may require a password for a newly added receiver.

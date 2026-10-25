@@ -6,14 +6,14 @@
 
 | Version | Status |
 | --- | --- |
-| 0.2.0-beta | Aktuelle Beta; Sicherheitsmeldungen sind willkommen |
+| 0.5.0-beta | Aktuelle Beta; Sicherheitsmeldungen sind willkommen |
 | Stabile Version | Noch nicht veröffentlicht |
 
 ## Sicherheitsmodell
 
-e2Atlas ist ein macOS-Client für Enigma2-Receiver, die du selbst einrichtest. Die App liest Senderlisten, Programmdaten, Senderlogos und TV-Streams über OpenWebif und den Streaming-Dienst des Receivers. Die aktuelle Beta kann den MPEG-TS-Stream des Receivers in einer ausgewählten lokalen Datei speichern. Systemadministration des Receivers und Timer-Steuerung sind nicht enthalten. Die App installiert keinen privilegierten Hilfsprozess und fügt keine Telemetrie, Analysedienste oder Cloud-Konten hinzu.
+e2Atlas ist ein macOS-Client für Enigma2-Receiver, die du selbst einrichtest. Die App liest Senderlisten, Programmdaten, Senderlogos und TV-Streams über OpenWebif und den Streaming-Dienst des Receivers. Sie kann unterstützte Receiver-Aufnahmetimer planen und verwalten, EPGRefresh und unterstützte AutoTimer-Regeln konfigurieren sowie den MPEG-TS-Stream des Receivers in einer ausgewählten lokalen Datei speichern. Eine Systemadministration des Receivers bietet sie nicht. Die App installiert keinen privilegierten Hilfsprozess und fügt keine Telemetrie, Analysedienste oder Cloud-Konten hinzu.
 
-Receiver-Passwörter liegen im macOS-Schlüsselbund. Erfolgreich gelesene Passwörter bleiben außerdem für die laufende App-Sitzung im Arbeitsspeicher. Receiver-Namen, Adressen, Benutzernamen und Anzeigeeinstellungen werden lokal in Application Support gespeichert. Dev, Beta und Final verwenden getrennte Bundle-Kennungen und Speicherbereiche.
+Receiver-Passwörter liegen im macOS-Schlüsselbund. Erfolgreich gelesene Passwörter bleiben außerdem für die laufende App-Sitzung im Arbeitsspeicher. Receiver-Namen, Adressen, Benutzernamen und Anzeigeeinstellungen werden lokal in Application Support gespeichert. JSON-Einstellungs-Backups können Receiver-Adressen und Benutzernamen enthalten, Passwörter sind ausgeschlossen. Dev, Beta und Final verwenden getrennte Bundle-Kennungen und Speicherbereiche.
 
 Der OpenWebif-API-Client verwendet eine flüchtige URLSession ohne dauerhafte Cookies oder Festplatten-Cache. Er übergibt HTTP-Basic-Zugangsdaten nur bei einer Anforderung vom eingerichteten Ursprung und lehnt Weiterleitungen zu anderen Ursprüngen ab. Für HTTPS-Anfragen der API gilt die normale Zertifikatsprüfung von macOS. Die Medienwiedergabe läuft über VLCKit oder AVFoundation mit deren eigener Netzwerk- und Decoderlogik; die Weiterleitungsprüfung des API-Clients deckt diese Engines nicht ab.
 
@@ -27,7 +27,7 @@ VLCKit 3.7.3 wird von VideoLAN geladen, mit einer festgelegten SHA-256-Prüfsumm
 
 ## Sicherheitslücke melden
 
-Bitte kontaktiere [Schrotty74](https://github.com/Schrotty74) privat, bevor du Einzelheiten zu einer Sicherheitslücke weitergibst. GitHubs private Schwachstellenmeldung ist für dieses Repository derzeit nicht aktiviert. Wenn du keinen privaten Kontaktweg hast, kannst du in einem öffentlichen Issue nach einem solchen fragen, ohne die Schwachstelle zu beschreiben.
+Bitte kontaktiere [Schrotty74](https://github.com/Schrotty74) privat, bevor du Einzelheiten zu einer Sicherheitslücke weitergibst. Wenn du keinen privaten Kontaktweg hast, kannst du in einem Issue nach einem solchen fragen, ohne die Schwachstelle zu beschreiben.
 
 Nenne die e2Atlas- und macOS-Version, die betroffene Komponente, Schritte zum Nachstellen, das erwartete Ergebnis und die Auswirkungen. Teile nur bereinigte Logs oder Screenshots. Entferne Passwörter, Authentifizierungs-Header, Receiver-Adressen, persönliche Dateinamen und Gerätekennungen.
 

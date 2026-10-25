@@ -6,14 +6,14 @@
 
 | Version | Status |
 | --- | --- |
-| 0.2.0-beta | Current beta; security reports welcome |
+| 0.5.0-beta | Current beta; security reports welcome |
 | Stable release | Not released yet |
 
 ## Security model
 
-e2Atlas is a macOS client for user-configured Enigma2 receivers. It reads channel lists, program data, channel logos and TV streams through OpenWebif and the receiver's streaming service. The current beta can record the receiver's MPEG-TS stream to a user-selected local file; it does not provide receiver administration or timer controls. The app does not install an elevated helper or add telemetry, analytics or a cloud account service.
+e2Atlas is a macOS client for user-configured Enigma2 receivers. It reads channel lists, program data, channel logos and TV streams through OpenWebif and the receiver's streaming service. It can schedule and manage supported receiver recording timers, configure EPGRefresh and supported AutoTimer rules, and record the receiver's MPEG-TS stream to a user-selected local file. It does not provide receiver system administration. The app does not install an elevated helper or add telemetry, analytics or a cloud account service.
 
-Receiver passwords are stored in the macOS Keychain. Successfully read passwords also remain in process memory for the app session. Receiver names, addresses, usernames and display preferences are stored locally in Application Support. Dev, Beta and Final use separate bundle identifiers and storage namespaces.
+Receiver passwords are stored in the macOS Keychain. Successfully read passwords also remain in process memory for the app session. Receiver names, addresses, usernames and display preferences are stored locally in Application Support. JSON settings backups can contain receiver addresses and usernames, but exclude passwords. Dev, Beta and Final use separate bundle identifiers and storage namespaces.
 
 The OpenWebif API client uses an ephemeral URLSession without persistent cookies or a disk cache. It supplies HTTP Basic credentials only for a challenge from the configured origin and rejects cross-origin redirects. API HTTPS requests use macOS's default certificate validation. Media playback uses VLCKit or AVFoundation, with their own network and decoding behavior; the API client's redirect checks do not cover those engines.
 
@@ -27,7 +27,7 @@ VLCKit 3.7.3 is downloaded from VideoLAN with a pinned SHA-256 checksum and incl
 
 ## Reporting a vulnerability
 
-Please contact [Schrotty74](https://github.com/Schrotty74) privately before sharing vulnerability details. GitHub private vulnerability reporting is currently not enabled for this repository. If you have no private contact route, open an issue asking for one without including the vulnerability details.
+Please contact [Schrotty74](https://github.com/Schrotty74) privately before sharing vulnerability details. If you have no private contact route, open an issue asking for one without including the vulnerability details.
 
 Include the e2Atlas and macOS versions, the affected component, reproduction steps, the expected result and the impact. Share sanitized logs or screenshots only. Remove passwords, authorization headers, receiver addresses, personal filenames and device identifiers.
 

@@ -10,6 +10,8 @@ The [0.2.0-beta release](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.2
 
 The built-in themes are System, Ocean, Ivory and Bronze. Each color theme has light and dark palettes. Ocean uses blue and cyan gradients; Ivory and Bronze also include gradients.
 
+From 0.5.0-beta, settings backups can include valid custom themes.
+
 ## Start with a custom theme
 
 1. In e2Atlas, open **Settings → Appearance → Create theme template**. The app creates a new JSON file and a guide in the correct folder. If you prefer, download the [template](theme-template.json?raw=true) and open **Settings → Appearance → Open theme folder**.

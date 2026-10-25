@@ -2,7 +2,7 @@
 
 [English](FEATURES.md) · **Deutsch** · [Zurück zur Projektseite](README.de.md)
 
-Diese Funktionen sind in **0.4.0-beta** enthalten. Die Kompatibilität hängt von OpenWebif, den Streaming-Diensten und den installierten Receiver-Plugins ab. Prüfergebnisse und bekannte Einschränkungen stehen im [englischen Changelog](https://github.com/Schrotty74/e2Atlas/blob/beta/CHANGELOG.md).
+Diese Funktionen sind in **0.5.0-beta** enthalten. Die Kompatibilität hängt von OpenWebif, den Streaming-Diensten und den installierten Receiver-Plugins ab. Prüfergebnisse und bekannte Einschränkungen stehen im [englischen Changelog](https://github.com/Schrotty74/e2Atlas/blob/beta/CHANGELOG.md).
 
 ## Live-TV und Multiview
 
@@ -24,6 +24,12 @@ Diese Funktionen sind in **0.4.0-beta** enthalten. Die Kompatibilität hängt vo
 - Erinnerungsglocken sowie geplante und laufende Aufnahmen in Sendungsfeldern, Suchtreffern und Details sehen. Markierungen geplanter Timer gelten für unterstützte Einzelaufnahmen; wiederkehrende und spezielle Timer sind ausgenommen.
 - EPG-Daten im Arbeitsspeicher und in einem lokalen Cache je Receiver und App-Kanal wiederverwenden. Scrollen und Zoom lösen keinen erneuten EPG-Abruf aus.
 - Anzeigeaktualisierung im Programmführer oder unter Einstellungen → EPG festlegen: Aus, standardmäßig sechs Stunden oder ein eigenes Intervall von einer Minute bis sieben Tagen, mit gespeichertem Startdatum und Uhrzeit. Vorhandene Daten bleiben während des Ladens sichtbar; Wiedergabe und Senderliste werden nicht neu gestartet beziehungsweise eingelesen.
+
+## Jetzt und danach
+
+- Eine kompakte Programmübersicht mit Bouquet, Favoriten und Sendersuche öffnen. Sie zeigt die aktuelle und die folgende Sendung mit Details und Wiedergabesteuerung.
+- Geladene Programmdaten beim Wechsel zwischen Ansichten und Bouquets behalten und den vorhandenen Wochen-EPG-Cache wiederverwenden.
+- Sendungen an ihren Zeitgrenzen automatisch weiterschalten. Fehlt eine Folgesendung, lädt die App EPG-Daten für diesen Sender nach. Bei Fehlern bleiben die angezeigten Daten erhalten; vor der nächsten Anfrage gilt eine Wartezeit.
 
 ## EPGRefresh am Receiver
 
@@ -67,3 +73,4 @@ Diese Funktionen sind in **0.4.0-beta** enthalten. Die Kompatibilität hängt vo
 - Eigene JSON-Themes über die Vorlage in den Darstellungseinstellungen erstellen. Siehe [Theme-Anleitung](https://github.com/Schrotty74/e2Atlas/blob/beta/Documentation/Themes/README.de.md).
 - Homepage und Repository unter Über öffnen. Schließen des Hauptfensters beendet die App auch bei offenen Nebenfenstern.
 - Einstellungen, Caches und Schlüsselbund-Services für Dev, Beta und Final getrennt halten.
+- Einstellungen als JSON-Backup exportieren und dessen Inhalt vor dem Import in einer Vorschau prüfen. Das Backup kann Receiver-Profile mit Adressen und Benutzernamen, Favoriten, Multiview-Belegungen, allgemeine Optionen, eigene EPG-Zeitkürzel und gültige eigene Themes enthalten. Passwörter, Erinnerungen, Wiedergabepositionen, lokale Aufnahmedateien, Ordnerrechte und EPG-Caches sind ausgeschlossen. Beim Import bleiben bestehende Profile und Einträge erhalten; allgemeine Einstellungen werden ersetzt. Für neu hinzugefügte Receiver kann ein Passwort erforderlich sein.

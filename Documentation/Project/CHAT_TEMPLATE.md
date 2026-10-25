@@ -8,7 +8,7 @@ Verwende den aktuellen Projektordner; keinen festen lokalen Pfad voraussetzen. L
 2. `PROJECT_CONTEXT.md`
 3. `NEXT_STEPS.md`
 
-Der lokale Dev-Hauptordner besitzt kein eigenes Git-Repository. Der zusätzliche Beta-Checkout liegt unter `Local/Channels/Beta` auf `beta`. Der Remote-Branch `main` enthält öffentliche README-/Feature-Seiten und die Lizenz; fehlende App- und Kontextdateien dort nicht automatisch ergänzen. Prüfe den tatsächlichen Quellstand und den aktuellen Branch. Öffne danach nur die für meinen Auftrag relevanten Dateien. Lokale Designreferenzen sind optional; die vorhandene Oberfläche und öffentlichen Screenshots liefern die mitgelieferte Gestaltung.
+Der lokale Dev-Hauptordner besitzt kein eigenes Git-Repository. Der zusätzliche Beta-Checkout liegt unter `Local/Channels/Beta` auf `beta`. Der Remote-Branch `main` enthält nur die ursprüngliche README und Lizenz. Main erst bei einem ausdrücklich beauftragten Final-Build ändern, auch keine README-/Feature-Seiten vorab ergänzen. Prüfe den tatsächlichen Quellstand und den aktuellen Branch. Öffne danach nur die für meinen Auftrag relevanten Dateien. Lokale Designreferenzen sind optional; die vorhandene Oberfläche und öffentlichen Screenshots liefern die mitgelieferte Gestaltung.
 
 Die App verwendet SwiftUI, unterstützt Apple Silicon ab macOS 26 und folgt Kino + Regie mit eigener Programmansicht. Codex und Xcode bearbeiten denselben Quellbestand. Beachte Datenschutz, modulare Architektur, relative Pfade und getrennte Kanäle. Dev bleibt lokal; Beta wird auf `beta`, Final auf `main` veröffentlicht.
 
@@ -20,4 +20,10 @@ Beachte das bestätigte Versionsschema in `AGENTS.md`: drei Zahlen mit der Endun
 
 Fasse die notwendigen Prüfungen zu einem Abschlusscheck zusammen. Wiederhole nach einer Korrektur nur betroffene Teile. Changelog und Release-Notes verwenden das Beta-1-Muster.
 
-Mein aktueller Auftrag folgt als nächste Nachricht.
+Aktueller Stand: Dev-Build 53 mit Einstellungsexport/-import und Jetzt-und-danach-Übersicht. Beta 0.5.0-beta, Build 5, wird im bestehenden Beta-Checkout auf ausdrücklichen Auftrag vorbereitet; bisher veröffentlicht ist 0.4.0-beta, Build 4. 34 gezielte Tests in vier Suites im Beta-Checkout bestanden; Build, Paketprüfung und Veröffentlichung stehen noch aus. Der Nutzer bestätigt Export, Navigationsdarstellung, Ansichtswechsel ohne erneuten Datenabruf und senderweises Nachladen nach Sendungsende. Main bleibt auf 1af31eb mit ursprünglicher README und LICENSE; kein Final-Checkout vorhanden. Der vorgemerkte Dateimanager ist kein Umsetzungsauftrag.
+
+Bei einem später ausdrücklich beauftragten Final-Build den freigegebenen Beta-Stand übernehmen und für Final anpassen, einschließlich Dokumentation und getrennter Daten-/Cache-/Schlüsselbundzuordnung. Bis dahin main unverändert lassen.
+
+Aktueller Auftrag:
+
+<Aktueller Auftrag>

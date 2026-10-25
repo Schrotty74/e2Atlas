@@ -1,15 +1,18 @@
 # Nächste Schritte
 
-Stand: 19. Oktober 2026. Beta `0.4.0-beta`, Build 4, ist mit Quellstand, Tag, ZIP, DMG und SHA256SUMS veröffentlicht; Upload-Digests sind geprüft. Es gibt keinen offenen Veröffentlichungsauftrag. Die folgenden Hardwareprüfungen sind keine automatisch abzuarbeitende Liste.
+Stand: 25. Oktober 2026. Beta `0.5.0-beta`, Build 5, ist auf ausdrücklichen Nutzerauftrag in Vorbereitung. Dev-Build 53 bleibt der lokale App-Stand. 34 gezielte Tests im Beta-Checkout bestanden; Build, Paketprüfung und Veröffentlichung stehen noch aus. Kein Final-Auftrag und kein bestätigter neuer Funktionsfehler. Folgende Punkte sind offene Validierungen, keine automatisch abzuarbeitende Liste.
 
-- Neue Beta mit bestehenden Beta-Einstellungen und echtem Receiver prüfen; Dev-Bestätigungen sind kein eigener Beta-Bedienungstest.
-- macOS 26, weitere Receiver-Images, Schlüsselbunddialoge nach Neubuilds und dunkles Dock-Icon im normalen Betrieb weiter prüfen.
-- Tatsächliche Aufnahmeausführung, Receiver-Konfliktmeldung und alternative Ausstrahlung im normalen Betrieb prüfen. Keinen künstlichen Konflikt auf Kosten laufender Aufnahmen erzwingen.
-- Fortsetzen einer Receiver-Aufnahme nach App-Neustart, weitere Ordner und authentifizierte Wiedergabe prüfen. Bibliotheksdateien besitzen keinen verlässlich gemeldeten Fertig-Status.
-- Benachrichtigung bei geschlossener App anklicken und richtige Sendung öffnen. Zustellung bei geschlossener App ist im Dev-Stand bestätigt. Erinnerung bei einer echten eindeutigen EPG-Zeitverschiebung nachführen; nicht künstlich am Receiver provozieren.
-- AutoTimer-Vorschau mit tatsächlichen Plugin-Ergebnissen vergleichen; Zeitzone, Spezialfilter und Duplikatregeln beachten. EPGRefresh-Ablauf einschließlich Standby und laufender Aufnahme weiter beobachten.
-- Lokale Aufnahme mit realen Streams, Beenden während Aufnahme, Speicherplatzmangel, externen Laufwerken und Verbindungsabbruch prüfen. Hardwaredekodierung und CPU-Last sind nicht gemessen.
-- Wiederverbindung nach echtem Netzwerkausfall oder Receiver-Neustart, weitere Multiview-Kombinationen und Sleep-Timer während lokaler Aufnahme prüfen.
-- Final bleibt separat: main enthält öffentliche README-/Feature-Seiten und Lizenz; erst auf Final-Auftrag App-Quellen übernehmen und Final-Paketierung vorbereiten.
+- Export/Import und Jetzt und danach im normalen Betrieb bestätigen: eigene Sicherung wieder einlesen, neue Receiver bei Bedarf mit Passwort ergänzen, eigene Themes sowie reale Bouquet-/Favoritenwechsel und Sendungsdetails prüfen. Übernahme des Dateiformats und Rücknahme bei Speicherfehlern sind gezielt automatisiert geprüft; eine echte Nutzerkonfiguration wurde nicht importiert. Die Funktionen werden mit Beta 0.5.0 übernommen.
+- Neue Beta mit vorhandenen Beta-Einstellungen und echtem Receiver im normalen Betrieb bestätigen; allgemeine Funktionsbestätigung gilt bisher für Dev.
+- macOS 26 und weitere Receiver-Images prüfen. Schlüsselbunddialoge nach Neubuilds bleiben nicht abschließend bestätigt.
+- Tatsächliche Ausführung/Bearbeitung von Receiver-Aufnahmen und vom Receiver gemeldete Konflikte mit alternativen Ausstrahlungen bei natürlichem Auftreten prüfen. Keine unnötigen Aufnahmen oder künstlichen Konflikte anlegen.
+- Receiver-Aufnahmen fortsetzen nach App-Neustart, Pause und Aufnahmeende, Wiedergabe bei ausdrücklich aktivierter Receiver-Anmeldung und weitere Ordner prüfen. Der Anmeldefall betrifft zusätzliche Konfigurationen; Live-Streams, Aufnahmeliste und SSD-Speicheranzeige ohne Zugangsdaten sind vom Nutzer bestätigt. Bibliotheksdateien haben keinen verlässlich gemeldeten Fertig-Status.
+- Benachrichtigung bei geschlossener App anklicken und die passende Sendung öffnen. Zustellung bei geschlossener App selbst ist bereits bestätigt. Erinnerungsnachführung nur bei einer tatsächlich auftretenden eindeutigen EPG-Zeitverschiebung beobachten.
+- AutoTimer-Vorschau mit Plugin-Ergebnissen vergleichen; Mac-Zeitzone, Spezialfilter und Duplikaterkennung können Unterschiede bewirken. EPGRefresh-Start, vollständigen Ablauf sowie Standby-/Aufnahme-Rücksicht weiter beobachten.
+- Eigene EPG-Intervalle und gespeicherten Beginn nach Neustart sowie zeitgesteuerte Ausführung ohne manuelles Aktualisieren bestätigen. Die Anzeigeaktualisierung bleibt vom receiverseitigen EPGRefresh-Zeitplan getrennt.
+- Lokale Streamaufnahme mit realen Streams prüfen: Beenden während Aufnahme, wenig Speicherplatz, externe Laufwerke, Dauerbegrenzung und echter Verbindungsabbruch. Hardwaredekodierung und CPU-Auswirkung sind nicht gemessen.
+- Wiederverbindung bei tatsächlichem Netzwerkausfall oder Receiver-Neustart sowie weitere Multiview-Kombinationen und Sleep-Timer während lokaler Aufnahme beobachten. Netzwerk nicht allein für einen Test trennen.
+- Noch offene Plattform-/Bedienungsfälle: FBC-Tunerzuordnung, Vollbild/Lautstärke im realen Betrieb, Themes mit erhöhtem Kontrast und reduzierter Transparenz sowie native Sprach-/Berechtigungsdialoge.
+- Main bis zum ausdrücklich beauftragten Final-Build unverändert lassen: ursprüngliche README und LICENSE, keine App- oder Kontextdateien. Erst dann den freigegebenen Beta-Stand in einen getrennten Final-Checkout übernehmen und für Final anpassen; Paketierung, Tags und getrennte Kanaldaten prüfen.
 
-Notwendige Prüfungen bündeln; bestandene Teile nur nach konkreter Änderung wiederholen. Keine zusätzlichen Prüf-Apps oder Projektkopien ohne ausdrücklichen Auftrag.
+Der aktuelle Beta-Auftrag umfasst auch die Veröffentlichung der bereinigten Kontextkorrekturen. Weitere Git-Aktionen nur mit passendem Auftrag. Bestandene Prüfungen nur bei konkretem Anlass wiederholen; keine zusätzlichen Prüf-Apps oder Projektkopien ohne ausdrücklichen Auftrag.

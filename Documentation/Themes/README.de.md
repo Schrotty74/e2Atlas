@@ -10,6 +10,8 @@ Die [Version 0.2.0-beta](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.2
 
 Mitgeliefert werden System, Ocean, Elfenbein und Bronze. Jedes Farb-Theme enthält eine helle und eine dunkle Palette. Ocean verwendet Blau- und Cyanverläufe; auch Elfenbein und Bronze haben eigene Verläufe.
 
+Ab 0.5.0-beta können Einstellungs-Backups gültige eigene Themes enthalten.
+
 ## Eigenes Theme anlegen
 
 1. Öffne in e2Atlas **Einstellungen → Darstellung → Theme-Vorlage erstellen**. Die App legt eine JSON-Datei und eine Anleitung im richtigen Ordner an. Alternativ kannst du die [Vorlage](theme-template.json?raw=true) herunterladen und **Einstellungen → Darstellung → Theme-Ordner öffnen** wählen.

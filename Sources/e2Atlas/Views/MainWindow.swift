@@ -5,7 +5,7 @@ import AtlasReceiver
 import AtlasPlayback
 import AtlasThemes
 
-enum MainSection: String, CaseIterable { case television = "Fernsehen", multiview = "Multiview", guide = "Programm", recordings = "Aufnahmen" }
+enum MainSection: String, CaseIterable { case television = "Fernsehen", multiview = "Multiview", nowNext = "Jetzt und danach", guide = "Programm", recordings = "Aufnahmen" }
 
 private struct ReceiverSelection: Equatable {
     let profile: ReceiverProfile?
@@ -37,6 +37,8 @@ struct MainWindow: View {
     @State private var favoritesOnly = false
     @State private var openedReminder: ProgrammeReminder?
     @State private var needsReminderSelection = false
+    @State private var pendingNowNextSelection: Programme?
+    @State private var pendingNowNextChannel: Channel?
     @State private var showPresets = false
     @State private var showEPGRefresh = false
     @State private var showAutoTimer = false
@@ -45,6 +47,7 @@ struct MainWindow: View {
     @State private var timerRequest: TimerRequest?
     @State private var sleepDeadline: Date?
     @State private var restoreTask: Task<Void, Never>?
+    @State private var bouquetTask: Task<Void, Never>?
     @State private var presetGuideChannels: [Channel] = []
     @State private var hasInitializedReceiver = false
     @State private var epgRefreshSessionStart = Date()
@@ -61,6 +64,7 @@ struct MainWindow: View {
         if let target = openedReminder, target.receiverID == settings.selectedReceiver?.id, !values.contains(where: { $0.id == target.programme.channelID }) {
             values.append(Channel(id: target.programme.channelID, name: target.channelName))
         }
+        if let channel = pendingNowNextChannel, !values.contains(where: { $0.id == channel.id }) { values.append(channel) }
         return values
     }
     private var loadedProgrammes: [Programme] {
@@ -108,6 +112,7 @@ struct MainWindow: View {
                 await guide.loadTimeline(channels: guideChannels, client: channels.client, cacheDirectory: settings.paths?.cache.appendingPathComponent("EPG", isDirectory: true))
                 guard !Task.isCancelled else { return }
                 applyReminderSelection()
+                applyNowNextSelection()
             }
         }
         .task(id: "\(settings.selectedReceiver?.id.uuidString ?? "")|\(settings.connectionRevision)|\(channels.metadataRevision)|\(section == .guide)") {
@@ -122,6 +127,7 @@ struct MainWindow: View {
         }
         .onChange(of: reminders.pendingOpen?.id, initial: true) { _, _ in
             guard let target = reminders.takePendingOpen() else { return }
+            pendingNowNextSelection = nil; pendingNowNextChannel = nil
             guard settings.preferences.receivers.contains(where: { $0.id == target.receiverID }) else { localError = "Der Receiver dieser Erinnerung ist nicht mehr eingerichtet."; return }
             openedReminder = target; needsReminderSelection = true
             settings.preferences.selectedReceiverID = target.receiverID; settings.persist()
@@ -139,8 +145,13 @@ struct MainWindow: View {
         }
         .task(id: nowGuideQueryID) {
             if !demo, section != .guide {
-                nowGuide.reset(); nowGuide.window = GuideWindow(start: Date(), duration: .six)
-                await nowGuide.load(channels: currentGuideChannels, client: channels.client)
+                while !Task.isCancelled {
+                    await nowGuide.ensureNowNext(channels: currentGuideChannels, client: channels.client, timeline: guide,
+                                                cacheDirectory: settings.paths?.cache.appendingPathComponent("EPG", isDirectory: true))
+                    guard !Task.isCancelled, channels.client != nil,
+                          let next = nowGuide.nextNowNextCheck(channels: currentGuideChannels, after: Date()) else { return }
+                    do { try await Task.sleep(for: .seconds(max(0.05, next.timeIntervalSinceNow))) } catch { return }
+                }
             }
         }
         .task(id: "\(guideQueryID)|\(nowGuideQueryID)|\(settings.preferences.epgRefreshMinutes)|\(settings.preferences.epgRefreshStartDate?.timeIntervalSince1970 ?? 0)") {
@@ -157,14 +168,15 @@ struct MainWindow: View {
                     guard !Task.isCancelled else { return }
                     await receiverTimers.load(using: channels.client)
                 } else {
-                    nowGuide.window = GuideWindow(start: Date(), duration: .six)
-                    await nowGuide.refresh(channels: currentGuideChannels, client: channels.client)
+                    await nowGuide.ensureNowNext(channels: currentGuideChannels, client: channels.client, timeline: guide,
+                                                cacheDirectory: settings.paths?.cache.appendingPathComponent("EPG", isDirectory: true), force: true)
                 }
             }
         }
         .onChange(of: section) { _, value in
             if value == .television || value == .multiview { playback.setMultiview(value == .multiview) }
             if value != .recordings { library.stopPlayback() }
+            if value != .guide { pendingNowNextSelection = nil; pendingNowNextChannel = nil }
         }
         .onChange(of: settings.preferences) { settings.persist() }
         .sheet(isPresented: $showAutoTimer, onDismiss: {
@@ -194,7 +206,7 @@ struct MainWindow: View {
             guard !Task.isCancelled, sleepDeadline == deadline else { return }
             restoreTask?.cancel(); playback.stopAll(); library.stopPlayback(); videoOnly.exit(); sleepDeadline = nil
         }
-        .onDisappear { restoreTask?.cancel(); videoOnly.exit(); playback.stopAll(); library.reset(); recording.stop() }
+        .onDisappear { restoreTask?.cancel(); bouquetTask?.cancel(); videoOnly.exit(); playback.stopAll(); library.reset(); recording.stop() }
     }
 
     private var appContent: some View {
@@ -211,6 +223,15 @@ struct MainWindow: View {
                 GuideView(store: guide, channels: guideChannels, picons: channels.picons, settings: settings, playback: playback, demo: demo, reminders: reminders, recording: recording, statusDate: guideStatusDate, timers: receiverTimers.timers, timerError: receiverTimers.error.map { settings.language.localized($0) }, onPlay: { channel in play(channel, index: 0) }, onPicon: { channel in await channels.loadPicon(channel) }, onSchedule: { event, channel in
                     timerRequest = TimerRequest(programme: event, channel: channel)
                 }, onEPGRefresh: { showEPGRefresh = true }, onAutoTimer: { showAutoTimer = true })
+            } else if section == .nowNext {
+                NowNextView(channels: filteredChannels, bouquets: channels.bouquets, selectedBouquetID: bouquetSelection,
+                            favoritesOnly: $favoritesOnly, search: $search, events: demo ? guide.events : nowGuide.events,
+                            errors: nowGuide.errors, isLoading: !demo && nowGuide.isLoading, picons: channels.picons,
+                            language: settings.language, piconRevision: "\(settings.connectionRevision)|\(settings.selectedReceiver?.id.uuidString ?? "")",
+                            demo: demo, isMetadataLoading: channels.isLoading,
+                            onPicon: { channel in await channels.loadPicon(channel) },
+                            onProgramme: openNowNextProgramme, onPlay: { channel in section = .television; play(channel, index: 0) },
+                            onRefresh: refreshChannels)
             } else if section == .recordings {
                 ReceiverRecordingsView(store: library, client: demo ? nil : channels.client, settings: settings, onPlay: {
                     restoreTask?.cancel(); playback.stopAll(); videoOnly.exit()
@@ -242,8 +263,9 @@ struct MainWindow: View {
 
     @ToolbarContentBuilder private var appToolbar: some ToolbarContent {
             ToolbarItem(placement: .principal) {
-                Picker("Ansicht", selection: $section) { ForEach(MainSection.allCases, id: \.self) { Text(LocalizedStringKey($0.rawValue)).tag($0) } }
-                    .pickerStyle(.segmented).frame(width: 440)
+                sectionPicker
+                    .pickerStyle(.segmented)
+                    .fixedSize(horizontal: true, vertical: false)
             }
             ToolbarItem(placement: .automatic) {
                 if !demo {
@@ -280,6 +302,12 @@ struct MainWindow: View {
                     .help("Nur das ausgewählte Video zeigen · Escape zum Zurückkehren")
                     .disabled(section == .recordings || (!demo && playback.slots[playback.targetIndex].channel == nil))
             }
+    }
+
+    private var sectionPicker: some View {
+        Picker("Ansicht", selection: $section) {
+            ForEach(MainSection.allCases, id: \.self) { Text(LocalizedStringKey($0.rawValue)).tag($0) }
+        }
     }
 
     private var recordingStatus: some View {
@@ -340,10 +368,32 @@ struct MainWindow: View {
         Binding(get: { playback.volume }, set: { playback.setVolume($0) })
     }
 
+    private var bouquetSelection: Binding<String?> {
+        Binding(get: { channels.selectedBouquetID }, set: { selectBouquet($0) })
+    }
+
+    private func refreshChannels() {
+        guide.invalidateTimelineCache(); nowGuide.invalidateNowNext()
+        Task { await channels.refresh() }
+    }
+
+    private func selectBouquet(_ id: String?) {
+        guard !demo, let id, id != channels.selectedBouquetID,
+              let profile = settings.selectedReceiver,
+              let bouquet = channels.bouquets.first(where: { $0.id == id }) else { return }
+        bouquetTask?.cancel()
+        channels.selectedBouquetID = id
+        bouquetTask = Task {
+            guard !Task.isCancelled, settings.selectedReceiver == profile,
+                  channels.client?.profile == profile, channels.selectedBouquetID == id else { return }
+            await channels.loadChannels(in: bouquet)
+        }
+    }
+
     private var television: some View {
         VStack(spacing: 0) {
             HStack(spacing: 12) {
-                Picker("Bouquet", selection: $channels.selectedBouquetID) {
+                Picker("Bouquet", selection: bouquetSelection) {
                     ForEach(channels.bouquets) { Text(demo ? settings.language.localized($0.name) : $0.name).tag(Optional($0.id)) }
                 }.frame(maxWidth: 280)
                 Toggle("Favoriten", systemImage: "star.fill", isOn: $favoritesOnly).toggleStyle(.button).disabled(demo)
@@ -354,7 +404,7 @@ struct MainWindow: View {
                     }.frame(width: 130)
                 }
                 TextField("Sender suchen", text: $search).textFieldStyle(.roundedBorder).frame(width: 190)
-                Button("Neu laden", systemImage: "arrow.clockwise") { Task { guide.invalidateTimelineCache(); await channels.refresh() } }.labelStyle(.iconOnly).disabled(channels.isLoading)
+                Button("Neu laden", systemImage: "arrow.clockwise", action: refreshChannels).labelStyle(.iconOnly).disabled(channels.isLoading)
             }.padding(.horizontal, 20).padding(.vertical, 12)
             GeometryReader { geometry in
                 HStack(spacing: 12) {
@@ -383,10 +433,6 @@ struct MainWindow: View {
                 }.padding(.horizontal, 24).padding(.vertical, 12)
             }
             senderShelf
-        }
-        .task(id: channels.selectedBouquetID) {
-            guard !demo, let bouquet = channels.bouquets.first(where: { $0.id == channels.selectedBouquetID }) else { return }
-            await channels.loadChannels(in: bouquet)
         }
     }
 
@@ -475,8 +521,28 @@ struct MainWindow: View {
         if finish { needsReminderSelection = false }
         guide.selection = guide.events[target.programme.channelID]?.first(where: { $0.id == target.programme.id }) ?? target.programme
     }
+    private func openNowNextProgramme(_ programme: Programme, channel: Channel) {
+        videoOnly.exit()
+        guide.timelineRange = GuideTimelineRange(containing: programme.start)
+        guide.window.start = programme.start
+        if demo {
+            guide.selection = guide.events[programme.channelID]?.first { $0.id == programme.id } ?? programme
+            section = .guide
+        } else {
+            pendingNowNextSelection = programme
+            pendingNowNextChannel = channel
+            section = .guide
+        }
+    }
+    private func applyNowNextSelection() {
+        guard let programme = pendingNowNextSelection else { return }
+        pendingNowNextSelection = nil
+        guide.selection = guide.events[programme.channelID]?.first { $0.id == programme.id } ?? programme
+    }
     private func connect(loadMetadata: Bool) async {
+        bouquetTask?.cancel()
         restoreTask?.cancel(); timerRequest = nil; showPresets = false; showAutoTimer = false; receiverTimers.reset(); library.reset()
+        pendingNowNextSelection = nil; pendingNowNextChannel = nil
         playback.stopAll(); presetGuideChannels = []; guide.reset(); nowGuide.reset(); guide.window.duration = settings.preferences.guideDuration; localError = nil
         if demo {
             channels.loadDemo()

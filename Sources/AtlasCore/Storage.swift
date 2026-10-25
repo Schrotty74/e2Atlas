@@ -32,19 +32,19 @@ public struct PreferencesStore: Sendable {
         guard FileManager.default.fileExists(atPath: fileURL.path) else { return AppPreferences() }
         do {
             let value = try JSONDecoder().decode(AppPreferences.self, from: Data(contentsOf: fileURL))
-            try validate(value)
+            try Self.validate(value)
             return value
         } catch { throw AtlasFailure.storage("Die gespeicherten Einstellungen konnten nicht gelesen werden. Die Datei bleibt erhalten.") }
     }
     public func save(_ preferences: AppPreferences) throws {
         do {
-            try validate(preferences)
+            try Self.validate(preferences)
             try FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
             let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
             try encoder.encode(preferences).write(to: fileURL, options: .atomic)
         } catch { throw AtlasFailure.storage("Die Einstellungen konnten nicht gespeichert werden.") }
     }
-    private func validate(_ value: AppPreferences) throws {
+    public static func validate(_ value: AppPreferences) throws {
         guard value.schemaVersion == 1, value.receivers.count <= 3,
               Set(value.receivers.map(\.id)).count == value.receivers.count,
               value.receivers.allSatisfy({ !$0.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !$0.address.isEmpty && (1...65535).contains($0.streamPort) }),

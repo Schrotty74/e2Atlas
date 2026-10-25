@@ -19,7 +19,7 @@ targets={n:ref(ident('target:'+n)) for n in names}
 products={n:ref(put('product:'+n,'PBXFileReference',explicitFileType='wrapper.application' if n=='e2Atlas' else 'wrapper.framework',includeInIndex=0,path='e2Atlas Dev.app' if n=='e2Atlas' else n+'.framework',sourceTree='BUILT_PRODUCTS_DIR')) for n in names}
 vlc=file('Build/Dependencies/VLCKit - binary package/VLCKit.xcframework/macos-arm64_x86_64/VLCKit.framework','wrapper.framework')
 allfiles=[vlc]; depmap={'AtlasCore':[],'AtlasRecording':[],'AtlasReceiver':['AtlasCore'],'AtlasThemes':[],'AtlasPlayback':['AtlasCore'],'e2Atlas':modules}
-base={'SDKROOT':'macosx','MACOSX_DEPLOYMENT_TARGET':'26.0','ARCHS':'arm64','SWIFT_VERSION':'6.0','SWIFT_STRICT_CONCURRENCY':'complete','SWIFT_EMIT_LOC_STRINGS':'YES','CLANG_ENABLE_MODULES':'YES','CODE_SIGN_IDENTITY':'-','CODE_SIGN_STYLE':'Manual','DEVELOPMENT_TEAM':'','ENABLE_USER_SCRIPT_SANDBOXING':'NO','E2ATLAS_APP_NAME':'e2Atlas Dev','E2ATLAS_BUNDLE_IDENTIFIER':'io.github.schrotty74.e2atlas.development','E2ATLAS_BUILD_CHANNEL':'dev','MARKETING_VERSION':'0.1.0','CURRENT_PROJECT_VERSION':'4','E2ATLAS_RELEASE_VERSION':'0.1.0-dev','OTHER_SWIFT_FLAGS':['$(inherited)','-debug-prefix-map','"$(SRCROOT)=."','-file-prefix-map','"$(SRCROOT)=."'],'FRAMEWORK_SEARCH_PATHS':['$(inherited)','"$(SRCROOT)/Build/Dependencies/VLCKit - binary package/VLCKit.xcframework/macos-arm64_x86_64"']}
+base={'SDKROOT':'macosx','MACOSX_DEPLOYMENT_TARGET':'26.0','ARCHS':'arm64','SWIFT_VERSION':'6.0','SWIFT_STRICT_CONCURRENCY':'complete','SWIFT_EMIT_LOC_STRINGS':'YES','CLANG_ENABLE_MODULES':'YES','CODE_SIGN_IDENTITY':'-','CODE_SIGN_STYLE':'Manual','DEVELOPMENT_TEAM':'','ENABLE_USER_SCRIPT_SANDBOXING':'NO','E2ATLAS_APP_NAME':'e2Atlas Dev','E2ATLAS_BUNDLE_IDENTIFIER':'io.github.schrotty74.e2atlas.development','E2ATLAS_BUILD_CHANNEL':'dev','MARKETING_VERSION':'0.1.0','CURRENT_PROJECT_VERSION':'2','E2ATLAS_RELEASE_VERSION':'0.1.0-dev','OTHER_SWIFT_FLAGS':['$(inherited)','-debug-prefix-map','"$(SRCROOT)=."','-file-prefix-map','"$(SRCROOT)=."'],'FRAMEWORK_SEARCH_PATHS':['$(inherited)','"$(SRCROOT)/Build/Dependencies/VLCKit - binary package/VLCKit.xcframework/macos-arm64_x86_64"']}
 def configs(key, extra):
     cs=[]
     for c in ['Debug','Release']:
@@ -57,7 +57,7 @@ testfiles=[]
 for p in sorted((root/'Tests').rglob('*.swift')):
     f=file(p.relative_to(root).as_posix(),'sourcecode.swift'); allfiles.append(f); testfiles.append(build('test'+str(p.relative_to(root)),f))
 # Compile selected app state with synthetic fixtures, without launching the app or reading user settings.
-for path in ['Sources/e2Atlas/State/PlaybackStore.swift', 'Sources/e2Atlas/State/GuideStore.swift', 'Sources/e2Atlas/State/ChannelStore.swift']:
+for path in ['Sources/e2Atlas/State/PlaybackStore.swift', 'Sources/e2Atlas/State/GuideStore.swift', 'Sources/e2Atlas/State/ChannelStore.swift', 'Sources/e2Atlas/State/SettingsArchive.swift']:
     testfiles.append(build('testappstate'+path, ref(ident('file:'+path))))
 testdeps=[]
 for d in modules:

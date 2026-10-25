@@ -12,6 +12,7 @@ struct AppSettingsView: View {
             Tab("Receiver", systemImage: "tv") { ReceiverManagementView(settings: settings) }
             Tab("EPG", systemImage: "calendar") { EPGSettingsView(settings: settings) }
             Tab("Darstellung", systemImage: "paintpalette") { ThemeSettingsView(settings: settings, themes: themes) }
+            Tab("Sicherung", systemImage: "square.and.arrow.up.on.square") { SettingsTransferView(settings: settings, themes: themes) }
             Tab("About", systemImage: "info.circle") { AboutSettingsView() }
         }
         .onChange(of: settings.preferences) { settings.persist() }
