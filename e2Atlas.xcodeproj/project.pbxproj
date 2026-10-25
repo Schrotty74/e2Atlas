@@ -1678,7 +1678,7 @@
 				"E2ATLAS_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas.development";
 				"E2ATLAS_BUILD_CHANNEL" = "dev";
 				"MARKETING_VERSION" = "0.1.0";
-				"CURRENT_PROJECT_VERSION" = "2";
+				"CURRENT_PROJECT_VERSION" = "5";
 				"E2ATLAS_RELEASE_VERSION" = "0.1.0-dev";
 				"OTHER_SWIFT_FLAGS" = ("$(inherited)", "-debug-prefix-map", "\"$(SRCROOT)=.\"", "-file-prefix-map", "\"$(SRCROOT)=.\"");
 				"FRAMEWORK_SEARCH_PATHS" = ("$(inherited)", "\"$(SRCROOT)/Build/Dependencies/VLCKit - binary package/VLCKit.xcframework/macos-arm64_x86_64\"");
@@ -1706,7 +1706,7 @@
 				"E2ATLAS_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas.development";
 				"E2ATLAS_BUILD_CHANNEL" = "dev";
 				"MARKETING_VERSION" = "0.1.0";
-				"CURRENT_PROJECT_VERSION" = "2";
+				"CURRENT_PROJECT_VERSION" = "5";
 				"E2ATLAS_RELEASE_VERSION" = "0.1.0-dev";
 				"OTHER_SWIFT_FLAGS" = ("$(inherited)", "-debug-prefix-map", "\"$(SRCROOT)=.\"", "-file-prefix-map", "\"$(SRCROOT)=.\"");
 				"FRAMEWORK_SEARCH_PATHS" = ("$(inherited)", "\"$(SRCROOT)/Build/Dependencies/VLCKit - binary package/VLCKit.xcframework/macos-arm64_x86_64\"");
