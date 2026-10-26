@@ -20,7 +20,7 @@ Beachte das bestätigte Versionsschema in `AGENTS.md`: drei Zahlen mit der Endun
 
 Fasse die notwendigen Prüfungen zu einem Abschlusscheck zusammen. Wiederhole nach einer Korrektur nur betroffene Teile. Changelog und Release-Notes verwenden das Beta-1-Muster.
 
-Aktueller Stand: Final 1.0.0-final, Build 1, wird im Checkout Local/Channels/Final auf main direkt aus dem bestätigten Dev-55-Quellstand erstellt und auf Nutzerwunsch als reguläres GitHub-Release veröffentlicht. 34 gezielte Tests in drei Suites der Release-Konfiguration bestanden; Final-Build, Paketprüfung und Veröffentlichung stehen noch aus. Dev 55 bleibt lokal; Beta 0.5.0-beta, Build 5, auf f98575f bleibt unverändert. Final verwendet e2Atlas und io.github.schrotty74.e2atlas mit eigenen Daten, Caches und Schlüsselbund-Services. Der vorgemerkte Dateimanager ist kein Umsetzungsauftrag.
+Aktueller Stand: Final 1.0.0-final, Build 1, wird im Checkout Local/Channels/Final auf main direkt aus dem bestätigten Dev-55-Quellstand erstellt und auf Nutzerwunsch als reguläres GitHub-Release veröffentlicht. 34 gezielte Tests in drei Suites der Release-Konfiguration bestanden. Startfehler der ersten Ad-hoc-Release-Signatur korrigiert; endgültige App, Start, Signatur, ZIP/DMG und Prüfsummen geprüft. Veröffentlichung wird vorbereitet. Dev 55 bleibt lokal; Beta 0.5.0-beta, Build 5, auf f98575f bleibt unverändert. Final verwendet e2Atlas und io.github.schrotty74.e2atlas mit eigenen Daten, Caches und Schlüsselbund-Services. Der vorgemerkte Dateimanager ist kein Umsetzungsauftrag.
 
 Aktueller Auftrag:
 

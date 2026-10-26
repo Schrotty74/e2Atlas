@@ -1,6 +1,6 @@
 # Nächste Schritte
 
-Stand: 26. Oktober 2026. Final 1.0.0-final, Build 1, wird auf ausdrücklichen Auftrag direkt aus Dev 55 gebaut und auf GitHub veröffentlicht. 34 gezielte Tests in drei Suites der Release-Konfiguration bestanden; Final-Build und Paketprüfung stehen noch aus. Beta 0.5.0 bleibt unverändert. Folgende Validierungen sind keine automatisch abzuarbeitende Liste.
+Stand: 26. Oktober 2026. Final 1.0.0-final, Build 1, wird auf ausdrücklichen Auftrag direkt aus Dev 55 gebaut und auf GitHub veröffentlicht. 34 gezielte Tests in drei Suites der Release-Konfiguration sowie korrigierter Final-Build, Start-, Paket- und Signaturprüfung bestanden. Veröffentlichung wird vorbereitet. Beta 0.5.0 bleibt unverändert. Folgende Validierungen sind keine automatisch abzuarbeitende Liste.
 
 - Neue Dev-Darstellung im normalen Betrieb und in schmalen Fenstern bestätigen: Bedienleiste außerhalb des Videobilds, lesbarer Sendername und eindeutig erkennbares Video-Vollbild. Native Demo-Prüfung von TV, Vierfach-Multiview und Video-Vollbild/Escape bestanden; schmales Fenster noch nicht bestätigt.
 - Export/Import und Jetzt und danach im normalen Betrieb bestätigen: eigene Sicherung wieder einlesen, neue Receiver bei Bedarf mit Passwort ergänzen, eigene Themes sowie reale Bouquet-/Favoritenwechsel und Sendungsdetails prüfen. Übernahme des Dateiformats und Rücknahme bei Speicherfehlern sind gezielt automatisiert geprüft; eine echte Nutzerkonfiguration wurde nicht importiert. Die Funktionen sind seit Beta 0.5.0 veröffentlicht.
