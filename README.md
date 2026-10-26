@@ -30,19 +30,19 @@ See the complete [feature overview](FEATURES.md) for playback controls, themes, 
 
 ## Screenshots
 
-Click a preview to open the full-resolution image. These historical screenshots show the German interface from an earlier beta; the receiver address has been anonymized.
+These screenshots show the German interface of e2Atlas 1.0.0-final. Click a preview to open the full-resolution image.
 
 <table>
 <tr>
-<td align="center"><a href="Documentation/Screenshots/full/live-tv.png?raw=true"><img src="Documentation/Screenshots/previews/live-tv.png" width="320" alt="e2Atlas live TV player on macOS with receiver channel logos and volume controls"></a><br>Live TV</td>
-<td align="center"><a href="Documentation/Screenshots/full/multiview.png?raw=true"><img src="Documentation/Screenshots/previews/multiview.png" width="320" alt="e2Atlas Enigma2 multiview with four TV streams and one active audio source"></a><br>Four-channel multiview</td>
+<td align="center"><a href="Documentation/Screenshots/full/live-tv.png?raw=true"><img src="Documentation/Screenshots/previews/live-tv.png" width="320" alt="e2Atlas TV view with channel selection and controls below the picture"></a><br>Live TV</td>
+<td align="center"><a href="Documentation/Screenshots/full/multiview.png?raw=true"><img src="Documentation/Screenshots/previews/multiview.png" width="320" alt="e2Atlas multiview with four picture slots and separate controls"></a><br>Multiview</td>
 </tr>
 <tr>
-<td align="center"><a href="Documentation/Screenshots/full/programme-guide.png?raw=true"><img src="Documentation/Screenshots/previews/programme-guide.png" width="320" alt="e2Atlas electronic program guide with a two-hour schedule and live TV preview"></a><br>Electronic program guide</td>
-<td align="center"><a href="Documentation/Screenshots/full/receivers.png?raw=true"><img src="Documentation/Screenshots/previews/receivers.png" width="320" alt="e2Atlas receiver settings with an anonymized address and room for three receivers"></a><br>Receiver settings</td>
+<td align="center"><a href="Documentation/Screenshots/full/now-next.png?raw=true"><img src="Documentation/Screenshots/previews/now-next.png" width="320" alt="Current and next programmes with progress and channel playback buttons"></a><br>Now and Next</td>
+<td align="center"><a href="Documentation/Screenshots/full/programme-guide.png?raw=true"><img src="Documentation/Screenshots/previews/programme-guide.png" width="320" alt="e2Atlas programme guide with channel logos, listings and EPG controls"></a><br>Programme guide</td>
 </tr>
 <tr>
-<td colspan="2" align="center"><a href="Documentation/Screenshots/full/welcome.png?raw=true"><img src="Documentation/Screenshots/previews/welcome.png" width="320" alt="e2Atlas welcome screen for connecting an Enigma2 receiver through OpenWebif"></a><br>First-run setup</td>
+<td colspan="2" align="center"><a href="Documentation/Screenshots/full/recordings.png?raw=true"><img src="Documentation/Screenshots/previews/recordings.png" width="320" alt="Receiver recordings view with storage capacity and timer filters"></a><br>Recordings and storage</td>
 </tr>
 </table>
 

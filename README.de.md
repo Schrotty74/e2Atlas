@@ -30,19 +30,19 @@ Die vollständige [Funktionsübersicht](FEATURES.de.md) beschreibt auch Wiederga
 
 ## Screenshots
 
-Ein Klick auf eine Vorschau öffnet das Bild in voller Auflösung. Diese historischen Screenshots zeigen die deutsche Oberfläche einer früheren Beta; die Receiver-Adresse wurde anonymisiert.
+Die Bilder zeigen die deutsche Oberfläche von e2Atlas 1.0.0-final. Ein Klick auf eine Vorschau öffnet das Bild in voller Auflösung.
 
 <table>
 <tr>
-<td align="center"><a href="Documentation/Screenshots/full/live-tv.png?raw=true"><img src="Documentation/Screenshots/previews/live-tv.png" width="320" alt="Live-TV mit e2Atlas auf macOS, Senderlogos vom Receiver und Lautstärkeregler"></a><br>Live-TV</td>
-<td align="center"><a href="Documentation/Screenshots/full/multiview.png?raw=true"><img src="Documentation/Screenshots/previews/multiview.png" width="320" alt="Enigma2-Multiview in e2Atlas mit vier TV-Streams und einer aktiven Tonquelle"></a><br>Multiview mit vier Sendern</td>
+<td align="center"><a href="Documentation/Screenshots/full/live-tv.png?raw=true"><img src="Documentation/Screenshots/previews/live-tv.png" width="320" alt="TV-Ansicht von e2Atlas mit Senderauswahl und Bedienleiste unter dem Bild"></a><br>Live-TV</td>
+<td align="center"><a href="Documentation/Screenshots/full/multiview.png?raw=true"><img src="Documentation/Screenshots/previews/multiview.png" width="320" alt="Multiview in e2Atlas mit vier Bildplätzen und eigenen Bedienelementen"></a><br>Multiview</td>
 </tr>
 <tr>
-<td align="center"><a href="Documentation/Screenshots/full/programme-guide.png?raw=true"><img src="Documentation/Screenshots/previews/programme-guide.png" width="320" alt="Elektronischer Programmführer von e2Atlas mit Zwei-Stunden-Ansicht und Live-TV-Vorschau"></a><br>Elektronischer Programmführer</td>
-<td align="center"><a href="Documentation/Screenshots/full/receivers.png?raw=true"><img src="Documentation/Screenshots/previews/receivers.png" width="320" alt="Receiver-Einstellungen von e2Atlas mit anonymisierter Adresse und Platz für drei Geräte"></a><br>Receiver-Einstellungen</td>
+<td align="center"><a href="Documentation/Screenshots/full/now-next.png?raw=true"><img src="Documentation/Screenshots/previews/now-next.png" width="320" alt="Aktuelle und nächste Sendungen mit Fortschritt und Wiedergabeschaltflächen"></a><br>Jetzt und danach</td>
+<td align="center"><a href="Documentation/Screenshots/full/programme-guide.png?raw=true"><img src="Documentation/Screenshots/previews/programme-guide.png" width="320" alt="Programmführer von e2Atlas mit Senderlogos, Sendungen und EPG-Steuerung"></a><br>Programmführer</td>
 </tr>
 <tr>
-<td colspan="2" align="center"><a href="Documentation/Screenshots/full/welcome.png?raw=true"><img src="Documentation/Screenshots/previews/welcome.png" width="320" alt="Willkommensfenster von e2Atlas zum Verbinden eines Enigma2-Receivers über OpenWebif"></a><br>Ersteinrichtung</td>
+<td colspan="2" align="center"><a href="Documentation/Screenshots/full/recordings.png?raw=true"><img src="Documentation/Screenshots/previews/recordings.png" width="320" alt="Receiver-Aufnahmeansicht mit Speicherplatz und Timerfiltern"></a><br>Aufnahmen und Speicherplatz</td>
 </tr>
 </table>
 

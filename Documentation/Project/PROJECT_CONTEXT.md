@@ -62,3 +62,10 @@ Ein Dateibereich für Transfers zwischen Mac und Receiver und später ein Texted
 - [e2Atlas 1.0.0-final](https://github.com/Schrotty74/e2Atlas/releases/tag/v1.0.0-final) ist als reguläres, aktuelles GitHub-Release veröffentlicht, kein Vorabrelease und kein Entwurf. Tag v1.0.0-final verweist auf 5d53575. ZIP, DMG und SHA256SUMS sind vollständig hochgeladen; alle drei serverseitigen Größen und SHA-256-Digests stimmen mit den geprüften lokalen Dateien überein.
 - main enthält jetzt den freigegebenen Dev-55-Funktionsstand mit Final-Metadaten und -Dokumentation. Beta bleibt f98575f, Dev bleibt lokal auf App-Build 55. Final-App lokal unter `Build/Final/e2Atlas.app`; Release-Ausgaben im Final-Checkout unter `dist/releases/final/1.0.0-final`. Kein weiterer Build-, Release- oder Final-Auftrag offen. Weitere main-Änderungen nur mit passendem Auftrag.
 - Erforderliche Build-/Paketlogs und die bereinigte Startdiagnose bleiben lokal als Nachweise. Eigene temporäre Release-Notes, Konsolenkopien und Arbeitsordner nach Abschluss entfernt.
+
+
+## Neue öffentliche Screenshots – 26. Oktober 2026
+
+- Auf ausdrücklichen Nutzerauftrag fünf bereitgestellte Screenshots für Fernsehen, Multiview, Jetzt und danach, Programmführer und Aufnahmen auf main und beta ersetzt beziehungsweise neu zugeordnet. Die bisherigen Bilder von Receiver-Einstellungen und Ersteinrichtung aus der aktuellen Galerie entfernt. App-Icon unverändert.
+- Vollauflösende PNG-Bilddaten unverändert übernommen; nicht darstellungsrelevante Metadaten entfernt. Vorschauen mit 640 Pixeln Breite und erhaltenem Seitenverhältnis erstellt. Deutsche und englische README-Galerien verlinken die fünf neuen Ansichten. Auf beta ist der gezeigte Final-Stand mit möglichen Abweichungen der Bedienelemente ausdrücklich bezeichnet.
+- Ausschließlich Bilder, README-Galerien und dieser Kontext geändert. Keine App-Builds, Versions-, Tag- oder Downloadänderungen. Veröffentlichung auf beiden Branches durch diesen Screenshot-Auftrag ausdrücklich freigegeben.
