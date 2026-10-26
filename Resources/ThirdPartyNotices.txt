@@ -1,0 +1,9 @@
+e2Atlas verwendet VLCKit 3.7.3 von VideoLAN für die Wiedergabe direkter Receiver-Streams.
+
+VLCKit wird als separate, dynamische Bibliothek unter LGPL-2.1-or-later eingebunden. Der vollständige Lizenztext liegt in VLCKit-LICENSE.txt. Die Bibliothek ist separat ersetzbar; nach dem Austausch kann eine erneute lokale Signierung des App-Bundles erforderlich sein.
+
+Quellcode: https://code.videolan.org/videolan/VLCKit/-/tree/3.7.3
+Projekt: https://www.videolan.org/vlc/libvlc.html
+Originalpaket: https://download.videolan.org/cocoapods/prod/VLCKit-3.7.3-319ed2c0-79128878.tar.xz
+
+AVFoundation, AVKit, SwiftUI und die übrigen Apple-Systemframeworks werden durch macOS bereitgestellt.

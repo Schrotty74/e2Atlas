@@ -1,0 +1,1744 @@
+// !$*UTF8*$!
+{
+	"archiveVersion" = 1;
+	"classes" = {
+	};
+	"objectVersion" = 56;
+	"objects" = {
+		"DDB4575E7A430A0D6B921317" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.framework";
+			"includeInIndex" = 0;
+			"path" = "AtlasCore.framework";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"4DF537270662494B15A9C168" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.framework";
+			"includeInIndex" = 0;
+			"path" = "AtlasReceiver.framework";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"62DE7522E469BD6EDB67AF7E" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.framework";
+			"includeInIndex" = 0;
+			"path" = "AtlasThemes.framework";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"2601D25E022E0BBEB8C51AA3" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.framework";
+			"includeInIndex" = 0;
+			"path" = "AtlasPlayback.framework";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"C43B69E87C78A78FF0F12810" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.framework";
+			"includeInIndex" = 0;
+			"path" = "AtlasRecording.framework";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"B05B5A641AAB528D0A4B448A" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.application";
+			"includeInIndex" = 0;
+			"path" = "e2Atlas.app";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"422BAFF6C8FAAF4516F81EA1" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "wrapper.framework";
+			"path" = "Build/Dependencies/VLCKit - binary package/VLCKit.xcframework/macos-arm64_x86_64/VLCKit.framework";
+			"sourceTree" = "<group>";
+		};
+		"AC1413D36F851575F57E0723" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasCore/AppLanguage.swift";
+			"sourceTree" = "<group>";
+		};
+		"E24C803B4943F64B5B5B0F82" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = AC1413D36F851575F57E0723;
+		};
+		"9827DF717831C6BB0E9EC037" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasCore/FavoriteChannel.swift";
+			"sourceTree" = "<group>";
+		};
+		"06D7C74B2AF35CFFEE85F4FD" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 9827DF717831C6BB0E9EC037;
+		};
+		"687C399CCF094D37D0797D58" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasCore/Models.swift";
+			"sourceTree" = "<group>";
+		};
+		"A3D5C7289FDC09CC29072EE0" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 687C399CCF094D37D0797D58;
+		};
+		"7E04E4EF5DCE32CAE0691BF6" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasCore/NowNextProgramme.swift";
+			"sourceTree" = "<group>";
+		};
+		"E461E0AB0789A20CC26D21C3" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 7E04E4EF5DCE32CAE0691BF6;
+		};
+		"F8199970C888047A8559961B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasCore/Preferences.swift";
+			"sourceTree" = "<group>";
+		};
+		"46238E82FD04868881B7F3B6" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = F8199970C888047A8559961B;
+		};
+		"EDCBB114BBB2615C4FAF39D4" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasCore/ProgrammeReminder.swift";
+			"sourceTree" = "<group>";
+		};
+		"4E5C71E6B459000D9AFC09BE" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = EDCBB114BBB2615C4FAF39D4;
+		};
+		"AF976E9F4640775515C6CD6D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasCore/RecordingPlaybackCheckpoint.swift";
+			"sourceTree" = "<group>";
+		};
+		"472C07CA67BB5AA424FD1366" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = AF976E9F4640775515C6CD6D;
+		};
+		"62680C1C511C65591C8E9EEE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasCore/Storage.swift";
+			"sourceTree" = "<group>";
+		};
+		"7526A3389662818564198244" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 62680C1C511C65591C8E9EEE;
+		};
+		"160AADDEA49205750EAAF006" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (E24C803B4943F64B5B5B0F82, 06D7C74B2AF35CFFEE85F4FD, A3D5C7289FDC09CC29072EE0, E461E0AB0789A20CC26D21C3, 46238E82FD04868881B7F3B6, 4E5C71E6B459000D9AFC09BE, 472C07CA67BB5AA424FD1366, 7526A3389662818564198244);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"F9D7389CCD15F4EBBD3E11E6" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"B47F0318AFD3B498EED7F754" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"BFA0402FDEC348B383BEEF3E" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "AtlasCore";
+				"PRODUCT_MODULE_NAME" = "AtlasCore";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas.atlascore";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"DEFINES_MODULE" = "YES";
+				"MACH_O_TYPE" = "staticlib";
+				"SKIP_INSTALL" = "YES";
+				"SWIFT_INSTALL_OBJC_HEADER" = "NO";
+				"ENABLE_TESTABILITY" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+			};
+			"name" = "Debug";
+		};
+		"D4EC3A9A73DF76DAD2829D3E" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "AtlasCore";
+				"PRODUCT_MODULE_NAME" = "AtlasCore";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas.atlascore";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"DEFINES_MODULE" = "YES";
+				"MACH_O_TYPE" = "staticlib";
+				"SKIP_INSTALL" = "YES";
+				"SWIFT_INSTALL_OBJC_HEADER" = "NO";
+				"ENABLE_TESTABILITY" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "";
+			};
+			"name" = "Release";
+		};
+		"1FC11284AEC2514ACE76F1D7" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (BFA0402FDEC348B383BEEF3E, D4EC3A9A73DF76DAD2829D3E);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"3CE36C3FF8410DB3BF28EC1E" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = 1FC11284AEC2514ACE76F1D7;
+			"buildPhases" = (160AADDEA49205750EAAF006, F9D7389CCD15F4EBBD3E11E6, B47F0318AFD3B498EED7F754);
+			"buildRules" = ();
+			"dependencies" = ();
+			"name" = "AtlasCore";
+			"productName" = "AtlasCore";
+			"productReference" = DDB4575E7A430A0D6B921317;
+			"productType" = "com.apple.product-type.framework";
+		};
+		"622D22025E0AD429E633DE58" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasReceiver/EPGRefresh.swift";
+			"sourceTree" = "<group>";
+		};
+		"4E4807C1CE1909F38D94E037" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 622D22025E0AD429E633DE58;
+		};
+		"215DA9BBA61A68F4E986BD94" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasReceiver/OpenWebifClient+AutoTimer.swift";
+			"sourceTree" = "<group>";
+		};
+		"1CB023CE264FD06EE8A00384" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 215DA9BBA61A68F4E986BD94;
+		};
+		"E4ABB6B288A7FFD28068E42E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasReceiver/OpenWebifClient+Storage.swift";
+			"sourceTree" = "<group>";
+		};
+		"DCB84D47AB073A3ACFA92F59" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = E4ABB6B288A7FFD28068E42E;
+		};
+		"15EEDD7BC317E6A5FAFB8954" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasReceiver/OpenWebifClient.swift";
+			"sourceTree" = "<group>";
+		};
+		"4D413297DB647938126AE870" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 15EEDD7BC317E6A5FAFB8954;
+		};
+		"02F880146722FCFDE036C5E3" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasReceiver/ProgrammeMatching.swift";
+			"sourceTree" = "<group>";
+		};
+		"74F431E4EB99B336E657A67F" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 02F880146722FCFDE036C5E3;
+		};
+		"2A7B66814CD691FAD0CA2392" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasReceiver/ReceiverAddress.swift";
+			"sourceTree" = "<group>";
+		};
+		"85E615E2DE5813B38246BD9B" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 2A7B66814CD691FAD0CA2392;
+		};
+		"1DE45C0D7E3E26B50A3DED2C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasReceiver/ReceiverAutoTimer.swift";
+			"sourceTree" = "<group>";
+		};
+		"766C82EE63B7267AB09A8F26" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 1DE45C0D7E3E26B50A3DED2C;
+		};
+		"F31CAA6D272060C19CE6AF42" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasReceiver/ReceiverHardware.swift";
+			"sourceTree" = "<group>";
+		};
+		"B9C0EBE85A43486639F85188" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = F31CAA6D272060C19CE6AF42;
+		};
+		"928F6EF134B321FE526621C3" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasReceiver/ReceiverRecording.swift";
+			"sourceTree" = "<group>";
+		};
+		"20E627CFE8E992F0D9947F0D" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 928F6EF134B321FE526621C3;
+		};
+		"61F2163E10B63D30303D6D42" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasReceiver/ReceiverStorage.swift";
+			"sourceTree" = "<group>";
+		};
+		"E17C5EDA8B6500763DAE3605" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 61F2163E10B63D30303D6D42;
+		};
+		"B632D07AE118E9F3DE5815F9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasReceiver/ReceiverTimer.swift";
+			"sourceTree" = "<group>";
+		};
+		"7DA0516C042E39B19B1391D9" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = B632D07AE118E9F3DE5815F9;
+		};
+		"76608C77560215F4AF37F4ED" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = DDB4575E7A430A0D6B921317;
+		};
+		"0954C8F9C088465DAB787722" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (4E4807C1CE1909F38D94E037, 1CB023CE264FD06EE8A00384, DCB84D47AB073A3ACFA92F59, 4D413297DB647938126AE870, 74F431E4EB99B336E657A67F, 85E615E2DE5813B38246BD9B, 766C82EE63B7267AB09A8F26, B9C0EBE85A43486639F85188, 20E627CFE8E992F0D9947F0D, E17C5EDA8B6500763DAE3605, 7DA0516C042E39B19B1391D9);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"2C2CCDEED07E12F3CB99D68A" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (76608C77560215F4AF37F4ED);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"1255558197CDD01CED423C03" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"062B875F36B7775431EB6B22" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = 244210E48437B6556980A702;
+			"proxyType" = 1;
+			"remoteGlobalIDString" = 3CE36C3FF8410DB3BF28EC1E;
+			"remoteInfo" = "AtlasCore";
+		};
+		"0BE8FEC06E3CFF70B8A832D3" = {
+			"isa" = "PBXTargetDependency";
+			"target" = 3CE36C3FF8410DB3BF28EC1E;
+			"targetProxy" = 062B875F36B7775431EB6B22;
+		};
+		"11CDAC5D35B1CE2EDD4149B0" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "AtlasReceiver";
+				"PRODUCT_MODULE_NAME" = "AtlasReceiver";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas.atlasreceiver";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"DEFINES_MODULE" = "YES";
+				"MACH_O_TYPE" = "staticlib";
+				"SKIP_INSTALL" = "YES";
+				"SWIFT_INSTALL_OBJC_HEADER" = "NO";
+				"ENABLE_TESTABILITY" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+			};
+			"name" = "Debug";
+		};
+		"0B4DDA9131B80F32A43FE32A" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "AtlasReceiver";
+				"PRODUCT_MODULE_NAME" = "AtlasReceiver";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas.atlasreceiver";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"DEFINES_MODULE" = "YES";
+				"MACH_O_TYPE" = "staticlib";
+				"SKIP_INSTALL" = "YES";
+				"SWIFT_INSTALL_OBJC_HEADER" = "NO";
+				"ENABLE_TESTABILITY" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "";
+			};
+			"name" = "Release";
+		};
+		"F030DB3BE795E03E78114DBB" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (11CDAC5D35B1CE2EDD4149B0, 0B4DDA9131B80F32A43FE32A);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"FC28FF5BDCB9E03B8054A5A2" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = F030DB3BE795E03E78114DBB;
+			"buildPhases" = (0954C8F9C088465DAB787722, 2C2CCDEED07E12F3CB99D68A, 1255558197CDD01CED423C03);
+			"buildRules" = ();
+			"dependencies" = (0BE8FEC06E3CFF70B8A832D3);
+			"name" = "AtlasReceiver";
+			"productName" = "AtlasReceiver";
+			"productReference" = 4DF537270662494B15A9C168;
+			"productType" = "com.apple.product-type.framework";
+		};
+		"65B56D2ED5E8B2DEE03C4D15" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasThemes/Theme.swift";
+			"sourceTree" = "<group>";
+		};
+		"74575440BBFA76CE8A9ABFBF" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 65B56D2ED5E8B2DEE03C4D15;
+		};
+		"CCAA2513D15228B564A3ACF9" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (74575440BBFA76CE8A9ABFBF);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"05470BACC386F4BBE2986A1D" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"B5203FAB01E2541AB3AAA39B" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"A083C41F6917991C6EFF71A9" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "AtlasThemes";
+				"PRODUCT_MODULE_NAME" = "AtlasThemes";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas.atlasthemes";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"DEFINES_MODULE" = "YES";
+				"MACH_O_TYPE" = "staticlib";
+				"SKIP_INSTALL" = "YES";
+				"SWIFT_INSTALL_OBJC_HEADER" = "NO";
+				"ENABLE_TESTABILITY" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+			};
+			"name" = "Debug";
+		};
+		"C29783962D7F749F1EF1B883" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "AtlasThemes";
+				"PRODUCT_MODULE_NAME" = "AtlasThemes";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas.atlasthemes";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"DEFINES_MODULE" = "YES";
+				"MACH_O_TYPE" = "staticlib";
+				"SKIP_INSTALL" = "YES";
+				"SWIFT_INSTALL_OBJC_HEADER" = "NO";
+				"ENABLE_TESTABILITY" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "";
+			};
+			"name" = "Release";
+		};
+		"FDA62BBBE2DAB5B5A52F1341" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (A083C41F6917991C6EFF71A9, C29783962D7F749F1EF1B883);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"BE50B6FF138CE2666C12A3BE" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = FDA62BBBE2DAB5B5A52F1341;
+			"buildPhases" = (CCAA2513D15228B564A3ACF9, 05470BACC386F4BBE2986A1D, B5203FAB01E2541AB3AAA39B);
+			"buildRules" = ();
+			"dependencies" = ();
+			"name" = "AtlasThemes";
+			"productName" = "AtlasThemes";
+			"productReference" = 62DE7522E469BD6EDB67AF7E;
+			"productType" = "com.apple.product-type.framework";
+		};
+		"AD1915EFB6A65F480585744E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasPlayback/PlaybackArrangement.swift";
+			"sourceTree" = "<group>";
+		};
+		"8C4522C1EC4B6D47ED2373F4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = AD1915EFB6A65F480585744E;
+		};
+		"2F63B95AAD3BEE5A8F43C2C2" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasPlayback/PlaybackSlot.swift";
+			"sourceTree" = "<group>";
+		};
+		"C199FF09F2F8E55A7D2D01EE" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 2F63B95AAD3BEE5A8F43C2C2;
+		};
+		"571DE218C47F999206E5C48C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = DDB4575E7A430A0D6B921317;
+		};
+		"248AECCFCC17FBD688BDE2D6" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 422BAFF6C8FAAF4516F81EA1;
+		};
+		"38C2BBFFE9317F9C1B703F4E" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (8C4522C1EC4B6D47ED2373F4, C199FF09F2F8E55A7D2D01EE);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"6C18536A6C637E3C31885823" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (571DE218C47F999206E5C48C, 248AECCFCC17FBD688BDE2D6);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"E7D3799ECC09F5CBC446AA0A" = {
+			"isa" = "PBXShellScriptBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"inputPaths" = ();
+			"outputPaths" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+			"shellPath" = "/bin/bash";
+			"shellScript" = "\"$SRCROOT/Scripts/fetch-vlckit.sh\"\n";
+			"alwaysOutOfDate" = 1;
+			"name" = "Fetch verified VLCKit";
+		};
+		"D14E8FD6AF9355E0106F348D" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"49CEA9E015ABBF787BA8821B" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = 244210E48437B6556980A702;
+			"proxyType" = 1;
+			"remoteGlobalIDString" = 3CE36C3FF8410DB3BF28EC1E;
+			"remoteInfo" = "AtlasCore";
+		};
+		"62D10814A0F85311FD029324" = {
+			"isa" = "PBXTargetDependency";
+			"target" = 3CE36C3FF8410DB3BF28EC1E;
+			"targetProxy" = 49CEA9E015ABBF787BA8821B;
+		};
+		"2E1F18E8D2E2C1D828846147" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "AtlasPlayback";
+				"PRODUCT_MODULE_NAME" = "AtlasPlayback";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas.atlasplayback";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"DEFINES_MODULE" = "YES";
+				"MACH_O_TYPE" = "staticlib";
+				"SKIP_INSTALL" = "YES";
+				"SWIFT_INSTALL_OBJC_HEADER" = "NO";
+				"ENABLE_TESTABILITY" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+			};
+			"name" = "Debug";
+		};
+		"8F7BDD7B09EB096C0DAB313E" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "AtlasPlayback";
+				"PRODUCT_MODULE_NAME" = "AtlasPlayback";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas.atlasplayback";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"DEFINES_MODULE" = "YES";
+				"MACH_O_TYPE" = "staticlib";
+				"SKIP_INSTALL" = "YES";
+				"SWIFT_INSTALL_OBJC_HEADER" = "NO";
+				"ENABLE_TESTABILITY" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "";
+			};
+			"name" = "Release";
+		};
+		"5AC6B49345A79ADD6DB26BDB" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (2E1F18E8D2E2C1D828846147, 8F7BDD7B09EB096C0DAB313E);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"5D0A85C33C95D06DD954CE94" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = 5AC6B49345A79ADD6DB26BDB;
+			"buildPhases" = (E7D3799ECC09F5CBC446AA0A, 38C2BBFFE9317F9C1B703F4E, 6C18536A6C637E3C31885823, D14E8FD6AF9355E0106F348D);
+			"buildRules" = ();
+			"dependencies" = (62D10814A0F85311FD029324);
+			"name" = "AtlasPlayback";
+			"productName" = "AtlasPlayback";
+			"productReference" = 2601D25E022E0BBEB8C51AA3;
+			"productType" = "com.apple.product-type.framework";
+		};
+		"F9744CC7362A558DF67D04F8" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/AtlasRecording/StreamRecorder.swift";
+			"sourceTree" = "<group>";
+		};
+		"D1879862BA6E07E350DD02F2" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = F9744CC7362A558DF67D04F8;
+		};
+		"C6D45B72D52FAAAD9130C4E1" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (D1879862BA6E07E350DD02F2);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"B0D69A6743D0A8CF8C6BF9CB" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"08EDC69099128E438B178927" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = ();
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"F2EBCC16EB928E75793B661A" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "AtlasRecording";
+				"PRODUCT_MODULE_NAME" = "AtlasRecording";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas.atlasrecording";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"DEFINES_MODULE" = "YES";
+				"MACH_O_TYPE" = "staticlib";
+				"SKIP_INSTALL" = "YES";
+				"SWIFT_INSTALL_OBJC_HEADER" = "NO";
+				"ENABLE_TESTABILITY" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+			};
+			"name" = "Debug";
+		};
+		"6D730E133EFE0027F600A5DE" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "AtlasRecording";
+				"PRODUCT_MODULE_NAME" = "AtlasRecording";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas.atlasrecording";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"DEFINES_MODULE" = "YES";
+				"MACH_O_TYPE" = "staticlib";
+				"SKIP_INSTALL" = "YES";
+				"SWIFT_INSTALL_OBJC_HEADER" = "NO";
+				"ENABLE_TESTABILITY" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "";
+			};
+			"name" = "Release";
+		};
+		"C59CFB0C12B89D3853B280E1" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (F2EBCC16EB928E75793B661A, 6D730E133EFE0027F600A5DE);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"07AE048F55EFD6CF2656C753" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = C59CFB0C12B89D3853B280E1;
+			"buildPhases" = (C6D45B72D52FAAAD9130C4E1, B0D69A6743D0A8CF8C6BF9CB, 08EDC69099128E438B178927);
+			"buildRules" = ();
+			"dependencies" = ();
+			"name" = "AtlasRecording";
+			"productName" = "AtlasRecording";
+			"productReference" = C43B69E87C78A78FF0F12810;
+			"productType" = "com.apple.product-type.framework";
+		};
+		"354F9ADBB83F0511C5C9AD08" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/State/ChannelStore.swift";
+			"sourceTree" = "<group>";
+		};
+		"9CFE055829EE9B0A67745D79" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 354F9ADBB83F0511C5C9AD08;
+		};
+		"65391CA182B5B420FF7083CC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/State/DemoData.swift";
+			"sourceTree" = "<group>";
+		};
+		"09013F776983BD3A54273ABD" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 65391CA182B5B420FF7083CC;
+		};
+		"A9A64FC32ECB90CA62462033" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/State/GuideStore.swift";
+			"sourceTree" = "<group>";
+		};
+		"BF357E001D5CDA09F9EB8E57" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = A9A64FC32ECB90CA62462033;
+		};
+		"17D72DE42DD418A980EFF982" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/State/PlaybackStore.swift";
+			"sourceTree" = "<group>";
+		};
+		"9B3BD16A686FAC5C9F8EF3E4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 17D72DE42DD418A980EFF982;
+		};
+		"4D8A9F8AC5A5F1A75CDC8286" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/State/ProgrammeReminderStore.swift";
+			"sourceTree" = "<group>";
+		};
+		"3BD0533CAEE321C8E057D869" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 4D8A9F8AC5A5F1A75CDC8286;
+		};
+		"18B914190E2121BB2FAC5E1B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/State/ReceiverRecordingsStore.swift";
+			"sourceTree" = "<group>";
+		};
+		"F2CB1CF7E23DBE301C710044" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 18B914190E2121BB2FAC5E1B;
+		};
+		"67404384282008DA9D9B4AB9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/State/ReceiverTimerStore.swift";
+			"sourceTree" = "<group>";
+		};
+		"3E806CDE060F733A0856952C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 67404384282008DA9D9B4AB9;
+		};
+		"3A4FC1D6FA2DA2463F0FC7B3" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/State/RecordingStore.swift";
+			"sourceTree" = "<group>";
+		};
+		"A70A260E543568EE82C2C105" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 3A4FC1D6FA2DA2463F0FC7B3;
+		};
+		"96D0FA204C045178EF13384A" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/State/SettingsArchive.swift";
+			"sourceTree" = "<group>";
+		};
+		"94B536B1D12B826A0991E356" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 96D0FA204C045178EF13384A;
+		};
+		"70196A991538E5A4B399366E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/State/SettingsStore.swift";
+			"sourceTree" = "<group>";
+		};
+		"B68568A063262F427AF08FD1" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 70196A991538E5A4B399366E;
+		};
+		"F77E0FA3403260E5C48F3CC9" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/AppLocalizedText.swift";
+			"sourceTree" = "<group>";
+		};
+		"DB762A39AA85D9C96B2D1CA5" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = F77E0FA3403260E5C48F3CC9;
+		};
+		"47FB8CE8A41D6667E1594BFE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/AppSettingsView.swift";
+			"sourceTree" = "<group>";
+		};
+		"0C4248A34F1DEFB9FB21D7A3" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 47FB8CE8A41D6667E1594BFE;
+		};
+		"5E6A86AB275EE25DA1A33ADC" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/Components.swift";
+			"sourceTree" = "<group>";
+		};
+		"418D91BB39CFEC57FDF2BC63" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 5E6A86AB275EE25DA1A33ADC;
+		};
+		"F5520BC8A3929FF4B603A408" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/EPGRefreshView.swift";
+			"sourceTree" = "<group>";
+		};
+		"2CC739418724C7AB0B51E74A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = F5520BC8A3929FF4B603A408;
+		};
+		"B74F95C2CCBB3CB09B2832E7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/GuideView.swift";
+			"sourceTree" = "<group>";
+		};
+		"45A60BCB0858E6C24DE308EF" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = B74F95C2CCBB3CB09B2832E7;
+		};
+		"88AA03F9E88765E08E064E8B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/MainWindow.swift";
+			"sourceTree" = "<group>";
+		};
+		"3E9585CAE3AF69BADF0020F6" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 88AA03F9E88765E08E064E8B;
+		};
+		"B8A5CFFD23FB961887F11045" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/MultiviewPresetsView.swift";
+			"sourceTree" = "<group>";
+		};
+		"E04587C9F6FC6996EFC9908F" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = B8A5CFFD23FB961887F11045;
+		};
+		"3F11D8A33224A2C495928908" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/NowNextView.swift";
+			"sourceTree" = "<group>";
+		};
+		"68781FB18783E7D0C1B75D10" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 3F11D8A33224A2C495928908;
+		};
+		"5A1809C6463F168C6F0AC162" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/ProgrammeRemindersView.swift";
+			"sourceTree" = "<group>";
+		};
+		"AD7F39DB55B6A03E71BCB099" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 5A1809C6463F168C6F0AC162;
+		};
+		"25D624AC6A030EBB330FBC86" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/ReceiverAutoTimersView.swift";
+			"sourceTree" = "<group>";
+		};
+		"5AFF7D0E64636024EE43F5A4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 25D624AC6A030EBB330FBC86;
+		};
+		"5108D65133411CC7FACDDEF7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/ReceiverInfoView.swift";
+			"sourceTree" = "<group>";
+		};
+		"217719B9BB99A9BFC93178D4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 5108D65133411CC7FACDDEF7;
+		};
+		"20E6B6D57325DE0E0AF75E55" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/ReceiverRecordingsView.swift";
+			"sourceTree" = "<group>";
+		};
+		"419A0CECF7FFFB7A7E2FF405" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 20E6B6D57325DE0E0AF75E55;
+		};
+		"C0176307225C52B58D8CCD04" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/ReceiverSetup.swift";
+			"sourceTree" = "<group>";
+		};
+		"08BE6F424C22BDB2EAFA26AC" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = C0176307225C52B58D8CCD04;
+		};
+		"9576541FB57E1E8AAE9F1777" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/ReceiverTimersView.swift";
+			"sourceTree" = "<group>";
+		};
+		"B7E0EC3CE8132C15ED22DC70" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 9576541FB57E1E8AAE9F1777;
+		};
+		"5E97A4CD4E1E84421FAF089E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/RecordingOptionsView.swift";
+			"sourceTree" = "<group>";
+		};
+		"B12DBA130BB82642455A54C1" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 5E97A4CD4E1E84421FAF089E;
+		};
+		"3072C771C5C29203E3FA4580" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/SettingsTransferView.swift";
+			"sourceTree" = "<group>";
+		};
+		"5E724CD205CB854E678B1955" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 3072C771C5C29203E3FA4580;
+		};
+		"D59F339114C7B97EFA5EA647" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/Views/VideoOnlyMode.swift";
+			"sourceTree" = "<group>";
+		};
+		"3598949323B67666801A8C8C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = D59F339114C7B97EFA5EA647;
+		};
+		"3B045343615FB0BAB56D4FD7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Sources/e2Atlas/e2AtlasApp.swift";
+			"sourceTree" = "<group>";
+		};
+		"FD66F060DEF63C4CA3025C65" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 3B045343615FB0BAB56D4FD7;
+		};
+		"B4593A10DC011981C761E0A0" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = DDB4575E7A430A0D6B921317;
+		};
+		"25A89E72F8D80729C42B95B8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 4DF537270662494B15A9C168;
+		};
+		"5C0D2A51ACE1C0AD836B8F72" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 62DE7522E469BD6EDB67AF7E;
+		};
+		"C037429201567C3FCF5DBA49" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 2601D25E022E0BBEB8C51AA3;
+		};
+		"4EAA07725004483345A5FA6A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = C43B69E87C78A78FF0F12810;
+		};
+		"C0E79EF9943432CED56480B4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 422BAFF6C8FAAF4516F81EA1;
+		};
+		"82564A8F22637839AC8FAD4A" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (9CFE055829EE9B0A67745D79, 09013F776983BD3A54273ABD, BF357E001D5CDA09F9EB8E57, 9B3BD16A686FAC5C9F8EF3E4, 3BD0533CAEE321C8E057D869, F2CB1CF7E23DBE301C710044, 3E806CDE060F733A0856952C, A70A260E543568EE82C2C105, 94B536B1D12B826A0991E356, B68568A063262F427AF08FD1, DB762A39AA85D9C96B2D1CA5, 0C4248A34F1DEFB9FB21D7A3, 418D91BB39CFEC57FDF2BC63, 2CC739418724C7AB0B51E74A, 45A60BCB0858E6C24DE308EF, 3E9585CAE3AF69BADF0020F6, E04587C9F6FC6996EFC9908F, 68781FB18783E7D0C1B75D10, AD7F39DB55B6A03E71BCB099, 5AFF7D0E64636024EE43F5A4, 217719B9BB99A9BFC93178D4, 419A0CECF7FFFB7A7E2FF405, 08BE6F424C22BDB2EAFA26AC, B7E0EC3CE8132C15ED22DC70, B12DBA130BB82642455A54C1, 5E724CD205CB854E678B1955, 3598949323B67666801A8C8C, FD66F060DEF63C4CA3025C65);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"E8C75AF92CC1065219609AC3" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (B4593A10DC011981C761E0A0, 25A89E72F8D80729C42B95B8, 5C0D2A51ACE1C0AD836B8F72, C037429201567C3FCF5DBA49, 4EAA07725004483345A5FA6A, C0E79EF9943432CED56480B4);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"3E0FB65FE1C9ABB8EF2491C7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "folder";
+			"path" = "Sources/AtlasThemes/Resources/Themes";
+			"sourceTree" = "<group>";
+		};
+		"9FFEA872239D6EA60C53A12A" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 3E0FB65FE1C9ABB8EF2491C7;
+		};
+		"B6CDD39F6EE69045B69EF6DF" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "folder";
+			"path" = "Sources/AtlasThemes/Resources/ThemeTemplates";
+			"sourceTree" = "<group>";
+		};
+		"3483C2FD34480F67DE03E799" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = B6CDD39F6EE69045B69EF6DF;
+		};
+		"069AB0DF76C49BD55D07F8B0" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.json.xcstrings";
+			"path" = "Resources/InfoPlist.xcstrings";
+			"sourceTree" = "<group>";
+		};
+		"FF24E737A66688FCDB142813" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 069AB0DF76C49BD55D07F8B0;
+		};
+		"F29391DC9A9ED7D4D2A38BB7" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text.json.xcstrings";
+			"path" = "Resources/Localizable.xcstrings";
+			"sourceTree" = "<group>";
+		};
+		"A9BF8417B8F191A391E896E9" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = F29391DC9A9ED7D4D2A38BB7;
+		};
+		"83B446D85EFBCD29F93CF075" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Resources/ThirdPartyNotices.txt";
+			"sourceTree" = "<group>";
+		};
+		"EF82E5B60F482679789CBB68" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 83B446D85EFBCD29F93CF075;
+		};
+		"BD84DAF23E7F5FEBD0301663" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "LICENSE";
+			"sourceTree" = "<group>";
+		};
+		"AFA5D340613F6CF32D4B26AD" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = BD84DAF23E7F5FEBD0301663;
+		};
+		"3E200236F925B173647189E6" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "text";
+			"path" = "Resources/VLCKit-LICENSE.txt";
+			"sourceTree" = "<group>";
+		};
+		"C4BDEE871A935C598D4D87EA" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 3E200236F925B173647189E6;
+		};
+		"3EAA18EC4375F749E8ACCA65" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "folder.iconcomposer.icon";
+			"path" = "Resources/E2AtlasIcon.icon";
+			"sourceTree" = "<group>";
+		};
+		"E33FA88AA6E2A7AED0D355FE" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 3EAA18EC4375F749E8ACCA65;
+		};
+		"90BDABD521AF21F115199791" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 422BAFF6C8FAAF4516F81EA1;
+			"settings" = {
+				"ATTRIBUTES" = ("CodeSignOnCopy", "RemoveHeadersOnCopy");
+			};
+		};
+		"639A00029FAB2743F4A1D2ED" = {
+			"isa" = "PBXCopyFilesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (90BDABD521AF21F115199791);
+			"runOnlyForDeploymentPostprocessing" = 0;
+			"dstPath" = "";
+			"dstSubfolderSpec" = 10;
+			"name" = "Embed VLCKit";
+		};
+		"98D75C904E8D4DF6FD36A6EF" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (9FFEA872239D6EA60C53A12A, 3483C2FD34480F67DE03E799, FF24E737A66688FCDB142813, A9BF8417B8F191A391E896E9, EF82E5B60F482679789CBB68, AFA5D340613F6CF32D4B26AD, C4BDEE871A935C598D4D87EA, E33FA88AA6E2A7AED0D355FE);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"9A6E91C21AEFF815ACD4676E" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = 244210E48437B6556980A702;
+			"proxyType" = 1;
+			"remoteGlobalIDString" = 3CE36C3FF8410DB3BF28EC1E;
+			"remoteInfo" = "AtlasCore";
+		};
+		"576F7578BC2C50B94E06D76A" = {
+			"isa" = "PBXTargetDependency";
+			"target" = 3CE36C3FF8410DB3BF28EC1E;
+			"targetProxy" = 9A6E91C21AEFF815ACD4676E;
+		};
+		"84E1F1FFF927A840F024A690" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = 244210E48437B6556980A702;
+			"proxyType" = 1;
+			"remoteGlobalIDString" = FC28FF5BDCB9E03B8054A5A2;
+			"remoteInfo" = "AtlasReceiver";
+		};
+		"CD4D27191B268AB4FC2F4888" = {
+			"isa" = "PBXTargetDependency";
+			"target" = FC28FF5BDCB9E03B8054A5A2;
+			"targetProxy" = 84E1F1FFF927A840F024A690;
+		};
+		"C0187804EEA362CD1CD9E300" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = 244210E48437B6556980A702;
+			"proxyType" = 1;
+			"remoteGlobalIDString" = BE50B6FF138CE2666C12A3BE;
+			"remoteInfo" = "AtlasThemes";
+		};
+		"CE0F34302491F55ACF1B0ECE" = {
+			"isa" = "PBXTargetDependency";
+			"target" = BE50B6FF138CE2666C12A3BE;
+			"targetProxy" = C0187804EEA362CD1CD9E300;
+		};
+		"0A022E879B49FBCBD9131856" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = 244210E48437B6556980A702;
+			"proxyType" = 1;
+			"remoteGlobalIDString" = 5D0A85C33C95D06DD954CE94;
+			"remoteInfo" = "AtlasPlayback";
+		};
+		"E36C976F954324BC44C492CC" = {
+			"isa" = "PBXTargetDependency";
+			"target" = 5D0A85C33C95D06DD954CE94;
+			"targetProxy" = 0A022E879B49FBCBD9131856;
+		};
+		"CD4F5170C475DEA216FEBB2D" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = 244210E48437B6556980A702;
+			"proxyType" = 1;
+			"remoteGlobalIDString" = 07AE048F55EFD6CF2656C753;
+			"remoteInfo" = "AtlasRecording";
+		};
+		"CC5EBB1A7EC0C2EF01D75491" = {
+			"isa" = "PBXTargetDependency";
+			"target" = 07AE048F55EFD6CF2656C753;
+			"targetProxy" = CD4F5170C475DEA216FEBB2D;
+		};
+		"D1C16AC7FC89DC0419A78D2E" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "$(E2ATLAS_APP_NAME)";
+				"PRODUCT_MODULE_NAME" = "e2Atlas";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "$(E2ATLAS_BUNDLE_IDENTIFIER)";
+				"INFOPLIST_FILE" = "Resources/Info.plist";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/../Frameworks");
+				"ENABLE_HARDENED_RUNTIME" = "YES";
+				"ENABLE_DEBUG_DYLIB" = "NO";
+				"COMBINE_HIDPI_IMAGES" = "YES";
+				"ASSETCATALOG_COMPILER_APPICON_NAME" = "E2AtlasIcon";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+			};
+			"name" = "Debug";
+		};
+		"4677B351BB923AF1FD4121F4" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "$(E2ATLAS_APP_NAME)";
+				"PRODUCT_MODULE_NAME" = "e2Atlas";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "$(E2ATLAS_BUNDLE_IDENTIFIER)";
+				"INFOPLIST_FILE" = "Resources/Info.plist";
+				"GENERATE_INFOPLIST_FILE" = "NO";
+				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@executable_path/../Frameworks");
+				"ENABLE_HARDENED_RUNTIME" = "YES";
+				"ENABLE_DEBUG_DYLIB" = "NO";
+				"COMBINE_HIDPI_IMAGES" = "YES";
+				"ASSETCATALOG_COMPILER_APPICON_NAME" = "E2AtlasIcon";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "";
+			};
+			"name" = "Release";
+		};
+		"9E1FB918730FB250BCA78CF7" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (D1C16AC7FC89DC0419A78D2E, 4677B351BB923AF1FD4121F4);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"5B1D492EBE99878DB7BEC392" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = 9E1FB918730FB250BCA78CF7;
+			"buildPhases" = (82564A8F22637839AC8FAD4A, E8C75AF92CC1065219609AC3, 639A00029FAB2743F4A1D2ED, 98D75C904E8D4DF6FD36A6EF);
+			"buildRules" = ();
+			"dependencies" = (576F7578BC2C50B94E06D76A, CD4D27191B268AB4FC2F4888, CE0F34302491F55ACF1B0ECE, E36C976F954324BC44C492CC, CC5EBB1A7EC0C2EF01D75491);
+			"name" = "e2Atlas";
+			"productName" = "e2Atlas";
+			"productReference" = B05B5A641AAB528D0A4B448A;
+			"productType" = "com.apple.product-type.application";
+		};
+		"8DEC815B76ED9B1CDB31C200" = {
+			"isa" = "PBXFileReference";
+			"explicitFileType" = "wrapper.cfbundle";
+			"includeInIndex" = 0;
+			"path" = "e2AtlasTests.xctest";
+			"sourceTree" = "BUILT_PRODUCTS_DIR";
+		};
+		"EDEF4C31FA8BC785F14BFCDE" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasCoreTests/AppLanguageTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"AADEC50654B0AA6E9D88C7A4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = EDEF4C31FA8BC785F14BFCDE;
+		};
+		"259907356217F6405F6BA77C" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasCoreTests/AppPreferencesTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"4926BCB6491638DBEC1E9176" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 259907356217F6405F6BA77C;
+		};
+		"25337AB70996B221815E1939" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasCoreTests/ChannelStoreTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"C4AA6F18B23A81D98ADB8267" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 25337AB70996B221815E1939;
+		};
+		"31EE69C391634DA592E09AD5" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasCoreTests/FavoriteChannelTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"A28F07E369A918E716D7348C" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 31EE69C391634DA592E09AD5;
+		};
+		"7C020E9814679B0034880139" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasCoreTests/GuideStoreTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"E36430CC1B013097F82BBFAA" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 7C020E9814679B0034880139;
+		};
+		"D7E23760333900FAC7616554" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasCoreTests/NowNextCacheTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"0091ED421AAE82146383D040" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = D7E23760333900FAC7616554;
+		};
+		"63AA20A55F16CAEED674691F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasCoreTests/NowNextProgrammeTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"254D9B2DFFCC32F9AC8B329F" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 63AA20A55F16CAEED674691F;
+		};
+		"7588229D79B306BD9A82C484" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasCoreTests/ProgrammeReminderTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"608F3ACB02B48B2DD3D11EE4" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 7588229D79B306BD9A82C484;
+		};
+		"A022022AC80145177E420C1B" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasCoreTests/RecordingPlaybackCheckpointTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"B30F03234B50E565E4EB4A43" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = A022022AC80145177E420C1B;
+		};
+		"E3DC6F9FF685D1D741BB20A2" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasCoreTests/SettingsArchiveTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"0C0B19E88AA49640075D8915" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = E3DC6F9FF685D1D741BB20A2;
+		};
+		"D5AB37F2B077D237F8896C32" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasPlaybackTests/PlaybackArrangementTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"BE628DDF729A4A892986548D" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = D5AB37F2B077D237F8896C32;
+		};
+		"F65E7DB8D87461C2E6F679CB" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasPlaybackTests/PlaybackEngineTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"0A8C09F85AB7BA61393999F8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = F65E7DB8D87461C2E6F679CB;
+		};
+		"A7BB53F12579D618307FBD72" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasPlaybackTests/PlaybackStoreTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"D1F371DCB37D9EBAFEFD0EBD" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = A7BB53F12579D618307FBD72;
+		};
+		"1BBE02945695833BDF7B80FF" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasReceiverTests/EPGRefreshTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"33B1F779B452B62A96E304C2" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 1BBE02945695833BDF7B80FF;
+		};
+		"E971BB6BE4F1A83F4FE7A25E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasReceiverTests/OpenWebifClientTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"0EA9629262687D8FD208A9CB" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = E971BB6BE4F1A83F4FE7A25E;
+		};
+		"AB7F68BB3E06E81D44789090" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasReceiverTests/ProgrammeMatchingTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"D245921052257ED0B0F747CB" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = AB7F68BB3E06E81D44789090;
+		};
+		"86CCD261D7FBF139DB6F750E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasReceiverTests/ReceiverAddressTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"8E2B946A6939197C415C5BC8" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 86CCD261D7FBF139DB6F750E;
+		};
+		"EAD340A985C6F0304B2957CD" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasReceiverTests/ReceiverAutoTimerTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"A95CBEED494016B356DBBCDA" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = EAD340A985C6F0304B2957CD;
+		};
+		"12A9829BAEB2F32BA3AA659D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasReceiverTests/ReceiverRecordingTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"AB4A5B09D70A6F3A7D7BDE86" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 12A9829BAEB2F32BA3AA659D;
+		};
+		"03F7876CA3671522D8595F8D" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasReceiverTests/ReceiverStorageTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"903BFE3D9BAE8AFBB41A7FAB" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 03F7876CA3671522D8595F8D;
+		};
+		"F985B1EEFA0508DA634D190F" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasReceiverTests/ReceiverTimerMatchingTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"44B61B34BE666D9DF5FF2707" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = F985B1EEFA0508DA634D190F;
+		};
+		"E5B677FB0B4934452225EE7E" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasRecordingTests/StreamRecorderTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"47BE1635204F6DEAE129A0BF" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = E5B677FB0B4934452225EE7E;
+		};
+		"1B72B6DB4E89D66A555EEA06" = {
+			"isa" = "PBXFileReference";
+			"lastKnownFileType" = "sourcecode.swift";
+			"path" = "Tests/AtlasThemesTests/AtlasThemeTests.swift";
+			"sourceTree" = "<group>";
+		};
+		"BED7D27EC51FDBDFB07E58E0" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 1B72B6DB4E89D66A555EEA06;
+		};
+		"EA4D64DF1E15CA168D2ACB4E" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 17D72DE42DD418A980EFF982;
+		};
+		"66F1F81F0D3E11B8D58B540B" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = A9A64FC32ECB90CA62462033;
+		};
+		"FD773924C131407D8C846231" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 354F9ADBB83F0511C5C9AD08;
+		};
+		"F63C97DDECCC7AD8FF170EC6" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 96D0FA204C045178EF13384A;
+		};
+		"650B3F51938335318AE68C9A" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = 244210E48437B6556980A702;
+			"proxyType" = 1;
+			"remoteGlobalIDString" = 3CE36C3FF8410DB3BF28EC1E;
+			"remoteInfo" = "AtlasCore";
+		};
+		"886BD330309B5E14E3A742C3" = {
+			"isa" = "PBXTargetDependency";
+			"target" = 3CE36C3FF8410DB3BF28EC1E;
+			"targetProxy" = 650B3F51938335318AE68C9A;
+		};
+		"6F426C5E3D334BF8CF725F79" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = 244210E48437B6556980A702;
+			"proxyType" = 1;
+			"remoteGlobalIDString" = FC28FF5BDCB9E03B8054A5A2;
+			"remoteInfo" = "AtlasReceiver";
+		};
+		"D2F483F13D2D3B7F91F9B2FF" = {
+			"isa" = "PBXTargetDependency";
+			"target" = FC28FF5BDCB9E03B8054A5A2;
+			"targetProxy" = 6F426C5E3D334BF8CF725F79;
+		};
+		"2067DDE95A5671E1E77B6CC8" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = 244210E48437B6556980A702;
+			"proxyType" = 1;
+			"remoteGlobalIDString" = BE50B6FF138CE2666C12A3BE;
+			"remoteInfo" = "AtlasThemes";
+		};
+		"CFE8148B80AB92CA5160F1BA" = {
+			"isa" = "PBXTargetDependency";
+			"target" = BE50B6FF138CE2666C12A3BE;
+			"targetProxy" = 2067DDE95A5671E1E77B6CC8;
+		};
+		"7D226DE69B6A78863B06D4DD" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = 244210E48437B6556980A702;
+			"proxyType" = 1;
+			"remoteGlobalIDString" = 5D0A85C33C95D06DD954CE94;
+			"remoteInfo" = "AtlasPlayback";
+		};
+		"66174B22AAA0A1FAAB9176D7" = {
+			"isa" = "PBXTargetDependency";
+			"target" = 5D0A85C33C95D06DD954CE94;
+			"targetProxy" = 7D226DE69B6A78863B06D4DD;
+		};
+		"482CB2EE097FE30DCEA2672A" = {
+			"isa" = "PBXContainerItemProxy";
+			"containerPortal" = 244210E48437B6556980A702;
+			"proxyType" = 1;
+			"remoteGlobalIDString" = 07AE048F55EFD6CF2656C753;
+			"remoteInfo" = "AtlasRecording";
+		};
+		"8CC622173D1F8D55AD01AC43" = {
+			"isa" = "PBXTargetDependency";
+			"target" = 07AE048F55EFD6CF2656C753;
+			"targetProxy" = 482CB2EE097FE30DCEA2672A;
+		};
+		"DB439D55C168E04DE6931726" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "e2AtlasTests";
+				"PRODUCT_MODULE_NAME" = "e2AtlasTests";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas.tests";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@loader_path/../Frameworks", "@loader_path/Frameworks");
+				"ENABLE_TESTABILITY" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+			};
+			"name" = "Debug";
+		};
+		"3185C161D5417608AE87042C" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"PRODUCT_NAME" = "e2AtlasTests";
+				"PRODUCT_MODULE_NAME" = "e2AtlasTests";
+				"PRODUCT_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas.tests";
+				"GENERATE_INFOPLIST_FILE" = "YES";
+				"LD_RUNPATH_SEARCH_PATHS" = ("$(inherited)", "@loader_path/../Frameworks", "@loader_path/Frameworks");
+				"ENABLE_TESTABILITY" = "YES";
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "";
+			};
+			"name" = "Release";
+		};
+		"E57120A709F19018A103ADF5" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (DB439D55C168E04DE6931726, 3185C161D5417608AE87042C);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"798B65A4B63A4D08FDD4C755" = {
+			"isa" = "PBXSourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (AADEC50654B0AA6E9D88C7A4, 4926BCB6491638DBEC1E9176, C4AA6F18B23A81D98ADB8267, A28F07E369A918E716D7348C, E36430CC1B013097F82BBFAA, 0091ED421AAE82146383D040, 254D9B2DFFCC32F9AC8B329F, 608F3ACB02B48B2DD3D11EE4, B30F03234B50E565E4EB4A43, 0C0B19E88AA49640075D8915, BE628DDF729A4A892986548D, 0A8C09F85AB7BA61393999F8, D1F371DCB37D9EBAFEFD0EBD, 33B1F779B452B62A96E304C2, 0EA9629262687D8FD208A9CB, D245921052257ED0B0F747CB, 8E2B946A6939197C415C5BC8, A95CBEED494016B356DBBCDA, AB4A5B09D70A6F3A7D7BDE86, 903BFE3D9BAE8AFBB41A7FAB, 44B61B34BE666D9DF5FF2707, 47BE1635204F6DEAE129A0BF, BED7D27EC51FDBDFB07E58E0, EA4D64DF1E15CA168D2ACB4E, 66F1F81F0D3E11B8D58B540B, FD773924C131407D8C846231, F63C97DDECCC7AD8FF170EC6);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"5024EFAE08D1B781A699061D" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 3E0FB65FE1C9ABB8EF2491C7;
+		};
+		"79DFDF936B5885C630023EC3" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = B6CDD39F6EE69045B69EF6DF;
+		};
+		"8E4A2384C3BB340395DB94D9" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = F29391DC9A9ED7D4D2A38BB7;
+		};
+		"14F0309E5479D955E2A2D11E" = {
+			"isa" = "PBXResourcesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (5024EFAE08D1B781A699061D, 79DFDF936B5885C630023EC3, 8E4A2384C3BB340395DB94D9);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"57D8A969533AF718A60C9C31" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = DDB4575E7A430A0D6B921317;
+		};
+		"FEC198D592BAC6B54FA440A5" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 4DF537270662494B15A9C168;
+		};
+		"C5403309CE10A376E971A780" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 62DE7522E469BD6EDB67AF7E;
+		};
+		"D64E8777E6C44764B8F832C3" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 2601D25E022E0BBEB8C51AA3;
+		};
+		"9B9801919F04843FDACFD7F3" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = C43B69E87C78A78FF0F12810;
+		};
+		"5F532CD013962A09FF513886" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 422BAFF6C8FAAF4516F81EA1;
+		};
+		"670AC63BFB73F1FE66EF5C07" = {
+			"isa" = "PBXFrameworksBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (57D8A969533AF718A60C9C31, FEC198D592BAC6B54FA440A5, C5403309CE10A376E971A780, D64E8777E6C44764B8F832C3, 9B9801919F04843FDACFD7F3, 5F532CD013962A09FF513886);
+			"runOnlyForDeploymentPostprocessing" = 0;
+		};
+		"11C4118A7ECB26E9A56378AC" = {
+			"isa" = "PBXBuildFile";
+			"fileRef" = 422BAFF6C8FAAF4516F81EA1;
+			"settings" = {
+				"ATTRIBUTES" = ("CodeSignOnCopy", "RemoveHeadersOnCopy");
+			};
+		};
+		"85FB03D41CCF56037F0B7FF5" = {
+			"isa" = "PBXCopyFilesBuildPhase";
+			"buildActionMask" = 2147483647;
+			"files" = (11C4118A7ECB26E9A56378AC);
+			"runOnlyForDeploymentPostprocessing" = 0;
+			"dstPath" = "";
+			"dstSubfolderSpec" = 10;
+			"name" = "Embed test VLC runtime";
+		};
+		"2D7604C3B943DAB580F304F6" = {
+			"isa" = "PBXNativeTarget";
+			"buildConfigurationList" = E57120A709F19018A103ADF5;
+			"buildPhases" = (798B65A4B63A4D08FDD4C755, 14F0309E5479D955E2A2D11E, 670AC63BFB73F1FE66EF5C07, 85FB03D41CCF56037F0B7FF5);
+			"buildRules" = ();
+			"dependencies" = (886BD330309B5E14E3A742C3, D2F483F13D2D3B7F91F9B2FF, CFE8148B80AB92CA5160F1BA, 66174B22AAA0A1FAAB9176D7, 8CC622173D1F8D55AD01AC43);
+			"name" = "e2AtlasTests";
+			"productName" = "e2AtlasTests";
+			"productReference" = 8DEC815B76ED9B1CDB31C200;
+			"productType" = "com.apple.product-type.bundle.unit-test";
+		};
+		"0A3E27B8CA818264D75C8D81" = {
+			"isa" = "PBXGroup";
+			"children" = (DDB4575E7A430A0D6B921317, 4DF537270662494B15A9C168, 62DE7522E469BD6EDB67AF7E, 2601D25E022E0BBEB8C51AA3, C43B69E87C78A78FF0F12810, B05B5A641AAB528D0A4B448A, 8DEC815B76ED9B1CDB31C200);
+			"name" = "Products";
+			"sourceTree" = "<group>";
+		};
+		"0D6E4079E36703EBD37C0072" = {
+			"isa" = "PBXGroup";
+			"children" = (422BAFF6C8FAAF4516F81EA1, AC1413D36F851575F57E0723, 9827DF717831C6BB0E9EC037, 687C399CCF094D37D0797D58, 7E04E4EF5DCE32CAE0691BF6, F8199970C888047A8559961B, EDCBB114BBB2615C4FAF39D4, AF976E9F4640775515C6CD6D, 62680C1C511C65591C8E9EEE, 622D22025E0AD429E633DE58, 215DA9BBA61A68F4E986BD94, E4ABB6B288A7FFD28068E42E, 15EEDD7BC317E6A5FAFB8954, 02F880146722FCFDE036C5E3, 2A7B66814CD691FAD0CA2392, 1DE45C0D7E3E26B50A3DED2C, F31CAA6D272060C19CE6AF42, 928F6EF134B321FE526621C3, 61F2163E10B63D30303D6D42, B632D07AE118E9F3DE5815F9, 65B56D2ED5E8B2DEE03C4D15, AD1915EFB6A65F480585744E, 2F63B95AAD3BEE5A8F43C2C2, F9744CC7362A558DF67D04F8, 354F9ADBB83F0511C5C9AD08, 65391CA182B5B420FF7083CC, A9A64FC32ECB90CA62462033, 17D72DE42DD418A980EFF982, 4D8A9F8AC5A5F1A75CDC8286, 18B914190E2121BB2FAC5E1B, 67404384282008DA9D9B4AB9, 3A4FC1D6FA2DA2463F0FC7B3, 96D0FA204C045178EF13384A, 70196A991538E5A4B399366E, F77E0FA3403260E5C48F3CC9, 47FB8CE8A41D6667E1594BFE, 5E6A86AB275EE25DA1A33ADC, F5520BC8A3929FF4B603A408, B74F95C2CCBB3CB09B2832E7, 88AA03F9E88765E08E064E8B, B8A5CFFD23FB961887F11045, 3F11D8A33224A2C495928908, 5A1809C6463F168C6F0AC162, 25D624AC6A030EBB330FBC86, 5108D65133411CC7FACDDEF7, 20E6B6D57325DE0E0AF75E55, C0176307225C52B58D8CCD04, 9576541FB57E1E8AAE9F1777, 5E97A4CD4E1E84421FAF089E, 3072C771C5C29203E3FA4580, D59F339114C7B97EFA5EA647, 3B045343615FB0BAB56D4FD7, 3E0FB65FE1C9ABB8EF2491C7, B6CDD39F6EE69045B69EF6DF, 069AB0DF76C49BD55D07F8B0, F29391DC9A9ED7D4D2A38BB7, 83B446D85EFBCD29F93CF075, BD84DAF23E7F5FEBD0301663, 3E200236F925B173647189E6, 3EAA18EC4375F749E8ACCA65, EDEF4C31FA8BC785F14BFCDE, 259907356217F6405F6BA77C, 25337AB70996B221815E1939, 31EE69C391634DA592E09AD5, 7C020E9814679B0034880139, D7E23760333900FAC7616554, 63AA20A55F16CAEED674691F, 7588229D79B306BD9A82C484, A022022AC80145177E420C1B, E3DC6F9FF685D1D741BB20A2, D5AB37F2B077D237F8896C32, F65E7DB8D87461C2E6F679CB, A7BB53F12579D618307FBD72, 1BBE02945695833BDF7B80FF, E971BB6BE4F1A83F4FE7A25E, AB7F68BB3E06E81D44789090, 86CCD261D7FBF139DB6F750E, EAD340A985C6F0304B2957CD, 12A9829BAEB2F32BA3AA659D, 03F7876CA3671522D8595F8D, F985B1EEFA0508DA634D190F, E5B677FB0B4934452225EE7E, 1B72B6DB4E89D66A555EEA06, 0A3E27B8CA818264D75C8D81);
+			"sourceTree" = "<group>";
+		};
+		"73EBF6644258C120893E685D" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"SDKROOT" = "macosx";
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ARCHS" = "arm64";
+				"SWIFT_VERSION" = "6.0";
+				"SWIFT_STRICT_CONCURRENCY" = "complete";
+				"SWIFT_EMIT_LOC_STRINGS" = "YES";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CODE_SIGN_IDENTITY" = "-";
+				"CODE_SIGN_STYLE" = "Manual";
+				"DEVELOPMENT_TEAM" = "";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "NO";
+				"E2ATLAS_APP_NAME" = "e2Atlas";
+				"E2ATLAS_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas";
+				"E2ATLAS_BUILD_CHANNEL" = "final";
+				"MARKETING_VERSION" = "1.0.0";
+				"CURRENT_PROJECT_VERSION" = "1";
+				"E2ATLAS_RELEASE_VERSION" = "1.0.0-final";
+				"OTHER_SWIFT_FLAGS" = ("$(inherited)", "-debug-prefix-map", "\"$(SRCROOT)=.\"", "-file-prefix-map", "\"$(SRCROOT)=.\"");
+				"FRAMEWORK_SEARCH_PATHS" = ("$(inherited)", "\"$(SRCROOT)/Build/Dependencies/VLCKit - binary package/VLCKit.xcframework/macos-arm64_x86_64\"");
+				"SWIFT_OPTIMIZATION_LEVEL" = "-Onone";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "DEBUG";
+			};
+			"name" = "Debug";
+		};
+		"0B0C687DF8B6B8DC790B519C" = {
+			"isa" = "XCBuildConfiguration";
+			"buildSettings" = {
+				"SDKROOT" = "macosx";
+				"MACOSX_DEPLOYMENT_TARGET" = "26.0";
+				"ARCHS" = "arm64";
+				"SWIFT_VERSION" = "6.0";
+				"SWIFT_STRICT_CONCURRENCY" = "complete";
+				"SWIFT_EMIT_LOC_STRINGS" = "YES";
+				"CLANG_ENABLE_MODULES" = "YES";
+				"CODE_SIGN_IDENTITY" = "-";
+				"CODE_SIGN_STYLE" = "Manual";
+				"DEVELOPMENT_TEAM" = "";
+				"ENABLE_USER_SCRIPT_SANDBOXING" = "NO";
+				"E2ATLAS_APP_NAME" = "e2Atlas";
+				"E2ATLAS_BUNDLE_IDENTIFIER" = "io.github.schrotty74.e2atlas";
+				"E2ATLAS_BUILD_CHANNEL" = "final";
+				"MARKETING_VERSION" = "1.0.0";
+				"CURRENT_PROJECT_VERSION" = "1";
+				"E2ATLAS_RELEASE_VERSION" = "1.0.0-final";
+				"OTHER_SWIFT_FLAGS" = ("$(inherited)", "-debug-prefix-map", "\"$(SRCROOT)=.\"", "-file-prefix-map", "\"$(SRCROOT)=.\"");
+				"FRAMEWORK_SEARCH_PATHS" = ("$(inherited)", "\"$(SRCROOT)/Build/Dependencies/VLCKit - binary package/VLCKit.xcframework/macos-arm64_x86_64\"");
+				"SWIFT_OPTIMIZATION_LEVEL" = "-O";
+				"DEBUG_INFORMATION_FORMAT" = "dwarf-with-dsym";
+				"SWIFT_ACTIVE_COMPILATION_CONDITIONS" = "";
+			};
+			"name" = "Release";
+		};
+		"187B327489003FCA55B00C62" = {
+			"isa" = "XCConfigurationList";
+			"buildConfigurations" = (73EBF6644258C120893E685D, 0B0C687DF8B6B8DC790B519C);
+			"defaultConfigurationIsVisible" = 0;
+			"defaultConfigurationName" = "Release";
+		};
+		"244210E48437B6556980A702" = {
+			"isa" = "PBXProject";
+			"attributes" = {
+				"BuildIndependentTargetsInParallel" = "YES";
+				"LastUpgradeCheck" = "2700";
+			};
+			"buildConfigurationList" = 187B327489003FCA55B00C62;
+			"compatibilityVersion" = "Xcode 14.0";
+			"developmentRegion" = "de";
+			"hasScannedForEncodings" = 0;
+			"knownRegions" = ("de", "en", "Base");
+			"mainGroup" = 0D6E4079E36703EBD37C0072;
+			"productRefGroup" = 0A3E27B8CA818264D75C8D81;
+			"projectDirPath" = "";
+			"projectRoot" = "";
+			"targets" = (3CE36C3FF8410DB3BF28EC1E, FC28FF5BDCB9E03B8054A5A2, BE50B6FF138CE2666C12A3BE, 5D0A85C33C95D06DD954CE94, 07AE048F55EFD6CF2656C753, 5B1D492EBE99878DB7BEC392, 2D7604C3B943DAB580F304F6);
+		};
+	};
+	"rootObject" = 244210E48437B6556980A702;
+}

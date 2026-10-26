@@ -1,0 +1,19 @@
+# Nächste Schritte
+
+Stand: 26. Oktober 2026. Final 1.0.0-final, Build 1, wird auf ausdrücklichen Auftrag direkt aus Dev 55 gebaut und auf GitHub veröffentlicht. 34 gezielte Tests in drei Suites der Release-Konfiguration bestanden; Final-Build und Paketprüfung stehen noch aus. Beta 0.5.0 bleibt unverändert. Folgende Validierungen sind keine automatisch abzuarbeitende Liste.
+
+- Neue Dev-Darstellung im normalen Betrieb und in schmalen Fenstern bestätigen: Bedienleiste außerhalb des Videobilds, lesbarer Sendername und eindeutig erkennbares Video-Vollbild. Native Demo-Prüfung von TV, Vierfach-Multiview und Video-Vollbild/Escape bestanden; schmales Fenster noch nicht bestätigt.
+- Export/Import und Jetzt und danach im normalen Betrieb bestätigen: eigene Sicherung wieder einlesen, neue Receiver bei Bedarf mit Passwort ergänzen, eigene Themes sowie reale Bouquet-/Favoritenwechsel und Sendungsdetails prüfen. Übernahme des Dateiformats und Rücknahme bei Speicherfehlern sind gezielt automatisiert geprüft; eine echte Nutzerkonfiguration wurde nicht importiert. Die Funktionen sind seit Beta 0.5.0 veröffentlicht.
+- Neue Beta mit vorhandenen Beta-Einstellungen und echtem Receiver im normalen Betrieb bestätigen; allgemeine Funktionsbestätigung gilt bisher für Dev.
+- macOS 26 und weitere Receiver-Images prüfen. Schlüsselbunddialoge nach Neubuilds bleiben nicht abschließend bestätigt.
+- Tatsächliche Ausführung/Bearbeitung von Receiver-Aufnahmen und vom Receiver gemeldete Konflikte mit alternativen Ausstrahlungen bei natürlichem Auftreten prüfen. Keine unnötigen Aufnahmen oder künstlichen Konflikte anlegen.
+- Receiver-Aufnahmen fortsetzen nach App-Neustart, Pause und Aufnahmeende, Wiedergabe bei ausdrücklich aktivierter Receiver-Anmeldung und weitere Ordner prüfen. Der Anmeldefall betrifft zusätzliche Konfigurationen; Live-Streams, Aufnahmeliste und SSD-Speicheranzeige ohne Zugangsdaten sind vom Nutzer bestätigt. Bibliotheksdateien haben keinen verlässlich gemeldeten Fertig-Status.
+- Benachrichtigung bei geschlossener App anklicken und die passende Sendung öffnen. Zustellung bei geschlossener App selbst ist bereits bestätigt. Erinnerungsnachführung nur bei einer tatsächlich auftretenden eindeutigen EPG-Zeitverschiebung beobachten.
+- AutoTimer-Vorschau mit Plugin-Ergebnissen vergleichen; Mac-Zeitzone, Spezialfilter und Duplikaterkennung können Unterschiede bewirken. EPGRefresh-Start, vollständigen Ablauf sowie Standby-/Aufnahme-Rücksicht weiter beobachten.
+- Eigene EPG-Intervalle und gespeicherten Beginn nach Neustart sowie zeitgesteuerte Ausführung ohne manuelles Aktualisieren bestätigen. Die Anzeigeaktualisierung bleibt vom receiverseitigen EPGRefresh-Zeitplan getrennt.
+- Lokale Streamaufnahme mit realen Streams prüfen: Beenden während Aufnahme, wenig Speicherplatz, externe Laufwerke, Dauerbegrenzung und echter Verbindungsabbruch. Hardwaredekodierung und CPU-Auswirkung sind nicht gemessen.
+- Wiederverbindung bei tatsächlichem Netzwerkausfall oder Receiver-Neustart sowie weitere Multiview-Kombinationen und Sleep-Timer während lokaler Aufnahme beobachten. Netzwerk nicht allein für einen Test trennen.
+- Noch offene Plattform-/Bedienungsfälle: FBC-Tunerzuordnung, Vollbild/Lautstärke im realen Betrieb, Themes mit erhöhtem Kontrast und reduzierter Transparenz sowie native Sprach-/Berechtigungsdialoge.
+- Nach Abschluss des aktuellen Final-Auftrags keine weiteren main-Änderungen ohne passenden ausdrücklichen Auftrag. Kanaltrennung weiterhin erhalten.
+
+Die Final-Kontextdateien werden mit dem aktuellen Auftrag veröffentlicht. Weitere Git-Aktionen nur mit passendem Auftrag. Bestandene Prüfungen nur bei konkretem Anlass wiederholen; keine zusätzlichen Prüf-Apps oder Projektkopien ohne ausdrücklichen Auftrag.
