@@ -3,7 +3,7 @@
 ## Aktueller Stand – 26. Oktober 2026
 
 - Auf ausdrücklichen Nutzerauftrag wird Final direkt aus dem aktuellen Dev-Build-55-Quellstand erstellt und als reguläres GitHub-Release veröffentlicht. Diese Quellenwahl ersetzt für diesen Auftrag die sonst vorgesehene Übernahme aus Beta. Dev bleibt lokal; seine Historie wird nicht veröffentlicht.
-- Ziel: 1.0.0-final, Build 1, App e2Atlas, Bundle-ID io.github.schrotty74.e2atlas, Release-Konfiguration auf main. Der zusätzliche lokale Final-Checkout liegt unter `Local/Channels/Final`; fertige App unter `Build/Final/e2Atlas.app`. Build und Paketprüfung bestanden; Veröffentlichung wird vorbereitet.
+- Ziel: 1.0.0-final, Build 1, App e2Atlas, Bundle-ID io.github.schrotty74.e2atlas, Release-Konfiguration auf main. Der zusätzliche lokale Final-Checkout liegt unter `Local/Channels/Final`; fertige App unter `Build/Final/e2Atlas.app`. Build, Start- und Paketprüfung bestanden; 1.0.0-final ist mit Tag v1.0.0-final, ZIP, DMG und SHA256SUMS als reguläres GitHub-Release veröffentlicht. Der Tag verweist auf 5d53575; nachfolgende Kontextpflege ergänzt nur Dokumentation.
 - Beta 0.5.0-beta, Build 5, bleibt unverändert auf f98575f; Tag v0.5.0-beta verweist auf 9c728a1. main stand vor dem Final-Auftrag auf 1af31eb mit ursprünglicher README und LICENSE. Der Final-Auftrag erlaubt die erforderlichen main-Änderungen, keine sonstigen Branch-Eingriffe.
 
 ## Funktionen und Plattform
@@ -55,3 +55,10 @@ Ein Dateibereich für Transfers zwischen Mac und Receiver und später ein Texted
 - Nutzer bestätigt Start nach der Korrektur. Eigenständiger nativer Start der endgültig paketierten App mit aktivem Hardened Runtime erfolgreich; Demo-Hauptfenster und Aktionshilfen sichtbar. Keine eigene Receiver-Änderung oder reale Streamprüfung. Danach App und Bedienungszugriff beendet; keine verbleibenden Prozesse des geprüften Pakets.
 - Finale Signatur enthält ausschließlich com.apple.security.cs.disable-library-validation, keine get-task-allow-Berechtigung. ZIP-CRC und enthaltene Programmdatei/Metadaten, vollständige Dateigleichheit des gemounteten DMG, Signatur und SHA256SUMS bestanden. Compiler-/Paketlog: `Build/Logs/Final/run-20261026T051706411884Z-4daae4b9.log`; abschließende Paketierung: `Build/Logs/Final/run-20261026T052012816177Z-f32060c3.log`.
 - Positivliste und Hook-Grenzen geprüft: main und gültige Final-Tags erlaubt; Dev, falsche Branchzuordnung und falsches Tagformat abgelehnt. Keine Dev-/Beta-Historie übernommen. Beta bleibt f98575f. Ein Sub-Agent mit GPT-6 Luna Medium unterstützte den Dokumentationsabgleich; passende Humanizer für Englisch und Deutsch verwendet.
+
+
+### Veröffentlichung abgeschlossen – 26. Oktober 2026
+
+- [e2Atlas 1.0.0-final](https://github.com/Schrotty74/e2Atlas/releases/tag/v1.0.0-final) ist als reguläres, aktuelles GitHub-Release veröffentlicht, kein Vorabrelease und kein Entwurf. Tag v1.0.0-final verweist auf 5d53575. ZIP, DMG und SHA256SUMS sind vollständig hochgeladen; alle drei serverseitigen Größen und SHA-256-Digests stimmen mit den geprüften lokalen Dateien überein.
+- main enthält jetzt den freigegebenen Dev-55-Funktionsstand mit Final-Metadaten und -Dokumentation. Beta bleibt f98575f, Dev bleibt lokal auf App-Build 55. Final-App lokal unter `Build/Final/e2Atlas.app`; Release-Ausgaben im Final-Checkout unter `dist/releases/final/1.0.0-final`. Kein weiterer Build-, Release- oder Final-Auftrag offen. Weitere main-Änderungen nur mit passendem Auftrag.
+- Erforderliche Build-/Paketlogs und die bereinigte Startdiagnose bleiben lokal als Nachweise. Eigene temporäre Release-Notes, Konsolenkopien und Arbeitsordner nach Abschluss entfernt.

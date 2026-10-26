@@ -21,6 +21,7 @@
 
 ### Validation
 
+- Published as the regular GitHub release v1.0.0-final. All three uploaded asset sizes and SHA-256 digests match the verified ZIP, DMG and SHA256SUMS.
 - Final 1.0.0-final, build 1, built in Release configuration. The initial launch failed at library validation before the window opened; no faulty package was published. The ad-hoc signing configuration was corrected, with Hardened Runtime retained and the required library-validation entitlement applied to both the app and package. No debugger entitlement remains.
 - The user confirmed startup after the correction. The final packaged app also opened successfully in a native demo check with its runtime protection enabled. ZIP CRC/content, mounted DMG content/signature and SHA-256 checks passed. App and control access were closed afterward. No separate real-receiver Final workflow or full test run was performed.
 - 34 targeted tests in three suites passed in the Final Release configuration: preferences and channel identity, credential session behavior, and settings archives/import. Final metadata in the test product passed; runtime sources, tests and resources match Dev 55 byte for byte. This was not a full test run. The first Final package passed structural checks but failed to launch because ad-hoc signatures have no Team ID for library validation. The unpublished packages were discarded. The signing configuration was corrected and startup checked before publication.
