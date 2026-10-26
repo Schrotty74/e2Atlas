@@ -82,10 +82,11 @@ fi
 signing_identity="${E2ATLAS_SIGNING_IDENTITY:--}"
 signing_build_args=()
 if [[ "$channel" == final ]]; then
+  signing_build_args+=("CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO")
   if [[ "$signing_identity" == - ]]; then
-    signing_build_args=("CODE_SIGN_ENTITLEMENTS=Resources/AdHoc.entitlements")
+    signing_build_args+=("CODE_SIGN_ENTITLEMENTS=Resources/AdHoc.entitlements")
   else
-    signing_build_args=("CODE_SIGN_ENTITLEMENTS=")
+    signing_build_args+=("CODE_SIGN_ENTITLEMENTS=")
   fi
 fi
 
