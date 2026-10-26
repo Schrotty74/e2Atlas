@@ -662,3 +662,10 @@ Protokollabgleich: Der [OpenWebif-Controller](https://github.com/E2OpenPlugins/e
 - README, FEATURES, SECURITY, Theme-Anleitungen, Changelog und Kontextdateien abgeglichen. Passende Humanizer für Deutsch und Englisch angewendet. Ein Sub-Agent mit GPT-6 Luna Medium unterstützte ausschließlich den Dokumentationsabgleich.
 
 - Veröffentlichung abgeschlossen: [e2Atlas 0.5.0-beta](https://github.com/Schrotty74/e2Atlas/releases/tag/v0.5.0-beta) ist ein öffentliches Vorabrelease mit genau ZIP, DMG und SHA256SUMS. Die von GitHub gemeldeten Größen und SHA-256-Digests aller drei Assets stimmen mit den geprüften lokalen Dateien überein. Branch beta und Tag veröffentlicht; main bleibt 1af31eb. Kein weiterer Build-, Release- oder Final-Auftrag offen.
+
+
+## Neue öffentliche Screenshots – 26. Oktober 2026
+
+- Auf ausdrücklichen Nutzerauftrag fünf bereitgestellte Screenshots für Fernsehen, Multiview, Jetzt und danach, Programmführer und Aufnahmen auf main und beta ersetzt beziehungsweise neu zugeordnet. Die bisherigen Bilder von Receiver-Einstellungen und Ersteinrichtung aus der aktuellen Galerie entfernt. App-Icon unverändert.
+- Vollauflösende PNG-Bilddaten unverändert übernommen; nicht darstellungsrelevante Metadaten entfernt. Vorschauen mit 640 Pixeln Breite und erhaltenem Seitenverhältnis erstellt. Deutsche und englische README-Galerien verlinken die fünf neuen Ansichten. Auf beta ist der gezeigte Final-Stand mit möglichen Abweichungen der Bedienelemente ausdrücklich bezeichnet.
+- Ausschließlich Bilder, README-Galerien und dieser Kontext geändert. Keine App-Builds, Versions-, Tag- oder Downloadänderungen. Veröffentlichung auf beiden Branches durch diesen Screenshot-Auftrag ausdrücklich freigegeben.
