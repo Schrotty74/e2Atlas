@@ -80,6 +80,14 @@ fi
 # A stable existing signer can preserve Keychain trust across rebuilds.
 # This never creates, imports or changes a certificate or a Keychain ACL.
 signing_identity="${E2ATLAS_SIGNING_IDENTITY:--}"
+signing_build_args=()
+if [[ "$channel" == final ]]; then
+  if [[ "$signing_identity" == - ]]; then
+    signing_build_args=("CODE_SIGN_ENTITLEMENTS=Resources/AdHoc.entitlements")
+  else
+    signing_build_args=("CODE_SIGN_ENTITLEMENTS=")
+  fi
+fi
 
 # Xcode bundles resources and frameworks with the same source graph used in its IDE.
 # No personal signing team or separate Codex source copy is required.
@@ -92,6 +100,7 @@ xcrun xcodebuild -project e2Atlas.xcodeproj -scheme e2Atlas \
   MARKETING_VERSION="${release_version%%-*}" \
   CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="$signing_identity" DEVELOPMENT_TEAM= \
   ${build_number_args[@]+"${build_number_args[@]}"} \
+  ${signing_build_args[@]+"${signing_build_args[@]}"} \
   ${executable_build_args[@]+"${executable_build_args[@]}"} build
 
 built_app="$derived_data/Build/Products/$build_configuration/$app_name.app"

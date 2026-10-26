@@ -9,6 +9,8 @@
 
 ### Fixed
 
+- Allow the bundled media framework to load in the ad-hoc-signed Final release while retaining Hardened Runtime. Apply the required library-validation entitlement to both the build and packaged app.
+
 - Show Video fullscreen as an icon in the toolbar and player controls, with its name available through hover help and accessibility.
 - Move live playback controls below the picture, alongside the channel name or on a separate row when space is limited. Compact multiview tiles keep their controls below the image.
 
@@ -20,7 +22,7 @@
 
 ### Validation
 
-- 34 targeted tests in three suites passed in the Final Release configuration: preferences and channel identity, credential session behavior, and settings archives/import. Final metadata in the test product passed; runtime sources, tests and resources match Dev 55 byte for byte. This was not a full test run. Final package validation is pending.
+- 34 targeted tests in three suites passed in the Final Release configuration: preferences and channel identity, credential session behavior, and settings archives/import. Final metadata in the test product passed; runtime sources, tests and resources match Dev 55 byte for byte. This was not a full test run. The first Final package passed structural checks but failed to launch because ad-hoc signatures have no Team ID for library validation. The unpublished packages were discarded. The signing entitlement is being corrected before another build and actual launch check.
 - Dev build 55 and signature checks passed. Source inspection found help on all 111 Button declarations, with both languages checked for literal tooltips. A native demo check confirmed icon-only fullscreen controls, exposed help on player/navigation and backup buttons, and updated audio help after muting. No new logic tests or full visual hover sweep were performed. App and control access were closed afterward.
 - Dev build 54 and signature checks passed. A native demo check confirmed controls below the picture in TV and four-picture multiview, explicit fullscreen controls, entry into video fullscreen and return with Escape. Window-size commands did not produce a confirmed narrow window. No new logic tests were run for this presentation-only change. The app and control session were closed afterward.
 

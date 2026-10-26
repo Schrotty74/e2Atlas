@@ -39,3 +39,10 @@ Final-Tags vX.Y.Z-final müssen beim Push auf den aktuellen main-Commit zeigen; 
 ## Zukünftige Option
 
 Ein Dateibereich für Transfers zwischen Mac und Receiver und später ein Texteditor für Konfigurationsdateien sind auf Nutzerwunsch vorgemerkt. Sicherung vor Änderungen und Erkennung zwischenzeitlicher Änderungen wären erforderlich. Protokoll (SFTP, FTP oder SMB) und Umgang mit von Enigma2 verwalteten Dateien sind offen. Es besteht kein Umsetzungsauftrag für diese Option.
+
+
+### Startfehler des ersten Final-Builds
+
+- Der erste Final-Build 1 bestand Build, Metadaten-, Signatur-, ZIP-, DMG- und Prüfsummenprüfung, brach aber vor dem App-Start im dynamischen Lader ab. Der Nutzer meldete ebenfalls den Startfehler. Der Absturzbericht benennt VLCKit und Library Validation mit fehlender gemeinsamer Team-ID. Dev/Beta waren Debug-Builds ohne diese aktive Release-Laufzeitprüfung. Es wurde noch nichts gepusht oder veröffentlicht.
+- Korrektur: Hardened Runtime bleibt aktiv. Ausschließlich ad-hoc signierte Final-Builds erhalten die für die austauschbare Medienbibliothek erforderliche Ausnahme com.apple.security.cs.disable-library-validation. Build und Paketierung müssen sie beide erhalten. Bei ausdrücklich vorgegebener Zertifikat-Signierung wird sie im Build nicht gesetzt. Keine Zertifikate, Schlüsselbunddaten oder Systemeinstellungen ändern. Unveröffentlichte fehlerhafte Pakete verworfen; erneuter Final-Build und tatsächlicher App-Start erforderlich.
+- Grundlage: eigener DYLD-Absturzbericht und [Apple-Dokumentation](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.security.cs.disable-library-validation). Die UI-Schnittstelle lief beim Zugriff auf die bereits abgestürzte App zweimal in ein Timeout; dies war kein bestandener Starttest.

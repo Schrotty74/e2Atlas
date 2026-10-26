@@ -41,7 +41,7 @@ while IFS= read -r -d '' executable; do
     echo 'Release binary contains a local development path.' >&2; exit 1
   fi
 done < <(find "$release_dir/e2Atlas.app/Contents/MacOS" -type f -print0)
-codesign --force --sign - --timestamp=none "$release_dir/e2Atlas.app"
+codesign --force --sign - --timestamp=none --entitlements "$root/Resources/AdHoc.entitlements" "$release_dir/e2Atlas.app"
 codesign --verify --deep --strict "$release_dir/e2Atlas.app"
 artifact="e2Atlas-$version-macos-arm64"
 ditto -c -k --norsrc --keepParent "$release_dir/e2Atlas.app" "$release_dir/$artifact.zip"
